@@ -7,16 +7,42 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		92D50D791D6540770022772A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D781D6540770022772A /* main.m */; };
-		92D50D7C1D6540770022772A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D7B1D6540770022772A /* AppDelegate.m */; };
+		92441AB51D66A94200F5426A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D781D6540770022772A /* main.m */; };
+		92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D7B1D6540770022772A /* AppDelegate.m */; };
+		92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AAA1D66A1A200F5426A /* ClientSocketController.m */; };
+		92441AB81D66A95700F5426A /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9B1D669F0E00F5426A /* Comment.m */; };
+		92441AB91D66A95C00F5426A /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9D1D669F0E00F5426A /* Message.m */; };
+		92441ABA1D66A96100F5426A /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9F1D669F0E00F5426A /* Story.m */; };
+		92441ABB1D66A96500F5426A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AA11D669F0E00F5426A /* User.m */; };
+		92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AE51D66AD3400F5426A /* SocketConstant.m */; };
 		92D50D841D6540770022772A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D50D831D6540770022772A /* Assets.xcassets */; };
+		A0A54C367DD48DE731058ED9 /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0EDEA1FB161204A0BD2CE6B5 /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
+		735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7931857DC026561F20153570 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
+		92441A9A1D669F0E00F5426A /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Comment.h; path = ../Models/Comment.h; sourceTree = "<group>"; };
+		92441A9B1D669F0E00F5426A /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Comment.m; path = ../Models/Comment.m; sourceTree = "<group>"; };
+		92441A9C1D669F0E00F5426A /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = ../Models/Message.h; sourceTree = "<group>"; };
+		92441A9D1D669F0E00F5426A /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = ../Models/Message.m; sourceTree = "<group>"; };
+		92441A9E1D669F0E00F5426A /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Story.h; path = ../Models/Story.h; sourceTree = "<group>"; };
+		92441A9F1D669F0E00F5426A /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Story.m; path = ../Models/Story.m; sourceTree = "<group>"; };
+		92441AA01D669F0E00F5426A /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = ../Models/User.h; sourceTree = "<group>"; };
+		92441AA11D669F0E00F5426A /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = ../Models/User.m; sourceTree = "<group>"; };
+		92441AA91D66A1A200F5426A /* ClientSocketController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientSocketController.h; sourceTree = "<group>"; };
+		92441AAA1D66A1A200F5426A /* ClientSocketController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClientSocketController.m; sourceTree = "<group>"; };
+		92441AAD1D66A2A500F5426A /* ResponseHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResponseHandler.h; sourceTree = "<group>"; };
+		92441AAE1D66A2A500F5426A /* RequestHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RequestHandler.h; sourceTree = "<group>"; };
+		92441AB01D66A2E100F5426A /* UIViewController+ResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ResponseHandler.h"; sourceTree = "<group>"; };
+		92441AB11D66A2E100F5426A /* UIViewController+RequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RequestHandler.h"; sourceTree = "<group>"; };
+		92441AE41D66AD3400F5426A /* SocketConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketConstant.h; sourceTree = "<group>"; };
+		92441AE51D66AD3400F5426A /* SocketConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConstant.m; sourceTree = "<group>"; };
 		92D50D741D6540770022772A /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D50D781D6540770022772A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		92D50D7A1D6540770022772A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		92D50D7B1D6540770022772A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		92D50D7A1D6540770022772A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../AppDelegate.h; sourceTree = "<group>"; };
+		92D50D7B1D6540770022772A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../../AppDelegate.m; sourceTree = "<group>"; };
 		92D50D831D6540770022772A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92D50D881D6540770022772A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -26,17 +52,91 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0A54C367DD48DE731058ED9 /* Pods_ShareMe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		92441AA71D669F3D00F5426A /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				92D50D7A1D6540770022772A /* AppDelegate.h */,
+				92D50D7B1D6540770022772A /* AppDelegate.m */,
+			);
+			name = AppDelegate;
+			path = ../Controllers/AppDelegate;
+			sourceTree = "<group>";
+		};
+		92441AA81D669FE000F5426A /* ClientSocketController */ = {
+			isa = PBXGroup;
+			children = (
+				92441AA91D66A1A200F5426A /* ClientSocketController.h */,
+				92441AAA1D66A1A200F5426A /* ClientSocketController.m */,
+			);
+			name = ClientSocketController;
+			path = ../Controllers/ClientSocketController;
+			sourceTree = "<group>";
+		};
+		92441AAC1D66A28A00F5426A /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				92441AAD1D66A2A500F5426A /* ResponseHandler.h */,
+				92441AAE1D66A2A500F5426A /* RequestHandler.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		92441AAF1D66A2C800F5426A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				92441AB01D66A2E100F5426A /* UIViewController+ResponseHandler.h */,
+				92441AB11D66A2E100F5426A /* UIViewController+RequestHandler.h */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		92441AB21D66A76300F5426A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				92441A9A1D669F0E00F5426A /* Comment.h */,
+				92441A9B1D669F0E00F5426A /* Comment.m */,
+				92441A9C1D669F0E00F5426A /* Message.h */,
+				92441A9D1D669F0E00F5426A /* Message.m */,
+				92441A9E1D669F0E00F5426A /* Story.h */,
+				92441A9F1D669F0E00F5426A /* Story.m */,
+				92441AA01D669F0E00F5426A /* User.h */,
+				92441AA11D669F0E00F5426A /* User.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		92441AB31D66A7B100F5426A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				92441AA81D669FE000F5426A /* ClientSocketController */,
+				92441AA71D669F3D00F5426A /* AppDelegate */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		92441AE31D66AD1600F5426A /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				92441AE41D66AD3400F5426A /* SocketConstant.h */,
+				92441AE51D66AD3400F5426A /* SocketConstant.m */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 		92D50D6B1D6540770022772A = {
 			isa = PBXGroup;
 			children = (
 				92D50D761D6540770022772A /* ShareMe */,
 				92D50D751D6540770022772A /* Products */,
+				BB9E4F5B67AD624D9659C549 /* Pods */,
+				F6537F0B8278D9C1599042F4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -51,10 +151,11 @@
 		92D50D761D6540770022772A /* ShareMe */ = {
 			isa = PBXGroup;
 			children = (
-				92D50D7A1D6540770022772A /* AppDelegate.h */,
-				92D50D7B1D6540770022772A /* AppDelegate.m */,
-				92D50D831D6540770022772A /* Assets.xcassets */,
-				92D50D881D6540770022772A /* Info.plist */,
+				92441AE31D66AD1600F5426A /* Constants */,
+				92441AB31D66A7B100F5426A /* Controllers */,
+				92441AB21D66A76300F5426A /* Models */,
+				92441AAF1D66A2C800F5426A /* Extensions */,
+				92441AAC1D66A28A00F5426A /* Protocols */,
 				92D50D771D6540770022772A /* Supporting Files */,
 			);
 			path = ShareMe;
@@ -63,9 +164,28 @@
 		92D50D771D6540770022772A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				92D50D831D6540770022772A /* Assets.xcassets */,
+				92D50D881D6540770022772A /* Info.plist */,
 				92D50D781D6540770022772A /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BB9E4F5B67AD624D9659C549 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0EDEA1FB161204A0BD2CE6B5 /* Pods-ShareMe.debug.xcconfig */,
+				7931857DC026561F20153570 /* Pods-ShareMe.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		F6537F0B8278D9C1599042F4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -75,9 +195,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92D50D8B1D6540770022772A /* Build configuration list for PBXNativeTarget "ShareMe" */;
 			buildPhases = (
+				71B8B359C934C738EBA28EC1 /* [CP] Check Pods Manifest.lock */,
 				92D50D701D6540770022772A /* Sources */,
 				92D50D711D6540770022772A /* Frameworks */,
 				92D50D721D6540770022772A /* Resources */,
+				A6BF2F53723BAF58F2628482 /* [CP] Embed Pods Frameworks */,
+				C1120FA9356DC37D408FF769 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -131,13 +254,67 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		71B8B359C934C738EBA28EC1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A6BF2F53723BAF58F2628482 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C1120FA9356DC37D408FF769 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		92D50D701D6540770022772A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92D50D7C1D6540770022772A /* AppDelegate.m in Sources */,
-				92D50D791D6540770022772A /* main.m in Sources */,
+				92441ABB1D66A96500F5426A /* User.m in Sources */,
+				92441ABA1D66A96100F5426A /* Story.m in Sources */,
+				92441AB91D66A95C00F5426A /* Message.m in Sources */,
+				92441AB81D66A95700F5426A /* Comment.m in Sources */,
+				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
+				92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */,
+				92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */,
+				92441AB51D66A94200F5426A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +405,7 @@
 		};
 		92D50D8C1D6540770022772A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0EDEA1FB161204A0BD2CE6B5 /* Pods-ShareMe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ShareMe/Info.plist;
@@ -239,6 +417,7 @@
 		};
 		92D50D8D1D6540770022772A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7931857DC026561F20153570 /* Pods-ShareMe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ShareMe/Info.plist;
@@ -267,6 +446,7 @@
 				92D50D8D1D6540770022772A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
