@@ -85,6 +85,8 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
     }
 }
 
+#pragma mark - Process message from server
+
 - (void)readMessage {
     _receivedMessage = nil;
     uint8_t buffer[1024];
@@ -115,6 +117,8 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
         }
     }
 }
+
+#pragma mark - NSStreamDelegate
 
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
     switch (streamEvent) {

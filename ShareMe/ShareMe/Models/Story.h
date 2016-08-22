@@ -19,7 +19,6 @@
 
 @property (strong, nonatomic) NSNumber *storyId;
 @property (strong, nonatomic) User<Optional> *creator;
-@property (strong, nonatomic) User<Optional> *receiver;
 @property (strong, nonatomic) NSString<Optional> *content;
 @property (strong, nonatomic) NSString<Optional> *createdTime;
 @property (strong, nonatomic) NSString<Optional> * imageURL;
