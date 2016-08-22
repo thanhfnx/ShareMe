@@ -17,5 +17,8 @@ int const kServerPort = 1994;
 NSString *const kMessageFormat = @"%@~%@~%@!";
 NSString *const kEndOfStream = @"!";
 NSString *const kDelim = @"~";
+NSString *const kSuccessMessage = @"TRUE";
+NSString *const kFailureMessage = @"FALSE";
+NSString *const kUserLoginAction = @"USER_LOGIN";
 
 @end
