@@ -28,5 +28,6 @@
 @property (strong, nonatomic) NSMutableArray<User, Optional> *sentRequests;
 @property (strong, nonatomic) NSMutableArray<User, Optional> *receivedRequests;
 @property (strong, nonatomic) NSString<Optional> *avatarImageURL;
+@property (strong, nonatomic) NSString<Optional> *coverImageURL;
 
 @end
