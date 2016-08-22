@@ -88,7 +88,7 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
 #pragma mark - Process message from server
 
 - (void)readMessage {
-    _receivedMessage = nil;
+    _receivedMessage = @"";
     uint8_t buffer[1024];
     NSString *temp;
     do {
@@ -106,6 +106,15 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
     if (_receivedMessage) {
         _receivedMessage = [_receivedMessage substringToIndex:_receivedMessage.length - 1];
         NSArray *result = [_receivedMessage componentsSeparatedByString:kDelim];
+        if (result.count <= 2) {
+            return;
+        } else {
+            for (NSString *str in result) {
+                if ([str isEqualToString:@""]) {
+                    return;
+                }
+            }
+        }
         if ([result[0] isEqualToString:kReceivingRequestSignal]) {
             [[kResponses objectForKey:result[1]] handleResponse:result];
             [kResponses removeObjectForKey:result[1]];

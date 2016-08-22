@@ -10,6 +10,6 @@
 
 @protocol ResponseHandler <NSObject>
 
-- (void)handleResponse:(NSArray *)result;
+- (void)handleResponse:(NSString *)actionName message:(NSString *)message;
 
 @end

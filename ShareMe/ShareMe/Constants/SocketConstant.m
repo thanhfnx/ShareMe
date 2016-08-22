@@ -20,5 +20,6 @@ NSString *const kDelim = @"~";
 NSString *const kSuccessMessage = @"TRUE";
 NSString *const kFailureMessage = @"FALSE";
 NSString *const kUserLoginAction = @"USER_LOGIN";
+NSString *const kUserRegisterAction = @"USER_REGISTER";
 
 @end
