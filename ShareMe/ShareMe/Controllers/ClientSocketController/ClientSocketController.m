@@ -88,7 +88,7 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
 #pragma mark - Process message from server
 
 - (void)readMessage {
-    _receivedMessage = nil;
+    _receivedMessage = @"";
     uint8_t buffer[1024];
     NSString *temp;
     do {
