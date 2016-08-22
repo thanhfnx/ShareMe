@@ -17,5 +17,8 @@ extern int const kServerPort;
 extern NSString *const kMessageFormat;
 extern NSString *const kEndOfStream;
 extern NSString *const kDelim;
+extern NSString *const kSuccessMessage;
+extern NSString *const kFailureMessage;
+extern NSString *const kUserLoginAction;
 
 @end
