@@ -8,4 +8,5 @@ use_frameworks!
 # Pods for SocialNetwork
 pod 'THCalendarDatePicker', '~> 1.2'
 pod 'JSONModel'
+pod 'DLRadioButton', '~> 1.4'
 end

@@ -11,6 +11,6 @@
 @protocol RequestHandler <NSObject>
 
 - (void)registerRequestHandler;
-- (void)handleRequest:(NSArray *)result;
+- (void)handleRequest:(NSString *)actionName message:(NSString *)message;
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "LoginController.h"
 #import "ClientSocketController.h"
 
 @interface AppDelegate () {
@@ -20,16 +19,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _clientSocketController = [[ClientSocketController alloc] init];
     [_clientSocketController openSocket];
-    LoginController *loginController = [[LoginController alloc] init];
-    UINavigationController *loginNavigationController = [[UINavigationController alloc]
-        initWithRootViewController:loginController];
-    [loginNavigationController setNavigationBarHidden:YES];
-    self.window.rootViewController = loginNavigationController;
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
     return YES;
 }
 

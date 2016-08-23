@@ -1,5 +1,5 @@
 //
-//  UIViewController+RequestHandler.h
+//  UIViewController+ResponseHandler.h
 //  SocialNetwork
 //
 //  Created by Nguyen Xuan Thanh on 8/10/16.

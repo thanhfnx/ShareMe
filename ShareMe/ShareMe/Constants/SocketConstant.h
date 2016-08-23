@@ -20,5 +20,6 @@ extern NSString *const kDelim;
 extern NSString *const kSuccessMessage;
 extern NSString *const kFailureMessage;
 extern NSString *const kUserLoginAction;
+extern NSString *const kUserRegisterAction;
 
 @end

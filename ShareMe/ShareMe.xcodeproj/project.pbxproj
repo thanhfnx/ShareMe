@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		92379DC01D6AD221005C1F4C /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92379DBF1D6AD221005C1F4C /* LoginView.m */; };
-		92379DC31D6AD255005C1F4C /* UIViewConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92379DC21D6AD255005C1F4C /* UIViewConstant.m */; };
-		92379DCB1D6ADC27005C1F4C /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92379DCA1D6ADC27005C1F4C /* LoginController.m */; };
+		922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */; };
 		92441AB51D66A94200F5426A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D781D6540770022772A /* main.m */; };
 		92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D7B1D6540770022772A /* AppDelegate.m */; };
 		92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AAA1D66A1A200F5426A /* ClientSocketController.m */; };
@@ -18,7 +16,10 @@
 		92441ABA1D66A96100F5426A /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9F1D669F0E00F5426A /* Story.m */; };
 		92441ABB1D66A96500F5426A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AA11D669F0E00F5426A /* User.m */; };
 		92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AE51D66AD3400F5426A /* SocketConstant.m */; };
+		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
 		92D50D841D6540770022772A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D50D831D6540770022772A /* Assets.xcassets */; };
+		92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EB835F1D6BDB9E004119FD /* RegisterViewController.m */; };
+		92EB83651D6BEC1E004119FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92EB83641D6BEC1E004119FD /* Main.storyboard */; };
 		A0A54C367DD48DE731058ED9 /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,12 +27,8 @@
 		0EDEA1FB161204A0BD2CE6B5 /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
 		735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7931857DC026561F20153570 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
-		92379DBE1D6AD221005C1F4C /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
-		92379DBF1D6AD221005C1F4C /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
-		92379DC11D6AD255005C1F4C /* UIViewConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewConstant.h; sourceTree = "<group>"; };
-		92379DC21D6AD255005C1F4C /* UIViewConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewConstant.m; sourceTree = "<group>"; };
-		92379DC91D6ADC27005C1F4C /* LoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginController.h; sourceTree = "<group>"; };
-		92379DCA1D6ADC27005C1F4C /* LoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
+		922DB3EE1D6B4D4C00AF2268 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		92441A9A1D669F0E00F5426A /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Comment.h; path = ../Models/Comment.h; sourceTree = "<group>"; };
 		92441A9B1D669F0E00F5426A /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Comment.m; path = ../Models/Comment.m; sourceTree = "<group>"; };
 		92441A9C1D669F0E00F5426A /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = ../Models/Message.h; sourceTree = "<group>"; };
@@ -48,12 +45,16 @@
 		92441AB11D66A2E100F5426A /* UIViewController+RequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RequestHandler.h"; sourceTree = "<group>"; };
 		92441AE41D66AD3400F5426A /* SocketConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketConstant.h; sourceTree = "<group>"; };
 		92441AE51D66AD3400F5426A /* SocketConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConstant.m; sourceTree = "<group>"; };
+		928EBC0C1D6C371C001E7D3B /* RegisterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterView.xib; sourceTree = "<group>"; };
 		92D50D741D6540770022772A /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D50D781D6540770022772A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		92D50D7A1D6540770022772A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../AppDelegate.h; sourceTree = "<group>"; };
-		92D50D7B1D6540770022772A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../../AppDelegate.m; sourceTree = "<group>"; };
+		92D50D7A1D6540770022772A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		92D50D7B1D6540770022772A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		92D50D831D6540770022772A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92D50D881D6540770022772A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92EB835E1D6BDB9E004119FD /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		92EB835F1D6BDB9E004119FD /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		92EB83641D6BEC1E004119FD /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,32 +69,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		92379DBD1D6AD201005C1F4C /* Views */ = {
+		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				92379DBE1D6AD221005C1F4C /* LoginView.h */,
-				92379DBF1D6AD221005C1F4C /* LoginView.m */,
+				92EB835D1D6BDB0A004119FD /* RegisterViewController */,
+				922DB3ED1D6B4D0400AF2268 /* LoginViewController */,
 			);
-			path = Views;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		92379DC81D6ADC0A005C1F4C /* LoginController */ = {
+		922DB3ED1D6B4D0400AF2268 /* LoginViewController */ = {
 			isa = PBXGroup;
 			children = (
-				92379DC91D6ADC27005C1F4C /* LoginController.h */,
-				92379DCA1D6ADC27005C1F4C /* LoginController.m */,
+				922DB3EE1D6B4D4C00AF2268 /* LoginViewController.h */,
+				922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */,
 			);
-			path = LoginController;
-			sourceTree = "<group>";
-		};
-		92441AA71D669F3D00F5426A /* AppDelegate */ = {
-			isa = PBXGroup;
-			children = (
-				92D50D7A1D6540770022772A /* AppDelegate.h */,
-				92D50D7B1D6540770022772A /* AppDelegate.m */,
-			);
-			name = AppDelegate;
-			path = ../Controllers/AppDelegate;
+			path = LoginViewController;
 			sourceTree = "<group>";
 		};
 		92441AA81D669FE000F5426A /* ClientSocketController */ = {
@@ -142,9 +133,7 @@
 		92441AB31D66A7B100F5426A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				92379DC81D6ADC0A005C1F4C /* LoginController */,
 				92441AA81D669FE000F5426A /* ClientSocketController */,
-				92441AA71D669F3D00F5426A /* AppDelegate */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -154,10 +143,16 @@
 			children = (
 				92441AE41D66AD3400F5426A /* SocketConstant.h */,
 				92441AE51D66AD3400F5426A /* SocketConstant.m */,
-				92379DC11D6AD255005C1F4C /* UIViewConstant.h */,
-				92379DC21D6AD255005C1F4C /* UIViewConstant.m */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		928EBBFF1D6C2C28001E7D3B /* XIBs */ = {
+			isa = PBXGroup;
+			children = (
+				928EBC0C1D6C371C001E7D3B /* RegisterView.xib */,
+			);
+			path = XIBs;
 			sourceTree = "<group>";
 		};
 		92D50D6B1D6540770022772A = {
@@ -181,7 +176,11 @@
 		92D50D761D6540770022772A /* ShareMe */ = {
 			isa = PBXGroup;
 			children = (
-				92379DBD1D6AD201005C1F4C /* Views */,
+				928EBBFF1D6C2C28001E7D3B /* XIBs */,
+				92D50D7A1D6540770022772A /* AppDelegate.h */,
+				92D50D7B1D6540770022772A /* AppDelegate.m */,
+				92EB83631D6BEBF9004119FD /* Storyboards */,
+				922DB3EC1D6B4CD100AF2268 /* ViewControllers */,
 				92441AE31D66AD1600F5426A /* Constants */,
 				92441AB31D66A7B100F5426A /* Controllers */,
 				92441AB21D66A76300F5426A /* Models */,
@@ -200,6 +199,23 @@
 				92D50D781D6540770022772A /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		92EB835D1D6BDB0A004119FD /* RegisterViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92EB835E1D6BDB9E004119FD /* RegisterViewController.h */,
+				92EB835F1D6BDB9E004119FD /* RegisterViewController.m */,
+			);
+			path = RegisterViewController;
+			sourceTree = "<group>";
+		};
+		92EB83631D6BEBF9004119FD /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				92EB83641D6BEC1E004119FD /* Main.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 		BB9E4F5B67AD624D9659C549 /* Pods */ = {
@@ -279,6 +295,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */,
+				92EB83651D6BEC1E004119FD /* Main.storyboard in Resources */,
 				92D50D841D6540770022772A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,16 +357,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				92441ABB1D66A96500F5426A /* User.m in Sources */,
-				92379DCB1D6ADC27005C1F4C /* LoginController.m in Sources */,
 				92441ABA1D66A96100F5426A /* Story.m in Sources */,
-				92379DC31D6AD255005C1F4C /* UIViewConstant.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
-				92379DC01D6AD221005C1F4C /* LoginView.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
 				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
+				92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */,
 				92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */,
 				92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */,
 				92441AB51D66A94200F5426A /* main.m in Sources */,
+				922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
