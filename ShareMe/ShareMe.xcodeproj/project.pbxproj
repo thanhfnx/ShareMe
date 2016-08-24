@@ -18,6 +18,11 @@
 		92441ABA1D66A96100F5426A /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9F1D669F0E00F5426A /* Story.m */; };
 		92441ABB1D66A96500F5426A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AA11D669F0E00F5426A /* User.m */; };
 		92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AE51D66AD3400F5426A /* SocketConstant.m */; };
+		924E108D1D6D99FE004DE853 /* RequestsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108C1D6D99FE004DE853 /* RequestsTableViewController.m */; };
+		924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */; };
+		924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */; };
+		924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */; };
+		924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */; };
 		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
 		92D50D841D6540770022772A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D50D831D6540770022772A /* Assets.xcassets */; };
 		92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EB835F1D6BDB9E004119FD /* RegisterViewController.m */; };
@@ -51,6 +56,16 @@
 		92441AB11D66A2E100F5426A /* UIViewController+RequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RequestHandler.h"; sourceTree = "<group>"; };
 		92441AE41D66AD3400F5426A /* SocketConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketConstant.h; sourceTree = "<group>"; };
 		92441AE51D66AD3400F5426A /* SocketConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConstant.m; sourceTree = "<group>"; };
+		924E108B1D6D99FE004DE853 /* RequestsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestsTableViewController.h; sourceTree = "<group>"; };
+		924E108C1D6D99FE004DE853 /* RequestsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestsTableViewController.m; sourceTree = "<group>"; };
+		924E108E1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceivedRequestTableViewCell.h; sourceTree = "<group>"; };
+		924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceivedRequestTableViewCell.m; sourceTree = "<group>"; };
+		924E10911D6D9C1B004DE853 /* SentRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SentRequestTableViewCell.h; sourceTree = "<group>"; };
+		924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SentRequestTableViewCell.m; sourceTree = "<group>"; };
+		924E109A1D6DA73C004DE853 /* MainTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarViewController.h; sourceTree = "<group>"; };
+		924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarViewController.m; sourceTree = "<group>"; };
+		924E109D1D6DBAE3004DE853 /* CALayer+UIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+UIColor.h"; sourceTree = "<group>"; };
+		924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UIColor.m"; sourceTree = "<group>"; };
 		928EBC0C1D6C371C001E7D3B /* RegisterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterView.xib; sourceTree = "<group>"; };
 		92D50D741D6540770022772A /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D50D781D6540770022772A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -89,6 +104,10 @@
 			children = (
 				920391171D6D3EAB00BC5BE0 /* StoryTableViewCell.h */,
 				920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */,
+				924E108E1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.h */,
+				924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */,
+				924E10911D6D9C1B004DE853 /* SentRequestTableViewCell.h */,
+				924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -96,6 +115,9 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				924E109A1D6DA73C004DE853 /* MainTabBarViewController.h */,
+				924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */,
+				924E108A1D6D99E7004DE853 /* RequestsViewController */,
 				9203910F1D6D33F600BC5BE0 /* NewsFeedViewController */,
 				92EB835D1D6BDB0A004119FD /* RegisterViewController */,
 				922DB3ED1D6B4D0400AF2268 /* LoginViewController */,
@@ -136,6 +158,8 @@
 			children = (
 				92441AB01D66A2E100F5426A /* UIViewController+ResponseHandler.h */,
 				92441AB11D66A2E100F5426A /* UIViewController+RequestHandler.h */,
+				924E109D1D6DBAE3004DE853 /* CALayer+UIColor.h */,
+				924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -170,6 +194,15 @@
 				92441AE51D66AD3400F5426A /* SocketConstant.m */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		924E108A1D6D99E7004DE853 /* RequestsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				924E108B1D6D99FE004DE853 /* RequestsTableViewController.h */,
+				924E108C1D6D99FE004DE853 /* RequestsTableViewController.m */,
+			);
+			path = RequestsViewController;
 			sourceTree = "<group>";
 		};
 		928EBBFF1D6C2C28001E7D3B /* XIBs */ = {
@@ -386,13 +419,18 @@
 				92441ABA1D66A96100F5426A /* Story.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
+				924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */,
+				924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */,
 				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
+				924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */,
+				924E108D1D6D99FE004DE853 /* RequestsTableViewController.m in Sources */,
 				92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */,
 				92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */,
 				920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */,
 				92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */,
 				92441AB51D66A94200F5426A /* main.m in Sources */,
 				922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */,
+				924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */,
 				920391151D6D343E00BC5BE0 /* NewsFeedTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

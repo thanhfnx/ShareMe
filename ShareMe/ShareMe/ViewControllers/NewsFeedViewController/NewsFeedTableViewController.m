@@ -11,7 +11,7 @@
 #import "Story.h"
 #import "User.h"
 
-static NSString *const kReuseIdentifier = @"StoryCell";
+static NSString *const kStoryReuseIdentifier = @"StoryCell";
 
 @interface NewsFeedTableViewController ()
 
@@ -19,10 +19,14 @@ static NSString *const kReuseIdentifier = @"StoryCell";
 
 @implementation NewsFeedTableViewController
 
+#pragma mark - UIView Life Cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.estimatedRowHeight = 350;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsSelection = NO;
     // Create sample data
     NSArray *firstNames = @[@"Thanh", @"Linh", @"Lan", @"Nhung", @"Tuan", @"Duong"];
     NSArray *lastNames = @[@"Nguyen", @"Tran", @"Le", @"Ly"];
@@ -50,7 +54,7 @@ static NSString *const kReuseIdentifier = @"StoryCell";
     }
 }
 
-#pragma mark - Table view data source
+#pragma mark - UITableViewDatasource, UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -61,13 +65,10 @@ static NSString *const kReuseIdentifier = @"StoryCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kReuseIdentifier forIndexPath:indexPath];
+    StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kStoryReuseIdentifier
+        forIndexPath:indexPath];
     [cell setStory:self.topStories[indexPath.row]];
     return cell;
-}
-
-- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
 }
 
 @end
