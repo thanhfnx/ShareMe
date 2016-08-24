@@ -116,12 +116,12 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
             }
         }
         if ([result[0] isEqualToString:kReceivingRequestSignal]) {
-            [[kResponses objectForKey:result[1]] handleResponse:result];
+            [[kResponses objectForKey:result[1]] handleResponse:result[1] message:result[2]];
             [kResponses removeObjectForKey:result[1]];
         } else if ([result[0] isEqualToString:kSendingRequestSignal]) {
             NSArray *array = [kRequests objectForKey:result[1]];
             for (UIViewController *viewController in array) {
-                [viewController handleRequest:result];
+                [viewController handleRequest:result[1] message:result[2]];
             }
         }
     }

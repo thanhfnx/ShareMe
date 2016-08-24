@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		920391151D6D343E00BC5BE0 /* NewsFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391141D6D343E00BC5BE0 /* NewsFeedTableViewController.m */; };
+		920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */; };
 		922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */; };
 		92441AB51D66A94200F5426A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D781D6540770022772A /* main.m */; };
 		92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D7B1D6540770022772A /* AppDelegate.m */; };
@@ -27,6 +29,10 @@
 		0EDEA1FB161204A0BD2CE6B5 /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
 		735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7931857DC026561F20153570 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
+		920391131D6D343E00BC5BE0 /* NewsFeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedTableViewController.h; sourceTree = "<group>"; };
+		920391141D6D343E00BC5BE0 /* NewsFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsFeedTableViewController.m; sourceTree = "<group>"; };
+		920391171D6D3EAB00BC5BE0 /* StoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewCell.h; sourceTree = "<group>"; };
+		920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryTableViewCell.m; sourceTree = "<group>"; };
 		922DB3EE1D6B4D4C00AF2268 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		92441A9A1D669F0E00F5426A /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Comment.h; path = ../Models/Comment.h; sourceTree = "<group>"; };
@@ -69,9 +75,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9203910F1D6D33F600BC5BE0 /* NewsFeedViewController */ = {
+			isa = PBXGroup;
+			children = (
+				920391131D6D343E00BC5BE0 /* NewsFeedTableViewController.h */,
+				920391141D6D343E00BC5BE0 /* NewsFeedTableViewController.m */,
+			);
+			path = NewsFeedViewController;
+			sourceTree = "<group>";
+		};
+		920391161D6D3E7000BC5BE0 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				920391171D6D3EAB00BC5BE0 /* StoryTableViewCell.h */,
+				920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */,
+			);
+			path = TableViewCell;
+			sourceTree = "<group>";
+		};
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				9203910F1D6D33F600BC5BE0 /* NewsFeedViewController */,
 				92EB835D1D6BDB0A004119FD /* RegisterViewController */,
 				922DB3ED1D6B4D0400AF2268 /* LoginViewController */,
 			);
@@ -176,6 +201,7 @@
 		92D50D761D6540770022772A /* ShareMe */ = {
 			isa = PBXGroup;
 			children = (
+				920391161D6D3E7000BC5BE0 /* TableViewCell */,
 				928EBBFF1D6C2C28001E7D3B /* XIBs */,
 				92D50D7A1D6540770022772A /* AppDelegate.h */,
 				92D50D7B1D6540770022772A /* AppDelegate.m */,
@@ -363,9 +389,11 @@
 				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
 				92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */,
 				92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */,
+				920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */,
 				92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */,
 				92441AB51D66A94200F5426A /* main.m in Sources */,
 				922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */,
+				920391151D6D343E00BC5BE0 /* NewsFeedTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
