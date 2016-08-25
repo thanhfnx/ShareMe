@@ -30,4 +30,6 @@
 @property (strong, nonatomic) NSString<Optional> *avatarImageURL;
 @property (strong, nonatomic) NSString<Optional> *coverImageURL;
 
+- (NSString *)fullName;
+
 @end

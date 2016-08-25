@@ -16,7 +16,7 @@ static NSString *const kDefaultFemaleAvatar = @"default-female-avatar";
 
 - (void)setStory:(Story *)story {
     self.imvAvatar.image = [UIImage imageNamed:(story.creator.avatarImageURL == nil ? (story.creator.gender.boolValue == 0 ? kDefaultMaleAvatar : kDefaultFemaleAvatar) : story.creator.avatarImageURL)];
-    self.lblFullName.text = [NSString stringWithFormat:@"%@ %@", story.creator.firstName, story.creator.lastName];
+    self.lblFullName.text = [story.creator fullName];
     self.lblUserName.text = [NSString stringWithFormat:@"@%@", story.creator.userName];
     // TODO: Calculate created time and display
     self.lblCreatedTime.text = @"4d ago";

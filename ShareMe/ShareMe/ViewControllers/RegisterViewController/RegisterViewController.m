@@ -51,7 +51,9 @@ static NSInteger const kMinimumPasswordLength = 6;
 @property (weak, nonatomic) IBOutlet UITextField *txtUserName;
 @property (weak, nonatomic) IBOutlet UITextField *txtPassword;
 @property (weak, nonatomic) IBOutlet UITextField *txtRetypePassword;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lastButtonBottomConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *loginButtonBottomConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backToFirstViewButtonBottomConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backToSecondViewButtonBottomConstraint;
 
 @end
 
@@ -63,6 +65,7 @@ static NSInteger const kMinimumPasswordLength = 6;
     [super viewDidLoad];
     NSArray *nibObjects = [[NSBundle mainBundle] loadNibNamed:@"RegisterView" owner:self options:nil];
     CGRect screenRect = self.view.frame;
+    self.scrollView.frame = screenRect;
     for (UIView *view in nibObjects) {
         view.frame = screenRect;
         [self.scrollView addSubview:view];
@@ -394,7 +397,9 @@ static NSInteger const kMinimumPasswordLength = 6;
     [UIView animateWithDuration:0.3 animations:^{
         CGRect theFrame = self.view.frame;
         CGFloat offset = self.lblTitle.frame.origin.y + self.lblTitle.frame.size.height;
-        self.lastButtonBottomConstraint.constant = keyboardSize.height + 8.0f - offset;
+        self.loginButtonBottomConstraint.constant = keyboardSize.height + 8.0f - offset;
+        self.backToFirstViewButtonBottomConstraint.constant = keyboardSize.height + 8.0f - offset;
+        self.backToSecondViewButtonBottomConstraint.constant = keyboardSize.height + 8.0f - offset;
         theFrame.origin.y = -offset;
         self.view.frame = theFrame;
     }];
@@ -403,7 +408,9 @@ static NSInteger const kMinimumPasswordLength = 6;
 - (void)keyboardWillHide:(NSNotification *)notification {
     [UIView animateWithDuration:0.3 animations:^{
         CGRect frame = self.view.frame;
-        self.lastButtonBottomConstraint.constant = 8.0f;
+        self.loginButtonBottomConstraint.constant = 8.0f;
+        self.backToFirstViewButtonBottomConstraint.constant = 8.0f;
+        self.backToSecondViewButtonBottomConstraint.constant = 8.0f;
         frame.origin.y = 0.0f;
         self.view.frame = frame;
     }];

@@ -24,6 +24,9 @@
 		924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */; };
 		924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */; };
 		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
+		92A77CBE1D6ED09500FD19A3 /* SearchFriendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A77CBD1D6ED09500FD19A3 /* SearchFriendTableViewController.m */; };
+		92AF4F731D6ED3E100B92297 /* SearchFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */; };
+		92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4F751D6ED72E00B92297 /* UIViewConstant.m */; };
 		92D50D841D6540770022772A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D50D831D6540770022772A /* Assets.xcassets */; };
 		92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EB835F1D6BDB9E004119FD /* RegisterViewController.m */; };
 		92EB83651D6BEC1E004119FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92EB83641D6BEC1E004119FD /* Main.storyboard */; };
@@ -67,6 +70,12 @@
 		924E109D1D6DBAE3004DE853 /* CALayer+UIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+UIColor.h"; sourceTree = "<group>"; };
 		924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UIColor.m"; sourceTree = "<group>"; };
 		928EBC0C1D6C371C001E7D3B /* RegisterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterView.xib; sourceTree = "<group>"; };
+		92A77CBC1D6ED09500FD19A3 /* SearchFriendTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendTableViewController.h; sourceTree = "<group>"; };
+		92A77CBD1D6ED09500FD19A3 /* SearchFriendTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendTableViewController.m; sourceTree = "<group>"; };
+		92AF4F711D6ED3E100B92297 /* SearchFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendTableViewCell.h; sourceTree = "<group>"; };
+		92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendTableViewCell.m; sourceTree = "<group>"; };
+		92AF4F741D6ED72E00B92297 /* UIViewConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewConstant.h; sourceTree = "<group>"; };
+		92AF4F751D6ED72E00B92297 /* UIViewConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewConstant.m; sourceTree = "<group>"; };
 		92D50D741D6540770022772A /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D50D781D6540770022772A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		92D50D7A1D6540770022772A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -108,6 +117,8 @@
 				924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */,
 				924E10911D6D9C1B004DE853 /* SentRequestTableViewCell.h */,
 				924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */,
+				92AF4F711D6ED3E100B92297 /* SearchFriendTableViewCell.h */,
+				92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -115,6 +126,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				92A77CBB1D6ED07E00FD19A3 /* SearchFriendViewController */,
 				924E109A1D6DA73C004DE853 /* MainTabBarViewController.h */,
 				924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */,
 				924E108A1D6D99E7004DE853 /* RequestsViewController */,
@@ -192,6 +204,8 @@
 			children = (
 				92441AE41D66AD3400F5426A /* SocketConstant.h */,
 				92441AE51D66AD3400F5426A /* SocketConstant.m */,
+				92AF4F741D6ED72E00B92297 /* UIViewConstant.h */,
+				92AF4F751D6ED72E00B92297 /* UIViewConstant.m */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -211,6 +225,15 @@
 				928EBC0C1D6C371C001E7D3B /* RegisterView.xib */,
 			);
 			path = XIBs;
+			sourceTree = "<group>";
+		};
+		92A77CBB1D6ED07E00FD19A3 /* SearchFriendViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92A77CBC1D6ED09500FD19A3 /* SearchFriendTableViewController.h */,
+				92A77CBD1D6ED09500FD19A3 /* SearchFriendTableViewController.m */,
+			);
+			path = SearchFriendViewController;
 			sourceTree = "<group>";
 		};
 		92D50D6B1D6540770022772A = {
@@ -417,7 +440,9 @@
 			files = (
 				92441ABB1D66A96500F5426A /* User.m in Sources */,
 				92441ABA1D66A96100F5426A /* Story.m in Sources */,
+				92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
+				92A77CBE1D6ED09500FD19A3 /* SearchFriendTableViewController.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
 				924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */,
 				924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */,
@@ -431,6 +456,7 @@
 				92441AB51D66A94200F5426A /* main.m in Sources */,
 				922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */,
 				924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */,
+				92AF4F731D6ED3E100B92297 /* SearchFriendTableViewCell.m in Sources */,
 				920391151D6D343E00BC5BE0 /* NewsFeedTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

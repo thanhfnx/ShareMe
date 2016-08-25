@@ -58,6 +58,7 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self registerRequestHandler];
     _requestActions = @[
         kUserSendRequestToUserAction,
         kUserDeclineRequestToUserAction,
