@@ -10,6 +10,7 @@
 #import "User.h"
 #import "ClientSocketController.h"
 #import "UIViewController+ResponseHandler.h"
+#import "MainTabBarViewController.h"
 
 NSString *const kDefaultMessageTitle = @"Warning";
 NSString *const kEmptyUserNameMessage = @"UserName can not be empty!";
@@ -17,7 +18,9 @@ NSString *const kEmptyPasswordMessage = @"Password can not be empty!";
 NSString *const kFailedLoginMessage = @"UserName or password is incorrect. Login failed!";
 NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
 
-@interface LoginViewController ()
+@interface LoginViewController () {
+    User *_user;
+}
 
 @property (weak, nonatomic) IBOutlet UIImageView *imvLogo;
 @property (weak, nonatomic) IBOutlet UITextField *txtUserName;
@@ -150,17 +153,24 @@ NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
         [self showMessage:kFailedLoginMessage title:kDefaultMessageTitle complete:nil];
     } else {
         NSError *error;
-        User *user = [[User alloc] initWithString:message error:&error];
-        if (!user.friends) {
-            user.friends = [NSMutableArray<User, Optional> array];
+        _user = [[User alloc] initWithString:message error:&error];
+        if (!_user.friends) {
+            _user.friends = [NSMutableArray<User, Optional> array];
         }
-        if (!user.sentRequests) {
-            user.sentRequests = [NSMutableArray<User, Optional> array];
+        if (!_user.sentRequests) {
+            _user.sentRequests = [NSMutableArray<User, Optional> array];
         }
-        if (!user.receivedRequests) {
-            user.receivedRequests = [NSMutableArray<User, Optional> array];
+        if (!_user.receivedRequests) {
+            _user.receivedRequests = [NSMutableArray<User, Optional> array];
         }
         [self performSegueWithIdentifier:kGoToMainTabBarSegueIdentifier sender:self];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kGoToMainTabBarSegueIdentifier]) {
+        MainTabBarViewController *mainTabBarViewController = [segue destinationViewController];
+        mainTabBarViewController.loggedInUser = _user;
     }
 }
 

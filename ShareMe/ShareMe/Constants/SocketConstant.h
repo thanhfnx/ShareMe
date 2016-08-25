@@ -12,14 +12,27 @@
 
 extern NSString *const kSendingRequestSignal;
 extern NSString *const kReceivingRequestSignal;
+
 extern NSString *const kServerHost;
 extern int const kServerPort;
+
 extern NSString *const kMessageFormat;
 extern NSString *const kEndOfStream;
 extern NSString *const kDelim;
+
 extern NSString *const kSuccessMessage;
 extern NSString *const kFailureMessage;
+
 extern NSString *const kUserLoginAction;
 extern NSString *const kUserRegisterAction;
+
+extern NSString *const kUserAcceptRequestAction;
+extern NSString *const kUserDeclineRequestAction;
+extern NSString *const kUserCancelRequestAction;
+
+extern NSString *const kUserSendRequestToUserAction;
+extern NSString *const kUserCancelRequestToUserAction;
+extern NSString *const kUserAddFriendToUserAction;
+extern NSString *const kUserDeclineRequestToUserAction;
 
 @end
