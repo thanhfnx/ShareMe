@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NewsFeedTableViewController : UITableViewController
+@interface NewsFeedTableViewController : UITableViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) NSMutableArray *topStories;
 

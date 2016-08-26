@@ -34,5 +34,11 @@ NSString *const kUserSendRequestToUserAction = @"SEND_FRIEND_REQUEST_TO_USER";
 NSString *const kUserCancelRequestToUserAction = @"SEND_CANCEL_FRIEND_REQUEST_TO_USER";
 NSString *const kUserAddFriendToUserAction = @"ADD_FRIEND_TO_USER";
 NSString *const kUserDeclineRequestToUserAction = @"DECLINE_FRIEND_REQUEST_TO_USER";
+NSString *const kUserUnfriendToUserAction = @"UNFRIEND_TO_USER";
+
+NSString *const kUserSearchFriendAction = @"USER_SEARCH_FRIEND";
+
+NSString *const kUserUnfriendAction = @"USER_UNFRIEND_USER";
+NSString *const kUserSendRequestAction = @"USER_SEND_FRIEND_REQUEST";
 
 @end

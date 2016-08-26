@@ -34,5 +34,11 @@ extern NSString *const kUserSendRequestToUserAction;
 extern NSString *const kUserCancelRequestToUserAction;
 extern NSString *const kUserAddFriendToUserAction;
 extern NSString *const kUserDeclineRequestToUserAction;
+extern NSString *const kUserUnfriendToUserAction;
+
+extern NSString *const kUserSearchFriendAction;
+
+extern NSString *const kUserUnfriendAction;
+extern NSString *const kUserSendRequestAction;
 
 @end

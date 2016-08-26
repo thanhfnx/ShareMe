@@ -7,13 +7,26 @@
 //
 
 #import "NewsFeedTableViewController.h"
+#import "ClientSocketController.h"
 #import "StoryTableViewCell.h"
+#import "UIViewController+ResponseHandler.h"
+#import "SearchFriendTableViewController.h"
 #import "Story.h"
 #import "User.h"
 
+static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kStoryReuseIdentifier = @"StoryCell";
+static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
+static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
+static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
 
-@interface NewsFeedTableViewController ()
+@interface NewsFeedTableViewController () {
+    NSArray<User *> *_searchResult;
+}
+
+@property (weak, nonatomic) IBOutlet UILabel *lblTitle;
+@property (weak, nonatomic) IBOutlet UITextField *txtSearch;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldLeadingConstraint;
 
 @end
 
@@ -27,6 +40,9 @@ static NSString *const kStoryReuseIdentifier = @"StoryCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
+    CGRect frame = self.navigationItem.titleView.frame;
+    frame.size.width = CGRectGetWidth([[UIScreen mainScreen] bounds]);
+    self.navigationItem.titleView.frame = frame;
     // Create sample data
     NSArray *firstNames = @[@"Thanh", @"Linh", @"Lan", @"Nhung", @"Tuan", @"Duong"];
     NSArray *lastNames = @[@"Nguyen", @"Tran", @"Le", @"Ly"];
@@ -54,6 +70,58 @@ static NSString *const kStoryReuseIdentifier = @"StoryCell";
     }
 }
 
+- (void)showMessage:(NSString *)message title:(NSString *)title
+        complete:(void (^ _Nullable)(UIAlertAction *action))complete {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
+        preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:complete];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - IBAction
+
+- (IBAction)btnSearchTapped:(UIButton *)sender {
+    if (self.lblTitle.alpha == 1.0f) {
+        [self.searchTextFieldLeadingConstraint setConstant:-self.lblTitle.frame.size.width];
+        [self.navigationItem.titleView setNeedsUpdateConstraints];
+        [UIView animateWithDuration:0.4 animations:^{
+            self.lblTitle.alpha = 0.0f;
+            [self.navigationItem.titleView layoutIfNeeded];
+        }];
+        [self.txtSearch becomeFirstResponder];
+        return;
+    }
+    if ([self.txtSearch.text isEqualToString:@""]) {
+        [self showMessage:kEmptySearchMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
+            [self.txtSearch becomeFirstResponder];
+        }];
+        return;
+    }
+    [ClientSocketController sendData:self.txtSearch.text messageType:kSendingRequestSignal
+        actionName:kUserSearchFriendAction sender:self];
+}
+
+- (IBAction)btnReloadTapped:(UIButton *)sender {
+    // TODO: Reload news feed
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self dissmissKeyboard];
+}
+
+- (void)dissmissKeyboard {
+    [self.txtSearch resignFirstResponder];
+    [self.searchTextFieldLeadingConstraint setConstant:-10.0f];
+    [self.navigationItem.titleView setNeedsUpdateConstraints];
+    [UIView animateWithDuration:0.4 animations:^{
+        [self.navigationItem.titleView layoutIfNeeded];
+        self.lblTitle.alpha = 1.0f;
+    }];
+}
+
 #pragma mark - UITableViewDatasource, UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -69,6 +137,27 @@ static NSString *const kStoryReuseIdentifier = @"StoryCell";
         forIndexPath:indexPath];
     [cell setStory:self.topStories[indexPath.row]];
     return cell;
+}
+
+#pragma mark - Response Handler
+
+- (void)handleResponse:(NSString *)actionName message:(NSString *)message {
+    if ([message isEqualToString:kFailureMessage]) {
+        [self showMessage:[NSString stringWithFormat:kEmptySearchResultMessage, self.txtSearch.text]
+            title:kDefaultMessageTitle complete:nil];
+    } else {
+        NSError *error;
+        _searchResult = [User arrayOfModelsFromString:message error:&error];
+        self.txtSearch.text = @"";
+        [self performSegueWithIdentifier:kGoToSearchFriendSegueIdentifier sender:self];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kGoToSearchFriendSegueIdentifier]) {
+        SearchFriendTableViewController *searchFriendTableViewController = [segue destinationViewController];
+        searchFriendTableViewController.users = _searchResult;
+    }
 }
 
 @end

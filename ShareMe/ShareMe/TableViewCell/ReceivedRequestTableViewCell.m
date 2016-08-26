@@ -24,7 +24,7 @@ static NSString *const kDefaultFemaleAvatar = @"default-female-avatar";
         imageName = kDefaultFemaleAvatar;
     }
     self.imvAvatar.image = [UIImage imageNamed:imageName];
-    self.lblFullName.text = [NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName];
+    self.lblFullName.text = [user fullName];
     self.lblUserName.text = [@"@" stringByAppendingString:user.userName];
 }
 
