@@ -6,11 +6,12 @@
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
-#import "NewsFeedTableViewController.h"
+#import "NewsFeedViewController.h"
 #import "ClientSocketController.h"
 #import "StoryTableViewCell.h"
 #import "UIViewController+ResponseHandler.h"
 #import "SearchFriendTableViewController.h"
+#import "Utils.h"
 #import "Story.h"
 #import "User.h"
 
@@ -19,18 +20,20 @@ static NSString *const kStoryReuseIdentifier = @"StoryCell";
 static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
 static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
 static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
+static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
 
-@interface NewsFeedTableViewController () {
+@interface NewsFeedViewController () {
     NSArray<User *> *_searchResult;
 }
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UITextField *txtSearch;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldLeadingConstraint;
 
 @end
 
-@implementation NewsFeedTableViewController
+@implementation NewsFeedViewController
 
 #pragma mark - UIView Life Cycle
 
@@ -41,7 +44,7 @@ static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
     CGRect frame = self.navigationItem.titleView.frame;
-    frame.size.width = CGRectGetWidth([[UIScreen mainScreen] bounds]);
+    frame.size.width = [Utils screenWidth];
     self.navigationItem.titleView.frame = frame;
     // Create sample data
     NSArray *firstNames = @[@"Thanh", @"Linh", @"Lan", @"Nhung", @"Tuan", @"Duong"];
@@ -83,7 +86,7 @@ static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
 
 - (IBAction)btnSearchTapped:(UIButton *)sender {
     if (self.lblTitle.alpha == 1.0f) {
-        [self.searchTextFieldLeadingConstraint setConstant:-self.lblTitle.frame.size.width];
+        [self.searchTextFieldLeadingConstraint setConstant:-CGRectGetWidth(self.lblTitle.frame)];
         [self.navigationItem.titleView setNeedsUpdateConstraints];
         [UIView animateWithDuration:0.4 animations:^{
             self.lblTitle.alpha = 0.0f;
@@ -104,6 +107,11 @@ static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
 
 - (IBAction)btnReloadTapped:(UIButton *)sender {
     // TODO: Reload news feed
+}
+
+- (IBAction)btnNewStoryTapped:(id)sender {
+    [self.navigationController.tabBarController.tabBar setHidden:YES];
+    [self performSegueWithIdentifier:kGoToNewStorySegueIdentifier sender:self];
 }
 
 #pragma mark - UIScrollViewDelegate

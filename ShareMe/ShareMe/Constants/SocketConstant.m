@@ -41,4 +41,6 @@ NSString *const kUserSearchFriendAction = @"USER_SEARCH_FRIEND";
 NSString *const kUserUnfriendAction = @"USER_UNFRIEND_USER";
 NSString *const kUserSendRequestAction = @"USER_SEND_FRIEND_REQUEST";
 
+NSString *const kUserCreateNewStoryAction = @"USER_CREATE_NEW_STORY";
+
 @end
