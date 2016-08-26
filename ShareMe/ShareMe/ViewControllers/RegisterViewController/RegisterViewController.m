@@ -11,6 +11,7 @@
 #import "User.h"
 #import "DLRadioButton.h"
 #import "UIViewController+ResponseHandler.h"
+#import "Utils.h"
 
 static NSString *const kDefaultDateFormat = @"dd-MM-yyyy";
 static NSString *const kDefaultDate = @"05-09-1994";
@@ -69,7 +70,7 @@ static NSInteger const kMinimumPasswordLength = 6;
     for (UIView *view in nibObjects) {
         view.frame = screenRect;
         [self.scrollView addSubview:view];
-        screenRect.origin.x += screenRect.size.width;
+        screenRect.origin.x += [Utils screenWidth];
     }
     _currentPage = 0;
     _dateFormatter = [[NSDateFormatter alloc] init];
@@ -296,11 +297,11 @@ static NSInteger const kMinimumPasswordLength = 6;
 - (IBAction)btnNextToViewTapped:(UIButton *)sender {
     if ([self validate]) {
         CGRect screenRect = self.view.frame;
-        screenRect.origin.x = screenRect.size.width;
+        screenRect.origin.x = [Utils screenWidth];
         _currentPage++;
         [self dismissKeyboard];
         [UIView animateWithDuration:0.3 animations:^{
-            self.scrollView.contentOffset = CGPointMake(screenRect.size.width * _currentPage, 0.0f);
+            self.scrollView.contentOffset = CGPointMake([Utils screenWidth] * _currentPage, 0.0f);
         }];
     }
 }

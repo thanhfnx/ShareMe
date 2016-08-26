@@ -13,6 +13,7 @@
 #import "SearchFriendTableViewCell.h"
 #import "User.h"
 #import "MainTabBarViewController.h"
+#import "Utils.h"
 
 typedef NS_ENUM(NSInteger, Relations) {
     FriendRelation,
@@ -93,7 +94,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _relationStatuses = [NSMutableArray array];
     CGRect frame = self.navigationItem.titleView.frame;
-    frame.size.width = CGRectGetWidth([[UIScreen mainScreen] bounds]);
+    frame.size.width = [Utils screenWidth];
     self.navigationItem.titleView.frame = frame;
     self.tableView.estimatedRowHeight = 80.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;

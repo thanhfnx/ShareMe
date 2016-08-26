@@ -41,4 +41,6 @@ extern NSString *const kUserSearchFriendAction;
 extern NSString *const kUserUnfriendAction;
 extern NSString *const kUserSendRequestAction;
 
+extern NSString *const kUserCreateNewStoryAction;
+
 @end
