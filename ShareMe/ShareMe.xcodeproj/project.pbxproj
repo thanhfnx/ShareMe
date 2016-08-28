@@ -18,16 +18,18 @@
 		92441ABA1D66A96100F5426A /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9F1D669F0E00F5426A /* Story.m */; };
 		92441ABB1D66A96500F5426A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AA11D669F0E00F5426A /* User.m */; };
 		92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AE51D66AD3400F5426A /* SocketConstant.m */; };
-		924E108D1D6D99FE004DE853 /* RequestsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108C1D6D99FE004DE853 /* RequestsTableViewController.m */; };
+		924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108C1D6D99FE004DE853 /* RequestViewController.m */; };
 		924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */; };
 		924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */; };
 		924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */; };
 		924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */; };
 		928688761D702C9C0078A599 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 928688751D702C9C0078A599 /* Utils.m */; };
 		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
-		92A77CBE1D6ED09500FD19A3 /* SearchFriendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A77CBD1D6ED09500FD19A3 /* SearchFriendTableViewController.m */; };
+		929A87AD1D711FEF0027385D /* FViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929A87AC1D711FEF0027385D /* FViewController.m */; };
+		92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */; };
 		92AF4F731D6ED3E100B92297 /* SearchFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */; };
 		92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4F751D6ED72E00B92297 /* UIViewConstant.m */; };
+		92B7CE9C1D7094900077240B /* ActivityIndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B7CE9B1D7094900077240B /* ActivityIndicatorView.xib */; };
 		92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CE61F91D6FFCAC00E31C34 /* NewStoryViewController.m */; };
 		92D50D841D6540770022772A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D50D831D6540770022772A /* Assets.xcassets */; };
 		92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EB835F1D6BDB9E004119FD /* RegisterViewController.m */; };
@@ -61,8 +63,8 @@
 		92441AB11D66A2E100F5426A /* UIViewController+RequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RequestHandler.h"; sourceTree = "<group>"; };
 		92441AE41D66AD3400F5426A /* SocketConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketConstant.h; sourceTree = "<group>"; };
 		92441AE51D66AD3400F5426A /* SocketConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConstant.m; sourceTree = "<group>"; };
-		924E108B1D6D99FE004DE853 /* RequestsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestsTableViewController.h; sourceTree = "<group>"; };
-		924E108C1D6D99FE004DE853 /* RequestsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestsTableViewController.m; sourceTree = "<group>"; };
+		924E108B1D6D99FE004DE853 /* RequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestViewController.h; sourceTree = "<group>"; };
+		924E108C1D6D99FE004DE853 /* RequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestViewController.m; sourceTree = "<group>"; };
 		924E108E1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceivedRequestTableViewCell.h; sourceTree = "<group>"; };
 		924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceivedRequestTableViewCell.m; sourceTree = "<group>"; };
 		924E10911D6D9C1B004DE853 /* SentRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SentRequestTableViewCell.h; sourceTree = "<group>"; };
@@ -74,12 +76,15 @@
 		928688741D702C9C0078A599 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		928688751D702C9C0078A599 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		928EBC0C1D6C371C001E7D3B /* RegisterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterView.xib; sourceTree = "<group>"; };
-		92A77CBC1D6ED09500FD19A3 /* SearchFriendTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendTableViewController.h; sourceTree = "<group>"; };
-		92A77CBD1D6ED09500FD19A3 /* SearchFriendTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendTableViewController.m; sourceTree = "<group>"; };
+		929A87AB1D711FEF0027385D /* FViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FViewController.h; sourceTree = "<group>"; };
+		929A87AC1D711FEF0027385D /* FViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FViewController.m; sourceTree = "<group>"; };
+		92A77CBC1D6ED09500FD19A3 /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendViewController.h; sourceTree = "<group>"; };
+		92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendViewController.m; sourceTree = "<group>"; };
 		92AF4F711D6ED3E100B92297 /* SearchFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendTableViewCell.h; sourceTree = "<group>"; };
 		92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendTableViewCell.m; sourceTree = "<group>"; };
 		92AF4F741D6ED72E00B92297 /* UIViewConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewConstant.h; sourceTree = "<group>"; };
 		92AF4F751D6ED72E00B92297 /* UIViewConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewConstant.m; sourceTree = "<group>"; };
+		92B7CE9B1D7094900077240B /* ActivityIndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivityIndicatorView.xib; sourceTree = "<group>"; };
 		92CE61F81D6FFCAC00E31C34 /* NewStoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewStoryViewController.h; sourceTree = "<group>"; };
 		92CE61F91D6FFCAC00E31C34 /* NewStoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewStoryViewController.m; sourceTree = "<group>"; };
 		92D50D741D6540770022772A /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -220,8 +225,8 @@
 		924E108A1D6D99E7004DE853 /* RequestsViewController */ = {
 			isa = PBXGroup;
 			children = (
-				924E108B1D6D99FE004DE853 /* RequestsTableViewController.h */,
-				924E108C1D6D99FE004DE853 /* RequestsTableViewController.m */,
+				924E108B1D6D99FE004DE853 /* RequestViewController.h */,
+				924E108C1D6D99FE004DE853 /* RequestViewController.m */,
 			);
 			path = RequestsViewController;
 			sourceTree = "<group>";
@@ -231,6 +236,8 @@
 			children = (
 				928688741D702C9C0078A599 /* Utils.h */,
 				928688751D702C9C0078A599 /* Utils.m */,
+				929A87AB1D711FEF0027385D /* FViewController.h */,
+				929A87AC1D711FEF0027385D /* FViewController.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -239,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				928EBC0C1D6C371C001E7D3B /* RegisterView.xib */,
+				92B7CE9B1D7094900077240B /* ActivityIndicatorView.xib */,
 			);
 			path = XIBs;
 			sourceTree = "<group>";
@@ -246,8 +254,8 @@
 		92A77CBB1D6ED07E00FD19A3 /* SearchFriendViewController */ = {
 			isa = PBXGroup;
 			children = (
-				92A77CBC1D6ED09500FD19A3 /* SearchFriendTableViewController.h */,
-				92A77CBD1D6ED09500FD19A3 /* SearchFriendTableViewController.m */,
+				92A77CBC1D6ED09500FD19A3 /* SearchFriendViewController.h */,
+				92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */,
 			);
 			path = SearchFriendViewController;
 			sourceTree = "<group>";
@@ -406,6 +414,7 @@
 				928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */,
 				92EB83651D6BEC1E004119FD /* Main.storyboard in Resources */,
 				92D50D841D6540770022772A /* Assets.xcassets in Resources */,
+				92B7CE9C1D7094900077240B /* ActivityIndicatorView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,17 +478,18 @@
 				92441ABA1D66A96100F5426A /* Story.m in Sources */,
 				92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
-				92A77CBE1D6ED09500FD19A3 /* SearchFriendTableViewController.m in Sources */,
+				92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
 				924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */,
 				92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */,
 				924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */,
 				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
 				924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */,
-				924E108D1D6D99FE004DE853 /* RequestsTableViewController.m in Sources */,
+				924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */,
 				92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */,
 				92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */,
 				920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */,
+				929A87AD1D711FEF0027385D /* FViewController.m in Sources */,
 				92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */,
 				92441AB51D66A94200F5426A /* main.m in Sources */,
 				922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */,

@@ -16,4 +16,6 @@
 
 @interface UIViewConstant : NSObject
 
+extern NSString *const kDefaultFontName;
+
 @end

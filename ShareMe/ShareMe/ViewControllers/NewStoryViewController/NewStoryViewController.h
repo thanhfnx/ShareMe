@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FViewController.h"
 #import <QBImagePickerController/QBImagePickerController.h>
 
-@interface NewStoryViewController : UIViewController <UITextFieldDelegate, QBImagePickerControllerDelegate,
+@interface NewStoryViewController : FViewController <UITextFieldDelegate, QBImagePickerControllerDelegate,
     UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @end

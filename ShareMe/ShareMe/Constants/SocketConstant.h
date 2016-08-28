@@ -23,6 +23,9 @@ extern NSString *const kDelim;
 extern NSString *const kSuccessMessage;
 extern NSString *const kFailureMessage;
 
+extern NSString *const kCloseConnection;
+extern NSString *const kEmptyMessage;
+
 extern NSString *const kUserLoginAction;
 extern NSString *const kUserRegisterAction;
 
@@ -42,5 +45,7 @@ extern NSString *const kUserUnfriendAction;
 extern NSString *const kUserSendRequestAction;
 
 extern NSString *const kUserCreateNewStoryAction;
+
+extern NSString *const kUserGetTopStoriesAction;
 
 @end

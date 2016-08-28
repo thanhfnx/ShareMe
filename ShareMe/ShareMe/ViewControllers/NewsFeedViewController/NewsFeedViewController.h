@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FViewController.h"
 
-@interface NewsFeedViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
-
-@property (strong, nonatomic) NSMutableArray *topStories;
+@interface NewsFeedViewController : FViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @end

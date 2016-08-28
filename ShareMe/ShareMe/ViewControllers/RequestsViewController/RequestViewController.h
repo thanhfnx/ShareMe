@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FViewController.h"
 
-@interface RequestsTableViewController : UITableViewController
+@interface RequestViewController : FViewController <UITableViewDataSource, UITableViewDelegate>
 
 @end

@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FViewController.h"
 
 @class User;
 
-@interface SearchFriendTableViewController : UITableViewController <UITextFieldDelegate>
+@interface SearchFriendViewController : FViewController <UITextFieldDelegate, UITableViewDataSource,
+    UITableViewDelegate>
 
 @property (strong, nonatomic) NSArray<User *> *users;
+@property (strong, nonatomic) NSString *keyword;
 
 @end

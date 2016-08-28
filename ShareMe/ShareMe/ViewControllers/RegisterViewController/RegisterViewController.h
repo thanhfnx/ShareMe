@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "THDatePickerViewController.h"
+#import "FViewController.h"
 
-@interface RegisterViewController : UIViewController <UITextFieldDelegate, THDatePickerDelegate>
+@interface RegisterViewController : FViewController <UITextFieldDelegate, THDatePickerDelegate>
 
 @end

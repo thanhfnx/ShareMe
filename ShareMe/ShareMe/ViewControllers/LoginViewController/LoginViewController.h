@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FViewController.h"
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate>
+@interface LoginViewController : FViewController <UITextFieldDelegate>
 
 @end

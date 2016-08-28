@@ -65,26 +65,6 @@ static NSInteger const kNumberOfCell = 4;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)showMessage:(NSString *)message title:(NSString *)title
-        complete:(void (^ _Nullable)(UIAlertAction *action))complete {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
-        preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:complete];
-    [alertController addAction:cancelAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
-- (void)showConfirmDialog:(NSString *)message title:(NSString *)title
-        handler:(void (^ _Nullable)(UIAlertAction *action))handler {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
-        preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:handler];
-    UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
-    [alertController addAction:yesAction];
-    [alertController addAction:noAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -108,6 +88,8 @@ static NSInteger const kNumberOfCell = 4;
         [self showConfirmDialog:kConfirmDiscardStory title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
         }];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

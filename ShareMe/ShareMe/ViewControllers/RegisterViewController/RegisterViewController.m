@@ -351,20 +351,6 @@ static NSInteger const kMinimumPasswordLength = 6;
         KNSemiModalOptionKeys.animationDuration: @(0.5f), KNSemiModalOptionKeys.shadowOpacity: @(0.3f)}];
 }
 
-- (void)dismissKeyboard {
-    [self.scrollView endEditing:YES];
-}
-
-- (void)showMessage:(NSString *)message title:(NSString *)title
-        complete:(void (^ _Nullable)(UIAlertAction *action))complete {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
-        preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel
-        handler:complete];
-    [alertController addAction:cancelAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -423,9 +409,10 @@ static NSInteger const kMinimumPasswordLength = 6;
     if ([message isEqualToString:kFailureMessage]) {
         [self showMessage:kFailedRegisterMessage title:kDefaultMessageTitle complete:nil];
     } else {
+        UIViewController *sender = self.navigationController.viewControllers[0];
         [self.navigationController popToRootViewControllerAnimated:NO];
         [ClientSocketController sendData:[self getUser] messageType:kSendingRequestSignal actionName:kUserLoginAction
-            sender:self.navigationController.viewControllers[0]];
+            sender:sender];
     }
 }
 
