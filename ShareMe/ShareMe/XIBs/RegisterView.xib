@@ -155,6 +155,9 @@
                     <state key="normal" title="I'm male">
                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
+                    <connections>
+                        <outletCollection property="otherButtons" destination="tbm-5W-vm5" id="Zy9-oz-NPK"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tbm-5W-vm5" customClass="DLRadioButton">
                     <rect key="frame" x="174" y="319" width="100" height="30"/>

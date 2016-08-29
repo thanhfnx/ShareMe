@@ -22,4 +22,6 @@
 
 @implementation UIViewConstant
 
+NSString *const kDefaultFontName = @"Helvetica-Light";
+
 @end

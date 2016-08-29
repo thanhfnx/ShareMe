@@ -16,12 +16,15 @@ NSString *const kReceivingRequestSignal = @"RE";
 NSString *const kServerHost = @"127.0.0.1";
 int const kServerPort = 1994;
 
-NSString *const kMessageFormat = @"%@~%@~%@!";
-NSString *const kEndOfStream = @"!";
+NSString *const kMessageFormat = @"%@~%@~%@";
+NSString *const kEndOfStream = @"<!END>";
 NSString *const kDelim = @"~";
 
 NSString *const kSuccessMessage = @"TRUE";
 NSString *const kFailureMessage = @"FALSE";
+
+NSString *const kCloseConnection = @"CLIENT_CLOSE_CONNECTION";
+NSString *const kEmptyMessage = @"N/A";
 
 NSString *const kUserLoginAction = @"USER_LOGIN";
 NSString *const kUserRegisterAction = @"USER_REGISTER";
@@ -42,5 +45,7 @@ NSString *const kUserUnfriendAction = @"USER_UNFRIEND_USER";
 NSString *const kUserSendRequestAction = @"USER_SEND_FRIEND_REQUEST";
 
 NSString *const kUserCreateNewStoryAction = @"USER_CREATE_NEW_STORY";
+
+NSString *const kUserGetTopStoriesAction = @"USER_GET_TOP_STORIES";
 
 @end

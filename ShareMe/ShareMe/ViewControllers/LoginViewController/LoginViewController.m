@@ -17,6 +17,7 @@ static NSString *const kEmptyUserNameMessage = @"UserName can not be empty!";
 static NSString *const kEmptyPasswordMessage = @"Password can not be empty!";
 static NSString *const kFailedLoginMessage = @"UserName or password is incorrect. Login failed!";
 static NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
+static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
 
 @interface LoginViewController () {
     User *_user;
@@ -70,15 +71,6 @@ static NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
     return YES;
 }
 
-- (void)showMessage:(NSString *)message title:(NSString *)title
-        complete:(void (^ _Nullable)(UIAlertAction *action))complete {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
-        preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:complete];
-    [alertController addAction:cancelAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
 #pragma mark - Packing Entity
 
 - (User *)getUser {
@@ -106,18 +98,19 @@ static NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
     return YES;
 }
 
-- (void)dismissKeyboard {
-    [self.view endEditing:YES];
-}
-
 #pragma mark - IBAction
 
 - (IBAction)loginButtonTapped:(UIButton *)sender {
     [self dismissKeyboard];
     if ([self validate]) {
+        [self showActitvyIndicator];
         [ClientSocketController sendData:[self getUser] messageType:kSendingRequestSignal actionName:kUserLoginAction
             sender:self];
     }
+}
+
+- (IBAction)registerButtonTapped:(UIButton *)sender {
+    [self performSegueWithIdentifier:kGoToRegisterSegueIdentifier sender:self];
 }
 
 - (IBAction)tapGestureRecognizer:(UITapGestureRecognizer *)sender {
@@ -149,11 +142,13 @@ static NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
 #pragma mark - Response Handler
 
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message; {
+    [self dismissActitvyIndicator];
     if ([message isEqualToString:kFailureMessage]) {
         [self showMessage:kFailedLoginMessage title:kDefaultMessageTitle complete:nil];
     } else {
         NSError *error;
         _user = [[User alloc] initWithString:message error:&error];
+        // TODO: Handle error
         if (!_user.friends) {
             _user.friends = [NSMutableArray<User, Optional> array];
         }

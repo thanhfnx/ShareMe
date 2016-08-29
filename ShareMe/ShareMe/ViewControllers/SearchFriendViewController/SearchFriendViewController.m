@@ -6,7 +6,7 @@
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
-#import "SearchFriendTableViewController.h"
+#import "SearchFriendViewController.h"
 #import "UIViewController+RequestHandler.h"
 #import "UIViewController+ResponseHandler.h"
 #import "ClientSocketController.h"
@@ -55,21 +55,24 @@ static NSString *const kSendRequestErrorMessage = @"Something went wrong! Can no
 static NSString *const kUnfriendErrorMessage = @"Something went wrong! Can not unfriend!";
 static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
 static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
+static NSString *const kSearchLabelTitle = @"Search result for '%@':";
 
-@interface SearchFriendTableViewController () {
+@interface SearchFriendViewController () {
     User *_currentUser;
     NSMutableArray<NSNumber *> *_relationStatuses;
     NSArray<NSString *> *_requestActions;
     NSArray<NSString *> *_responseActions;
 }
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UITextField *txtSearch;
+@property (weak, nonatomic) IBOutlet UILabel *lblSearchTitle;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldLeadingConstraint;
 
 @end
 
-@implementation SearchFriendTableViewController
+@implementation SearchFriendViewController
 
 #pragma mark - UIView Life Cycle
 
@@ -142,26 +145,6 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
     }
 }
 
-- (void)showMessage:(NSString *)message title:(NSString *)title
-        complete:(void (^ _Nullable)(UIAlertAction *action))complete {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
-        preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:complete];
-    [alertController addAction:cancelAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
-- (void)showConfirmDialog:(NSString *)message title:(NSString *)title
-        handler:(void (^ _Nullable)(UIAlertAction *action))handler {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
-        preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:handler];
-    UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
-    [alertController addAction:yesAction];
-    [alertController addAction:noAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
 #pragma mark - UITableViewDatasource, UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -169,6 +152,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    [self.lblSearchTitle setText:[NSString stringWithFormat:kSearchLabelTitle, self.keyword]];
     return self.users.count;
 }
 
@@ -201,8 +185,11 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self btnSearchTapped:nil];
-    return YES;
+    if (textField == self.txtSearch) {
+        [self btnSearchTapped:nil];
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark - IBAction
@@ -307,6 +294,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
     NSError *error;
     User *user = [[User alloc] initWithString:message error:&error];
+    // TODO: Handle error
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
         case UserUnfriendToUserAction:
@@ -367,6 +355,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self removeUser:_currentUser.receivedRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -378,6 +367,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self removeUser:_currentUser.receivedRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -389,6 +379,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self removeUser:_currentUser.sentRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -400,6 +391,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self addUserIfNotExist:_currentUser.sentRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -411,6 +403,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self removeUser:_currentUser.friends user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -423,7 +416,11 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
             } else {
                 NSError *error;
                 self.users = [User arrayOfModelsFromString:message error:&error];
+                // TODO: Handle error
                 [self setRelationStatuses];
+                self.keyword = self.txtSearch.text;
+                self.txtSearch.text = @"";
+                [self dismissKeyboard];
                 [self.tableView reloadData];
             }
             break;

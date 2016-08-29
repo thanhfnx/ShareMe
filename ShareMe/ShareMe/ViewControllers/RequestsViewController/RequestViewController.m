@@ -6,13 +6,14 @@
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
-#import "RequestsTableViewController.h"
+#import "RequestViewController.h"
 #import "MainTabBarViewController.h"
 #import "ReceivedRequestTableViewCell.h"
 #import "SentRequestTableViewCell.h"
 #import "ClientSocketController.h"
 #import "UIViewController+RequestHandler.h"
 #import "UIViewController+ResponseHandler.h"
+#import "UIViewConstant.h"
 #import "User.h"
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
@@ -30,8 +31,7 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
 
 typedef NS_ENUM(NSInteger, RequestSections) {
     ReceivedRequestSection,
-    SentRequestSection,
-    RequestSectionsCount
+    SentRequestSection
 };
 
 static NSString *const kReceivedRequestReuseIdentifier = @"ReceivedRequestCell";
@@ -41,8 +41,9 @@ static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kAcceptRequestErrorMessage = @"Something went wrong! Can not accept friend request!";
 static NSString *const kDeclineRequestErrorMessage = @"Something went wrong! Can not decline friend request!";
 static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can not cancel friend request!";
+static NSString *const kNoRequestsMessage = @"No new requests.";
 
-@interface RequestsTableViewController () {
+@interface RequestViewController () {
     User *_currentUser;
     NSArray<User *> *_receivedRequests;
     NSArray<User *> *_sentRequests;
@@ -50,9 +51,13 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
     NSArray<NSString *> *_responseActions;
 }
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *scRequestType;
+@property (weak, nonatomic) IBOutlet UILabel *lblTitle;
+
 @end
 
-@implementation RequestsTableViewController
+@implementation RequestViewController
 
 #pragma mark - UIView Life Cycle
 
@@ -77,6 +82,8 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
+    UIFont *font = [UIFont fontWithName:kDefaultFontName size:15];
+    [self.scRequestType setTitleTextAttributes:@{NSFontAttributeName: font} forState:UIControlStateNormal];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -87,12 +94,12 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
 #pragma mark - UITableViewDatasource, UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return RequestSectionsCount;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger numberOfRowsInSection = 0;
-    switch (section) {
+    switch (self.scRequestType.selectedSegmentIndex) {
         case ReceivedRequestSection:
             numberOfRowsInSection = _receivedRequests.count;
             break;
@@ -100,11 +107,19 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
             numberOfRowsInSection = _sentRequests.count;
             break;
     }
+    if (numberOfRowsInSection == 0) {
+        self.lblTitle.text = kNoRequestsMessage;
+        self.lblTitle.textAlignment = NSTextAlignmentCenter;
+    } else {
+        self.lblTitle.text = [NSString stringWithFormat:@"%@:", [self.scRequestType
+            titleForSegmentAtIndex:self.scRequestType.selectedSegmentIndex]];
+        self.lblTitle.textAlignment = NSTextAlignmentLeft;
+    }
     return numberOfRowsInSection;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    switch (indexPath.section) {
+    switch (self.scRequestType.selectedSegmentIndex) {
         case ReceivedRequestSection: {
             ReceivedRequestTableViewCell *cell = [tableView
                 dequeueReusableCellWithIdentifier:kReceivedRequestReuseIdentifier forIndexPath:indexPath];
@@ -130,6 +145,10 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
 
 #pragma mark - IBAction
 
+- (IBAction)requestTypeValueChanged:(UISegmentedControl *)sender {
+    [self.tableView reloadData];
+}
+
 - (IBAction)btnAcceptTapped:(UIButton *)sender {
     NSInteger index = sender.tag;
     NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
@@ -154,15 +173,6 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
         sender:self];
 }
 
-- (void)showMessage:(NSString *)message title:(NSString *)title
-        complete:(void (^ _Nullable)(UIAlertAction *action))complete {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
-        preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:complete];
-    [alertController addAction:cancelAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
 #pragma mark - Request Handler
 
 - (void)registerRequestHandler {
@@ -175,6 +185,7 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
     NSError *error;
     User *user = [[User alloc] initWithString:message error:&error];
+    // TODO: Handle error
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
         case UserSendRequestToUserAction:
@@ -231,6 +242,7 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self removeUser:_currentUser.receivedRequests user:user];
                 [self.tableView reloadData];
             }
@@ -241,6 +253,7 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self removeUser:_currentUser.receivedRequests user:user];
                 [self.tableView reloadData];
             }
@@ -251,6 +264,7 @@ static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can 
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
                 [self removeUser:_currentUser.sentRequests user:user];
                 [self.tableView reloadData];
             }

@@ -67,7 +67,8 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
     } else {
         jsonString = [object toJSONString];
     }
-    NSString *finalMessage = [NSString stringWithFormat:kMessageFormat, messageType, actionName, jsonString];
+    NSString *finalMessage = [[NSString stringWithFormat:kMessageFormat, messageType, actionName, jsonString]
+        stringByAppendingString:kEndOfStream];
     uint8_t *data = (uint8_t *) [finalMessage UTF8String];
     [kOutputStream write:data maxLength:strlen((char *) data)];
     [kResponses setValue:sender forKey:actionName];
@@ -99,12 +100,12 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
                 _receivedMessage = [_receivedMessage stringByAppendingString:temp];
             }
         }
-    } while (![_receivedMessage containsString:kEndOfStream]);
+    } while (![_receivedMessage hasSuffix:kEndOfStream]);
 }
 
 - (void)handleMessage {
     if (_receivedMessage) {
-        _receivedMessage = [_receivedMessage substringToIndex:_receivedMessage.length - 1];
+        _receivedMessage = [_receivedMessage substringToIndex:_receivedMessage.length - kEndOfStream.length];
         NSArray *result = [_receivedMessage componentsSeparatedByString:kDelim];
         if (result.count <= 2) {
             return;
