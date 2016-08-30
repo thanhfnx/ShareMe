@@ -11,5 +11,6 @@
 @interface Utils : NSObject
 
 + (CGFloat)screenWidth;
++ (UIImage *)resize:(UIImage *)image scaledToSize:(CGSize)newSize;
 
 @end

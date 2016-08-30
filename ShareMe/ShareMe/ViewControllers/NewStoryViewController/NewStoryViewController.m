@@ -10,30 +10,34 @@
 #import "MainTabBarViewController.h"
 #import "ClientSocketController.h"
 #import "UIViewController+ResponseHandler.h"
+#import "ThumbnailCollectionViewCell.h"
 #import "Utils.h"
 #import "Story.h"
 
 static NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd hh:mm:ss";
-static NSString *const kImageReuseIdentifier = @"ImageCell";
+static NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
 static NSString *const kDeleteButtonImage = @"delete";
 static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kConfirmMessageTitle = @"Confirm";
 static NSString *const kConfirmDiscardStory = @"Are you sure to discard this story?";
 static NSString *const kAddNewStoryErrorMessage = @"Something went wrong! Can not post new story!";
+static CGFloat const kMaxImageWidth = 1920.0f;
+static CGFloat const kMaxImageHeight = 1080.0f;
 static NSInteger const kNumberOfCell = 4;
 
 @interface NewStoryViewController () {
     NSMutableArray<UIImage *> *_images;
-    UICollectionView *_imagesCollectionView;
     CGFloat _cellWidth;
     NSDateFormatter *_dateFormatter;
 }
 
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UITextView *txvContent;
 @property (weak, nonatomic) IBOutlet UIView *vToolBar;
 @property (weak, nonatomic) IBOutlet UILabel *lblPlaceHolder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolBarViewBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentTextViewBottomConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeightConstraint;
 
 @end
 
@@ -50,6 +54,7 @@ static NSInteger const kNumberOfCell = 4;
     _images = [NSMutableArray array];
     _dateFormatter = [[NSDateFormatter alloc] init];
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
+    _cellWidth = ([Utils screenWidth] - 8.0f * (kNumberOfCell + 1)) / kNumberOfCell;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -116,14 +121,14 @@ static NSInteger const kNumberOfCell = 4;
     if ([self.txvContent hasText] || _images.count > 0) {
         [ClientSocketController sendData:[self getStory] messageType:kSendingRequestSignal
             actionName:kUserCreateNewStoryAction sender:self];
-        // TODO: Send images to server
     }
 }
 
-- (void)btnDeleteImageTapped:(UIButton *)sender {
+- (IBAction)btnDeleteImageTapped:(UIButton *)sender {
     NSInteger index = sender.tag;
     [_images removeObjectAtIndex:index];
-    [_imagesCollectionView reloadData];
+    [self.collectionView reloadData];
+    [self hideCollectionViewIfNeeded];
 }
 
 #pragma mark - Packing entity
@@ -135,7 +140,11 @@ static NSInteger const kNumberOfCell = 4;
     story.creator = creator;
     story.content = self.txvContent.text;
     story.createdTime = [_dateFormatter stringFromDate:[NSDate date]];
-    // TODO: Packing images
+    story.images = [NSMutableArray<Optional> array];
+    for (UIImage *imageData in _images) {
+        [story.images addObject:[UIImageJPEGRepresentation(imageData, 0.9f)
+            base64EncodedStringWithOptions:kNilOptions]];
+    }
     return story;
 }
 
@@ -155,6 +164,21 @@ static NSInteger const kNumberOfCell = 4;
     }];
 }
 
+#pragma mark - Show / hide collection view
+
+- (void)showCollectionView {
+    self.contentTextViewBottomConstraint.constant += (_cellWidth + 24.0f);
+    self.collectionViewHeightConstraint.constant = _cellWidth + 16.0f;
+    [self.collectionView reloadData];
+}
+
+- (void)hideCollectionViewIfNeeded {
+    if (_images.count == 0) {
+        self.contentTextViewBottomConstraint.constant -= (_cellWidth + 24.0f);
+        self.collectionViewHeightConstraint.constant = 0.0f;
+    }
+}
+
 #pragma mark - QBImagePickerControllerDelegate
 
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController
@@ -163,12 +187,15 @@ static NSInteger const kNumberOfCell = 4;
     for (PHAsset *asset in assets) {
         [_images addObject:[self getUIImageFromAsset:asset]];
     }
-    [self initImagesCollectionView];
+    [self showCollectionView];
     [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.txvContent becomeFirstResponder];
 }
 
 - (void)qb_imagePickerControllerDidCancel:(QBImagePickerController *)imagePickerController {
     [self dismissViewControllerAnimated:YES completion:NULL];
+    [self hideCollectionViewIfNeeded];
+    [self.txvContent becomeFirstResponder];
 }
 
 - (UIImage *)getUIImageFromAsset:(PHAsset *)asset {
@@ -180,92 +207,44 @@ static NSInteger const kNumberOfCell = 4;
         contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage * _Nullable result,
         NSDictionary * _Nullable info) {
         image = result;
-    }];
+    }];;
+    NSInteger width, height;
+    if (asset.pixelWidth < kMaxImageWidth && asset.pixelHeight < kMaxImageHeight) {
+        width = asset.pixelWidth;
+        height = asset.pixelHeight;
+    } else {
+        float ratio;
+        if (asset.pixelWidth > asset.pixelHeight) {
+            ratio = kMaxImageWidth / asset.pixelWidth;
+        } else {
+            ratio = kMaxImageHeight / asset.pixelHeight;
+        }
+        width = asset.pixelWidth * ratio;
+        height = asset.pixelHeight * ratio;
+    }
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    image = [Utils resize:image scaledToSize:CGSizeMake(width / scale, height / scale)];
     return image;
 }
 
-- (void)initImagesCollectionView {
-    if (!_imagesCollectionView) {
-        _cellWidth = ([Utils screenWidth] - 8.0f * (kNumberOfCell + 1)) / kNumberOfCell;
-        self.contentTextViewBottomConstraint.constant += (_cellWidth + 16.0f);
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        _imagesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-        _imagesCollectionView.backgroundColor = [UIColor whiteColor];
-        _imagesCollectionView.dataSource = self;
-        _imagesCollectionView.delegate = self;
-        [_imagesCollectionView registerClass:[UICollectionViewCell class]
-            forCellWithReuseIdentifier:kImageReuseIdentifier];
-        _imagesCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.view addSubview:_imagesCollectionView];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_imagesCollectionView
-            attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.view
-            attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_imagesCollectionView
-            attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.view
-            attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_imagesCollectionView
-            attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil
-            attribute:NSLayoutAttributeNotAnAttribute multiplier:0.0f constant:_cellWidth + 16.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_imagesCollectionView
-            attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.vToolBar
-            attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
-    } else {
-        [_imagesCollectionView reloadData];
-    }
-}
+#pragma mark - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return _images.count;
 }
 
-#pragma mark - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
     cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kImageReuseIdentifier
-        forIndexPath:indexPath];
-    UIImageView *imvThumbnail = [[UIImageView alloc] initWithFrame:CGRectZero];
-    imvThumbnail.image = _images[indexPath.row];
-    imvThumbnail.contentMode = UIViewContentModeScaleAspectFill;
-    imvThumbnail.clipsToBounds = YES;
-    imvThumbnail.translatesAutoresizingMaskIntoConstraints = NO;
-    [cell addSubview:imvThumbnail];
-    [cell addConstraint:[NSLayoutConstraint constraintWithItem:imvThumbnail attribute:NSLayoutAttributeWidth
-        relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
-    [cell addConstraint:[NSLayoutConstraint constraintWithItem:imvThumbnail attribute:NSLayoutAttributeHeight
-        relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeHeight multiplier:1.0f constant:0.0f]];
-    UIButton *btnDeleteImage = [[UIButton alloc] init];
-    [btnDeleteImage setImage:[UIImage imageNamed:kDeleteButtonImage] forState:UIControlStateNormal];
-    [btnDeleteImage addTarget:self action:@selector(btnDeleteImageTapped:)
-        forControlEvents:UIControlEventTouchUpInside];
-    btnDeleteImage.tag = indexPath.row;
-    btnDeleteImage.translatesAutoresizingMaskIntoConstraints = NO;
-    [cell addSubview:btnDeleteImage];
-    [cell addConstraint:[NSLayoutConstraint constraintWithItem:btnDeleteImage attribute:NSLayoutAttributeWidth
-        relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeWidth multiplier:0.25f constant:0.0f]];
-    [cell addConstraint:[NSLayoutConstraint constraintWithItem:btnDeleteImage attribute:NSLayoutAttributeHeight
-        relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeHeight multiplier:0.25f constant:0.0f]];
-    [cell addConstraint:[NSLayoutConstraint constraintWithItem:btnDeleteImage attribute:NSLayoutAttributeTop
-        relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f]];
-    [cell addConstraint:[NSLayoutConstraint constraintWithItem:btnDeleteImage attribute:NSLayoutAttributeTrailing
-        relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f]];
+    ThumbnailCollectionViewCell *cell = [collectionView
+        dequeueReusableCellWithReuseIdentifier:kThumbnailReuseIdentifier forIndexPath:indexPath];
+    cell.imvThumbnail.image = _images[indexPath.row];
+    cell.btnDelete.tag = indexPath.row;
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout
     sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(_cellWidth, _cellWidth);
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-    insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(0.0f, 8.0f, 0.0f, 8.0f);
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout
-    minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 8.0f;
 }
 
 #pragma mark - Response Handler
@@ -275,7 +254,7 @@ static NSInteger const kNumberOfCell = 4;
         [self showMessage:kAddNewStoryErrorMessage title:kDefaultMessageTitle complete:nil];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
-        // TODO
+        // TODO: Add new story to news feed
     }
 }
 

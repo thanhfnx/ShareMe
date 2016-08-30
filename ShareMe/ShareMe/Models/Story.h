@@ -21,7 +21,7 @@
 @property (strong, nonatomic) User<Optional> *creator;
 @property (strong, nonatomic) NSString<Optional> *content;
 @property (strong, nonatomic) NSString<Optional> *createdTime;
-@property (strong, nonatomic) NSString<Optional> * imageURL;
+@property (strong, nonatomic) NSMutableArray<Optional> *images;
 @property (strong, nonatomic) NSMutableArray<Comment, Optional> *comments;
 @property (strong, nonatomic) NSMutableArray<User, Optional> *likedUsers;
 

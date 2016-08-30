@@ -333,7 +333,7 @@
                                 </constraints>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="X6z-VH-REu">
-                                <rect key="frame" x="8" y="16" width="304" height="393"/>
+                                <rect key="frame" x="8" y="16" width="304" height="385"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no"/>
@@ -350,17 +350,72 @@
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="1MI-fy-FXa">
+                                <rect key="frame" x="0.0" y="409" width="320" height="0.0"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" id="Bcn-Lc-BN2"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="8" minimumInteritemSpacing="8" id="xEt-M4-bDh">
+                                    <size key="itemSize" width="70" height="70"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ThumbnailCell" id="5xj-wI-NEQ" customClass="ThumbnailCollectionViewCell">
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dA7-RT-4Zg"/>
+                                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7em-Xp-okf">
+                                                    <rect key="frame" x="-4" y="4" width="0.0" height="0.0"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="7em-Xp-okf" secondAttribute="height" multiplier="1:1" id="jnW-ZO-aMC"/>
+                                                    </constraints>
+                                                    <state key="normal" image="delete"/>
+                                                    <connections>
+                                                        <action selector="btnDeleteImageTapped:" destination="DaE-o8-DXk" eventType="touchUpInside" id="Q8u-kK-PyR"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="7em-Xp-okf" firstAttribute="top" secondItem="5xj-wI-NEQ" secondAttribute="top" constant="4" id="4kS-Hb-C2O"/>
+                                            <constraint firstItem="dA7-RT-4Zg" firstAttribute="height" secondItem="5xj-wI-NEQ" secondAttribute="height" id="6i4-2E-2nF"/>
+                                            <constraint firstItem="dA7-RT-4Zg" firstAttribute="leading" secondItem="5xj-wI-NEQ" secondAttribute="leading" id="7LA-MS-PMU"/>
+                                            <constraint firstAttribute="trailing" secondItem="7em-Xp-okf" secondAttribute="trailing" constant="4" id="F3S-QL-FYg"/>
+                                            <constraint firstItem="dA7-RT-4Zg" firstAttribute="top" secondItem="5xj-wI-NEQ" secondAttribute="top" id="alH-8D-vhS"/>
+                                            <constraint firstItem="7em-Xp-okf" firstAttribute="width" secondItem="dA7-RT-4Zg" secondAttribute="height" multiplier="1:4" id="e79-5h-lXd"/>
+                                            <constraint firstItem="dA7-RT-4Zg" firstAttribute="width" secondItem="5xj-wI-NEQ" secondAttribute="width" id="h5C-h3-K6g"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="btnDelete" destination="7em-Xp-okf" id="hmV-b5-jph"/>
+                                            <outlet property="imvThumbnail" destination="dA7-RT-4Zg" id="LMp-We-HzX"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="DaE-o8-DXk" id="47i-sJ-ha3"/>
+                                    <outlet property="delegate" destination="DaE-o8-DXk" id="8kW-FO-0aN"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="X6z-VH-REu" firstAttribute="leading" secondItem="Cfu-qf-M3j" secondAttribute="leading" constant="8" id="6ja-bm-e1a"/>
                             <constraint firstItem="D8J-uQ-YRN" firstAttribute="top" secondItem="oC3-cU-NIw" secondAttribute="bottom" id="AbF-Jk-dM8"/>
                             <constraint firstItem="FHO-g8-4XN" firstAttribute="leading" secondItem="X6z-VH-REu" secondAttribute="leading" constant="10" id="I94-dw-pOx"/>
-                            <constraint firstItem="oC3-cU-NIw" firstAttribute="top" secondItem="X6z-VH-REu" secondAttribute="bottom" id="IPa-W6-ugh"/>
+                            <constraint firstItem="oC3-cU-NIw" firstAttribute="top" secondItem="X6z-VH-REu" secondAttribute="bottom" constant="8" id="IPa-W6-ugh"/>
+                            <constraint firstAttribute="trailing" secondItem="1MI-fy-FXa" secondAttribute="trailing" id="Lcq-Uq-soF"/>
+                            <constraint firstItem="1MI-fy-FXa" firstAttribute="leading" secondItem="Cfu-qf-M3j" secondAttribute="leading" id="Ukz-Vk-QMn"/>
                             <constraint firstItem="FHO-g8-4XN" firstAttribute="top" secondItem="X6z-VH-REu" secondAttribute="top" id="eOS-pN-r14"/>
                             <constraint firstAttribute="trailing" secondItem="oC3-cU-NIw" secondAttribute="trailing" id="ey0-tB-FMY"/>
                             <constraint firstItem="oC3-cU-NIw" firstAttribute="leading" secondItem="Cfu-qf-M3j" secondAttribute="leading" id="hZ4-m5-msg"/>
                             <constraint firstItem="X6z-VH-REu" firstAttribute="top" secondItem="Q8q-Qt-5Hv" secondAttribute="bottom" constant="16" id="igz-W9-ydI"/>
+                            <constraint firstItem="oC3-cU-NIw" firstAttribute="top" secondItem="1MI-fy-FXa" secondAttribute="bottom" id="piL-P2-zKv"/>
                             <constraint firstAttribute="trailing" secondItem="X6z-VH-REu" secondAttribute="trailing" constant="8" id="y6Q-FK-rR7"/>
                         </constraints>
                     </view>
@@ -407,6 +462,8 @@
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="collectionView" destination="1MI-fy-FXa" id="z7E-ph-9At"/>
+                        <outlet property="collectionViewHeightConstraint" destination="Bcn-Lc-BN2" id="SEO-k0-om8"/>
                         <outlet property="contentTextViewBottomConstraint" destination="IPa-W6-ugh" id="Akb-Fg-2rs"/>
                         <outlet property="lblPlaceHolder" destination="FHO-g8-4XN" id="mVV-3E-29U"/>
                         <outlet property="toolBarViewBottomConstraint" destination="AbF-Jk-dM8" id="F0W-OA-xI1"/>
@@ -1346,6 +1403,7 @@
         <image name="add-location" width="100" height="100"/>
         <image name="back" width="60" height="60"/>
         <image name="comment" width="50" height="50"/>
+        <image name="delete" width="104" height="104"/>
         <image name="friends" width="30" height="30"/>
         <image name="logo" width="475" height="475"/>
         <image name="love" width="50" height="50"/>
