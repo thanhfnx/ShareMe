@@ -14,6 +14,7 @@
 static NSOutputStream *kOutputStream;
 static NSMutableDictionary<NSString *, UIViewController *> *kResponses;
 static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
+static NSData *kRemainData;
 
 @interface ClientSocketController () {
     CFReadStreamRef _readStream;
@@ -60,7 +61,7 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
 }
 
 + (void)sendData:(id)object messageType:(NSString *)messageType actionName:(NSString *)actionName
-        sender:(UIViewController *)sender {
+    sender:(UIViewController *)sender {
     NSString *jsonString;
     if ([object isKindOfClass:[NSString class]]) {
         jsonString = object;
@@ -69,8 +70,15 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
     }
     NSString *finalMessage = [[NSString stringWithFormat:kMessageFormat, messageType, actionName, jsonString]
         stringByAppendingString:kEndOfStream];
-    uint8_t *data = (uint8_t *) [finalMessage UTF8String];
-    [kOutputStream write:data maxLength:strlen((char *) data)];
+    NSData *data = [finalMessage dataUsingEncoding:NSUTF8StringEncoding];
+    uint8_t *bytes = (uint8_t *) [data bytes];
+    NSInteger bytesWritten = [kOutputStream write:bytes maxLength:[data length]];
+    if (bytesWritten < [data length]) {
+        if (bytesWritten != -1) {
+            bytes += bytesWritten;
+        }
+        kRemainData = [NSData dataWithBytes:bytes length:strlen((char *)bytes)];
+    }
     [kResponses setValue:sender forKey:actionName];
 }
 
@@ -140,10 +148,24 @@ static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
                 [self handleMessage];
             }
             break;
-        case NSStreamEventHasSpaceAvailable:
+        case NSStreamEventHasSpaceAvailable: {
+            if (kRemainData) {
+                uint8_t *bytes = (uint8_t *) [kRemainData bytes];
+                NSInteger bytesWritten = [kOutputStream write:bytes maxLength:[kRemainData length]];
+                if (bytesWritten < [kRemainData length]) {
+                    if (bytesWritten != -1) {
+                        bytes += bytesWritten;
+                    }
+                    kRemainData = [NSData dataWithBytes:bytes length:strlen((char *)bytes)];
+                } else {
+                    kRemainData = nil;
+                }
+            }
             break;
+        }
         case NSStreamEventErrorOccurred:
             // TODO
+            [self closeSocket];
             break;
         case NSStreamEventEndEncountered:
             // TODO
