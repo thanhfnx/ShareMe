@@ -13,8 +13,8 @@
 
 - (void)openSocket;
 - (void)closeSocket;
-+ (void)sendData:(id)object messageType:(NSString *)messageType actionName:(NSString *)actionName
-          sender:(UIViewController *)sender;
++ (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
+    sender:(UIViewController *)sender;
 + (void)registerRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver;
 
 @end

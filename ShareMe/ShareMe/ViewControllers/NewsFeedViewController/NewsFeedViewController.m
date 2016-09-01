@@ -28,6 +28,7 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
 static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
 static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
 static NSString *const kRequestFormat = @"%ld-%ld";
+static NSInteger const kNumberOfStories = 10;
 
 @interface NewsFeedViewController () {
     User *_currentUser;
@@ -35,11 +36,14 @@ static NSString *const kRequestFormat = @"%ld-%ld";
     NSMutableArray<Story *> *_topStories;
     NSArray<NSString *> *_responseActions;
     NSInteger _startIndex;
+    NSMutableDictionary<NSNumber *, NSNumber *> *_imageIndexes;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UITextField *txtSearch;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeLeftGestureRecognizer;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeRightGestureRecognizer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldLeadingConstraint;
 
 @end
@@ -50,7 +54,7 @@ static NSString *const kRequestFormat = @"%ld-%ld";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.estimatedRowHeight = 350;
+    self.tableView.estimatedRowHeight = 44.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
@@ -64,11 +68,16 @@ static NSString *const kRequestFormat = @"%ld-%ld";
     ];
     _startIndex = 0;
     _topStories = [NSMutableArray array];
-    [ClientSocketController sendData:[NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
-        _startIndex] messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction sender:self];
+    _imageIndexes = [NSMutableDictionary dictionary];
+    [self loadTopStories];
 }
 
 #pragma mark - IBAction
+
+- (void)loadTopStories {
+    [ClientSocketController sendData:[NSString stringWithFormat:kRequestFormat, _startIndex,
+        kNumberOfStories] messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction sender:self];
+}
 
 - (IBAction)btnSearchTapped:(UIButton *)sender {
     if (self.lblTitle.alpha == 1.0f) {
@@ -111,6 +120,26 @@ static NSString *const kRequestFormat = @"%ld-%ld";
     return NO;
 }
 
+#pragma mark - 
+
+- (IBAction)swipeLeftGestureRecognizer:(UISwipeGestureRecognizer *)sender {
+    StoryTableViewCell *cell = (StoryTableViewCell *) sender.view;
+    NSInteger index = cell.tag;
+    NSInteger currentImageIndex = _imageIndexes[@(index)].integerValue;
+    if (currentImageIndex) {
+        // TODO
+    }
+}
+
+- (IBAction)swipeRightGestureRecognizer:(UISwipeGestureRecognizer *)sender {
+    StoryTableViewCell *cell = (StoryTableViewCell *) sender.view;
+    NSInteger index = cell.tag;
+    NSInteger currentImageIndex = _imageIndexes[@(index)].integerValue;
+    if (currentImageIndex < _topStories[index].images.count - 1) {
+        // TODO
+    }
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -140,8 +169,31 @@ static NSString *const kRequestFormat = @"%ld-%ld";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kStoryReuseIdentifier
         forIndexPath:indexPath];
-    [cell setStory:_topStories[indexPath.row]];
+    if (!cell) {
+        return [UITableViewCell new];
+    }
+    cell.tag = indexPath.row;
+    NSInteger imageIndex = 0;
+    if (_topStories[indexPath.row].images.count > 1) {
+        if (!_imageIndexes[@(indexPath.row)]) {
+            _imageIndexes[@(indexPath.row)] = @(0);
+        } else {
+            imageIndex = _imageIndexes[@(indexPath.row)].integerValue;
+        }
+        [cell addGestureRecognizer:self.swipeLeftGestureRecognizer];
+        [cell addGestureRecognizer:self.swipeRightGestureRecognizer];
+    }
+    [cell setStory:_topStories[indexPath.row] imageIndex:imageIndex];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
+    forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
+    NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
+    if (indexPath.section == lastSectionIndex && indexPath.row == lastRowIndex) {
+        [self loadTopStories];
+    }
 }
 
 #pragma mark - Response Handler
@@ -168,6 +220,7 @@ static NSString *const kRequestFormat = @"%ld-%ld";
             } else {
                 NSError *error;
                 [_topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
+                _startIndex += kNumberOfStories;
                 // TODO: Handle error
                 // TODO: Fix can't read UTF-8 story issue
                 [self.tableView reloadData];

@@ -159,10 +159,11 @@ static NSString *const kSearchLabelTitle = @"Search result for '%@':";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SearchFriendTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kSearchFriendReuseIdentifier
         forIndexPath:indexPath];
-    if (cell) {
-        cell.btnAction.tag = indexPath.row;
-        [cell setUser:self.users[indexPath.row] relationStatus:_relationStatuses[indexPath.row].integerValue];
+    if (!cell) {
+        return [UITableViewCell new];
     }
+    cell.btnAction.tag = indexPath.row;
+    [cell setUser:self.users[indexPath.row] relationStatus:_relationStatuses[indexPath.row].integerValue];
     return cell;
 }
 

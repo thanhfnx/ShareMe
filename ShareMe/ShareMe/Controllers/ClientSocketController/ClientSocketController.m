@@ -7,7 +7,6 @@
 //
 
 #import "ClientSocketController.h"
-#import "JSONModel.h"
 #import "UIViewController+ResponseHandler.h"
 #import "UIViewController+RequestHandler.h"
 
@@ -60,15 +59,9 @@ static NSData *kRemainData;
     kOutputStream = nil;
 }
 
-+ (void)sendData:(id)object messageType:(NSString *)messageType actionName:(NSString *)actionName
++ (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
     sender:(UIViewController *)sender {
-    NSString *jsonString;
-    if ([object isKindOfClass:[NSString class]]) {
-        jsonString = object;
-    } else {
-        jsonString = [object toJSONString];
-    }
-    NSString *finalMessage = [[NSString stringWithFormat:kMessageFormat, messageType, actionName, jsonString]
+    NSString *finalMessage = [[NSString stringWithFormat:kMessageFormat, messageType, actionName, message]
         stringByAppendingString:kEndOfStream];
     NSData *data = [finalMessage dataUsingEncoding:NSUTF8StringEncoding];
     uint8_t *bytes = (uint8_t *) [data bytes];
@@ -79,7 +72,7 @@ static NSData *kRemainData;
         }
         kRemainData = [NSData dataWithBytes:bytes length:strlen((char *)bytes)];
     }
-    [kResponses setValue:sender forKey:actionName];
+    kResponses[actionName] = sender;
 }
 
 + (void)registerRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver {
@@ -90,7 +83,7 @@ static NSData *kRemainData;
         }
     } else {
         array = @[receiver].mutableCopy;
-        [kRequests setValue:array forKey:actionName];
+        kRequests[actionName] = array;
     }
 }
 

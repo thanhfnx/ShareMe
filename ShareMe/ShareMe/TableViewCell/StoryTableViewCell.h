@@ -20,7 +20,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imvContent;
 @property (weak, nonatomic) IBOutlet UILabel *lblNumberOfLikes;
 @property (weak, nonatomic) IBOutlet UILabel *lblNumberOfComments;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentImageViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *likeButtonTopSpacingConstraint;
 
-- (void)setStory:(Story *)story;
+- (void)setStory:(Story *)story imageIndex:(NSInteger)imageIndex;
 
 @end

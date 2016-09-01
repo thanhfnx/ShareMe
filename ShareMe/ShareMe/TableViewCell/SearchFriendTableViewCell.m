@@ -9,6 +9,7 @@
 #import "SearchFriendTableViewCell.h"
 #import "UIViewConstant.h"
 #import "User.h"
+#import "Utils.h"
 
 typedef NS_ENUM(NSInteger, Relations) {
     FriendRelation,
@@ -17,8 +18,6 @@ typedef NS_ENUM(NSInteger, Relations) {
     NotFriendRelation
 };
 
-static NSString *const kDefaultMaleAvatar = @"default-male-avatar";
-static NSString *const kDefaultFemaleAvatar = @"default-female-avatar";
 static NSString *const kFriendButtonTitle = @"Friends";
 static NSString *const kSentRequestButtonTitle = @"Cancel";
 static NSString *const kReceivedRequestButtonTitle = @"Reply";
@@ -27,15 +26,7 @@ static NSString *const kNotFriendButtonTitle = @"Add";
 @implementation SearchFriendTableViewCell
 
 - (void)setUser:(User *)user relationStatus:(NSInteger)relationStatus {
-    NSString *imageName;
-    if (user.avatarImageURL.length) {
-        imageName = user.avatarImageURL;
-    } else if (user.gender) {
-        imageName = kDefaultMaleAvatar;
-    } else {
-        imageName = kDefaultFemaleAvatar;
-    }
-    self.imvAvatar.image = [UIImage imageNamed:imageName];
+    self.imvAvatar.image = [Utils getAvatar:user.avatarImage gender:user.gender];
     self.lblFullName.text = [user fullName];
     self.lblUserName.text = [@"@" stringByAppendingString:user.userName];
     NSString *actionButtonTitle;

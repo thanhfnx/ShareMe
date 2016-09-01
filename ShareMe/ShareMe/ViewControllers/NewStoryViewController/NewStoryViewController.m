@@ -13,8 +13,9 @@
 #import "ThumbnailCollectionViewCell.h"
 #import "Utils.h"
 #import "Story.h"
+#import "FDateFormatter.h"
 
-static NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd hh:mm:ss";
+static NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd HH:mm:ss";
 static NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
 static NSString *const kDeleteButtonImage = @"delete";
 static NSString *const kDefaultMessageTitle = @"Warning";
@@ -52,7 +53,7 @@ static NSInteger const kNumberOfCell = 4;
     self.navigationItem.titleView.frame = frame;
     [self.txvContent becomeFirstResponder];
     _images = [NSMutableArray array];
-    _dateFormatter = [[NSDateFormatter alloc] init];
+    _dateFormatter = [FDateFormatter sharedDateFormatter];
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
     _cellWidth = ([Utils screenWidth] - 8.0f * (kNumberOfCell + 1)) / kNumberOfCell;
 }
@@ -119,7 +120,7 @@ static NSInteger const kNumberOfCell = 4;
 
 - (IBAction)btnPostTapped:(UIButton *)sender {
     if ([self.txvContent hasText] || _images.count > 0) {
-        [ClientSocketController sendData:[self getStory] messageType:kSendingRequestSignal
+        [ClientSocketController sendData:[[self getStory] toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewStoryAction sender:self];
     }
 }
@@ -174,7 +175,7 @@ static NSInteger const kNumberOfCell = 4;
 
 - (void)hideCollectionViewIfNeeded {
     if (_images.count == 0) {
-        self.contentTextViewBottomConstraint.constant -= (_cellWidth + 24.0f);
+        self.contentTextViewBottomConstraint.constant = 8.0f;
         self.collectionViewHeightConstraint.constant = 0.0f;
     }
 }

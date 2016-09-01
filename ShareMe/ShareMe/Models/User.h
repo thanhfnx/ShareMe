@@ -27,8 +27,8 @@
 @property (strong, nonatomic) NSMutableArray<User, Optional> *friends;
 @property (strong, nonatomic) NSMutableArray<User, Optional> *sentRequests;
 @property (strong, nonatomic) NSMutableArray<User, Optional> *receivedRequests;
-@property (strong, nonatomic) NSString<Optional> *avatarImageURL;
-@property (strong, nonatomic) NSString<Optional> *coverImageURL;
+@property (strong, nonatomic) NSString<Optional> *avatarImage;
+@property (strong, nonatomic) NSString<Optional> *coverImage;
 
 - (NSString *)fullName;
 
