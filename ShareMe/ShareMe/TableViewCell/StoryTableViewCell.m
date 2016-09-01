@@ -8,31 +8,31 @@
 
 #import "StoryTableViewCell.h"
 #import "Story.h"
-
-static NSString *const kDefaultMaleAvatar = @"default-male-avatar";
-static NSString *const kDefaultFemaleAvatar = @"default-female-avatar";
+#import "Utils.h"
 
 @implementation StoryTableViewCell
 
-- (void)setStory:(Story *)story {
-    self.imvAvatar.image = [UIImage imageNamed:(story.creator.avatarImageURL == nil ? (story.creator.gender.boolValue == 0 ? kDefaultMaleAvatar : kDefaultFemaleAvatar) : story.creator.avatarImageURL)];
+- (void)setStory:(Story *)story imageIndex:(NSInteger)imageIndex {
+    self.imvAvatar.image = [Utils getAvatar:story.creator.avatarImage gender:story.creator.gender];
     self.lblFullName.text = [story.creator fullName];
     self.lblUserName.text = [NSString stringWithFormat:@"@%@", story.creator.userName];
-    // TODO: Calculate created time and display
-    self.lblCreatedTime.text = @"4d ago";
+    self.lblCreatedTime.text = [Utils timeDiffFromDate:story.createdTime];
     self.txvContent.text = story.content;
-    // TODO: Replace sample data
-    UIImage *image = [UIImage imageNamed:@"story-image"];
-    self.imvContent.image = image;
-    if (image.size.width >= image.size.height) {
-        self.imvContent.contentMode = UIViewContentModeScaleAspectFill;
+    if (!story.images.count) {
+        [self.likeButtonTopSpacingConstraint setConstant:0.0f];
+        [self.contentImageViewHeightConstraint setConstant:0.0f];
     } else {
-        self.imvContent.contentMode = UIViewContentModeScaleAspectFit;
+        CGFloat height = [Utils screenWidth] * 9.0f / 16.0f;
+        [self.likeButtonTopSpacingConstraint setConstant:height + 8.0f];
+        [self.contentImageViewHeightConstraint setConstant:height];
+        NSData *imageData = [[NSData alloc] initWithBase64EncodedString:story.images[imageIndex]
+            options:NSDataBase64DecodingIgnoreUnknownCharacters];
+        UIImage *image = [UIImage imageWithData:imageData];
+        self.imvContent.image = image;
     }
     // TODO: Replace sample data
-    self.lblNumberOfComments.text = @"942";
-    self.lblNumberOfLikes.text = @"1.2k";
-    [self setNeedsUpdateConstraints];
+    self.lblNumberOfComments.text = [Utils stringfromNumber:723233];
+    self.lblNumberOfLikes.text = [Utils stringfromNumber:411];
 }
 
 @end

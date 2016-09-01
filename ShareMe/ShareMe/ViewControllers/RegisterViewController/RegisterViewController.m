@@ -12,6 +12,7 @@
 #import "DLRadioButton.h"
 #import "UIViewController+ResponseHandler.h"
 #import "Utils.h"
+#import "FDateFormatter.h"
 
 static NSString *const kDefaultDateFormat = @"dd-MM-yyyy";
 static NSString *const kDefaultDate = @"05-09-1994";
@@ -73,7 +74,7 @@ static NSInteger const kMinimumPasswordLength = 6;
         screenRect.origin.x += [Utils screenWidth];
     }
     _currentPage = 0;
-    _dateFormatter = [[NSDateFormatter alloc] init];
+    _dateFormatter = [FDateFormatter sharedDateFormatter];
     [_dateFormatter setDateFormat:kDefaultDateFormat];
     _currentDate = [_dateFormatter dateFromString:kDefaultDate];
 }
@@ -289,7 +290,7 @@ static NSInteger const kMinimumPasswordLength = 6;
 - (IBAction)btnRegisterTapped:(UIButton *)sender {
     [self dismissKeyboard];
     if ([self validate]) {
-        [ClientSocketController sendData:[self getUser] messageType:kSendingRequestSignal
+        [ClientSocketController sendData:[[self getUser] toJSONString] messageType:kSendingRequestSignal
             actionName:kUserRegisterAction sender:self];
     }
 }
@@ -411,7 +412,7 @@ static NSInteger const kMinimumPasswordLength = 6;
     } else {
         UIViewController *sender = self.navigationController.viewControllers[0];
         [self.navigationController popToRootViewControllerAnimated:NO];
-        [ClientSocketController sendData:[self getUser] messageType:kSendingRequestSignal actionName:kUserLoginAction
+        [ClientSocketController sendData:[[self getUser] toJSONString] messageType:kSendingRequestSignal actionName:kUserLoginAction
             sender:sender];
     }
 }

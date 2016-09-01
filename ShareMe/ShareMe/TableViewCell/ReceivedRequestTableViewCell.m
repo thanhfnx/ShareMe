@@ -8,22 +8,12 @@
 
 #import "ReceivedRequestTableViewCell.h"
 #import "User.h"
-
-static NSString *const kDefaultMaleAvatar = @"default-male-avatar";
-static NSString *const kDefaultFemaleAvatar = @"default-female-avatar";
+#import "Utils.h"
 
 @implementation ReceivedRequestTableViewCell
 
 - (void)setUser:(User *)user {
-    NSString *imageName;
-    if (user.avatarImageURL.length) {
-        imageName = user.avatarImageURL;
-    } else if (user.gender) {
-        imageName = kDefaultMaleAvatar;
-    } else {
-        imageName = kDefaultFemaleAvatar;
-    }
-    self.imvAvatar.image = [UIImage imageNamed:imageName];
+    self.imvAvatar.image = [Utils getAvatar:user.avatarImage gender:user.gender];
     self.lblFullName.text = [user fullName];
     self.lblUserName.text = [@"@" stringByAppendingString:user.userName];
 }

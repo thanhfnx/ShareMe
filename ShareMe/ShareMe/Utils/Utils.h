@@ -11,6 +11,9 @@
 @interface Utils : NSObject
 
 + (CGFloat)screenWidth;
++ (UIImage *)getAvatar:(NSString *)imageString gender:(BOOL)gender;
 + (UIImage *)resize:(UIImage *)image scaledToSize:(CGSize)newSize;
++ (NSString *)stringfromNumber:(NSUInteger)number;
++ (NSString *)timeDiffFromDate:(NSString *)dateString;
 
 @end
