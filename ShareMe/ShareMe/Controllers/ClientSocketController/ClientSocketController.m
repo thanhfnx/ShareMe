@@ -61,8 +61,9 @@ static NSData *kRemainData;
 
 + (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
     sender:(UIViewController *)sender {
-    NSString *finalMessage = [[NSString stringWithFormat:kMessageFormat, messageType, actionName, message]
-        stringByAppendingString:kEndOfStream];
+    NSString *finalMessage = [NSString stringWithFormat:kMessageFormat, messageType, actionName, message];
+    finalMessage = [NSString stringWithFormat:kFinalMessageFormat, kStartOfStream, strlen([finalMessage UTF8String]),
+        finalMessage, kEndOfStream];
     NSData *data = [finalMessage dataUsingEncoding:NSUTF8StringEncoding];
     uint8_t *bytes = (uint8_t *) [data bytes];
     NSInteger bytesWritten = [kOutputStream write:bytes maxLength:[data length]];
@@ -90,35 +91,39 @@ static NSData *kRemainData;
 #pragma mark - Process message from server
 
 - (void)readMessage {
-    _receivedMessage = @"";
-    uint8_t buffer[1024];
+    uint8_t buffer[kDefaultBufferLength];
     NSString *temp;
-    do {
-        NSInteger value = [_inputStream read:buffer maxLength:sizeof(buffer)];
-        if (value > 0) {
-            temp = [[NSString alloc] initWithBytes:buffer length:value encoding:NSUTF8StringEncoding];
-            if (temp) {
-                _receivedMessage = [_receivedMessage stringByAppendingString:temp];
-            }
+    NSInteger bytesRead = [_inputStream read:buffer maxLength:kDefaultBufferLength];
+    _receivedMessage = [[NSString alloc] initWithBytes:buffer length:bytesRead
+        encoding:NSUTF8StringEncoding];
+    NSUInteger offset = kDefaultBufferLength;
+    if ([_receivedMessage hasPrefix:kStartOfStream]) {
+        _receivedMessage = [_receivedMessage substringFromIndex:kStartOfStream.length];
+        NSString *messageLengthString = [_receivedMessage componentsSeparatedByString:@"-"][0];
+        _receivedMessage = [_receivedMessage substringFromIndex:messageLengthString.length + 1];
+        NSUInteger messageLength = [messageLengthString integerValue] + kEndOfStream.length + kStartOfStream.length +
+            messageLengthString.length + 1;
+        NSUInteger bufferLength;
+        while (offset < messageLength) {
+            bufferLength = messageLength - offset > kDefaultBufferLength ? kDefaultBufferLength :
+                messageLength - offset;
+            bytesRead = [_inputStream read:buffer maxLength:bufferLength];
+            offset += bufferLength;
+            temp = [[NSString alloc] initWithBytes:buffer length:bytesRead encoding:NSUTF8StringEncoding];
+            _receivedMessage = [_receivedMessage stringByAppendingString:temp];
         }
-    } while (![_receivedMessage hasSuffix:kEndOfStream]);
+        _receivedMessage = [_receivedMessage substringToIndex:[_receivedMessage rangeOfString:kEndOfStream].location];
+    }
 }
 
 - (void)handleMessage {
     if (_receivedMessage) {
-        _receivedMessage = [_receivedMessage substringToIndex:_receivedMessage.length - kEndOfStream.length];
         NSArray *result = [_receivedMessage componentsSeparatedByString:kDelim];
-        if (result.count <= 2) {
+        if ([result containsObject:@""]) {
             return;
-        } else {
-            for (NSString *str in result) {
-                if ([str isEqualToString:@""]) {
-                    return;
-                }
-            }
         }
         if ([result[0] isEqualToString:kReceivingRequestSignal]) {
-            [[kResponses objectForKey:result[1]] handleResponse:result[1] message:result[2]];
+            [kResponses[result[1]] handleResponse:result[1] message:result[2]];
             [kResponses removeObjectForKey:result[1]];
         } else if ([result[0] isEqualToString:kSendingRequestSignal]) {
             NSArray *array = [kRequests objectForKey:result[1]];

@@ -15,7 +15,6 @@
 #import "Story.h"
 #import "FDateFormatter.h"
 
-static NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd HH:mm:ss";
 static NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
 static NSString *const kDeleteButtonImage = @"delete";
 static NSString *const kDefaultMessageTitle = @"Warning";
@@ -120,6 +119,10 @@ static NSInteger const kNumberOfCell = 4;
 
 - (IBAction)btnPostTapped:(UIButton *)sender {
     if ([self.txvContent hasText] || _images.count > 0) {
+        [self dismissKeyboard];
+        CGRect frame = [[UIScreen mainScreen] bounds];
+        frame.origin.y -= 44.0f;
+        [self showActitvyIndicator:self.view frame:frame];
         [ClientSocketController sendData:[[self getStory] toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewStoryAction sender:self];
     }
@@ -208,7 +211,7 @@ static NSInteger const kNumberOfCell = 4;
         contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage * _Nullable result,
         NSDictionary * _Nullable info) {
         image = result;
-    }];;
+    }];
     NSInteger width, height;
     if (asset.pixelWidth < kMaxImageWidth && asset.pixelHeight < kMaxImageHeight) {
         width = asset.pixelWidth;

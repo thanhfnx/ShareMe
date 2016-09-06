@@ -17,6 +17,9 @@ extern NSString *const kServerHost;
 extern int const kServerPort;
 
 extern NSString *const kMessageFormat;
+extern NSString *const kFinalMessageFormat;
+extern NSInteger const kDefaultBufferLength;
+extern NSString *const kStartOfStream;
 extern NSString *const kEndOfStream;
 extern NSString *const kDelim;
 
@@ -47,5 +50,6 @@ extern NSString *const kUserSendRequestAction;
 extern NSString *const kUserCreateNewStoryAction;
 
 extern NSString *const kUserGetTopStoriesAction;
+extern NSString *const kAddImageToStory;
 
 @end

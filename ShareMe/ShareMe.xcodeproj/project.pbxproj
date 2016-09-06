@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		920391151D6D343E00BC5BE0 /* NewsFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391141D6D343E00BC5BE0 /* NewsFeedViewController.m */; };
 		920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */; };
+		922945011D7D40C300913B0C /* NewsFeedImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922945001D7D40C300913B0C /* NewsFeedImageView.xib */; };
 		922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */; };
 		92441AB51D66A94200F5426A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D781D6540770022772A /* main.m */; };
 		92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D7B1D6540770022772A /* AppDelegate.m */; };
@@ -48,6 +49,7 @@
 		920391141D6D343E00BC5BE0 /* NewsFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsFeedViewController.m; sourceTree = "<group>"; };
 		920391171D6D3EAB00BC5BE0 /* StoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewCell.h; sourceTree = "<group>"; };
 		920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryTableViewCell.m; sourceTree = "<group>"; };
+		922945001D7D40C300913B0C /* NewsFeedImageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsFeedImageView.xib; sourceTree = "<group>"; };
 		922DB3EE1D6B4D4C00AF2268 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		92441A9A1D669F0E00F5426A /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Comment.h; path = ../Models/Comment.h; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 		928EBBFF1D6C2C28001E7D3B /* XIBs */ = {
 			isa = PBXGroup;
 			children = (
+				922945001D7D40C300913B0C /* NewsFeedImageView.xib */,
 				928EBC0C1D6C371C001E7D3B /* RegisterView.xib */,
 				92B7CE9B1D7094900077240B /* ActivityIndicatorView.xib */,
 			);
@@ -438,6 +441,7 @@
 				92EB83651D6BEC1E004119FD /* Main.storyboard in Resources */,
 				92D50D841D6540770022772A /* Assets.xcassets in Resources */,
 				92B7CE9C1D7094900077240B /* ActivityIndicatorView.xib in Resources */,
+				922945011D7D40C300913B0C /* NewsFeedImageView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

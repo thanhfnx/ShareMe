@@ -10,6 +10,7 @@
 #import "ClientSocketController.h"
 #import "StoryTableViewCell.h"
 #import "UIViewController+ResponseHandler.h"
+#import "UIViewController+RequestHandler.h"
 #import "MainTabBarViewController.h"
 #import "SearchFriendViewController.h"
 #import "Utils.h"
@@ -19,6 +20,10 @@
 typedef NS_ENUM(NSInteger, UserResponseActions) {
     UserSearchFriendAction,
     UserGetTopStoriesAction
+};
+
+typedef NS_ENUM(NSInteger, UserRequestActions) {
+    AddImageToStory
 };
 
 static NSString *const kDefaultMessageTitle = @"Warning";
@@ -35,15 +40,13 @@ static NSInteger const kNumberOfStories = 10;
     NSArray<User *> *_searchResult;
     NSMutableArray<Story *> *_topStories;
     NSArray<NSString *> *_responseActions;
+    NSArray<NSString *> *_requestActions;
     NSInteger _startIndex;
-    NSMutableDictionary<NSNumber *, NSNumber *> *_imageIndexes;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UITextField *txtSearch;
-@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeLeftGestureRecognizer;
-@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeRightGestureRecognizer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldLeadingConstraint;
 
 @end
@@ -54,6 +57,7 @@ static NSInteger const kNumberOfStories = 10;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self registerRequestHandler];
     self.tableView.estimatedRowHeight = 44.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -66,9 +70,9 @@ static NSInteger const kNumberOfStories = 10;
         kUserSearchFriendAction,
         kUserGetTopStoriesAction
     ];
+    _requestActions = @[kAddImageToStory];
     _startIndex = 0;
     _topStories = [NSMutableArray array];
-    _imageIndexes = [NSMutableDictionary dictionary];
     [self loadTopStories];
 }
 
@@ -120,26 +124,6 @@ static NSInteger const kNumberOfStories = 10;
     return NO;
 }
 
-#pragma mark - 
-
-- (IBAction)swipeLeftGestureRecognizer:(UISwipeGestureRecognizer *)sender {
-    StoryTableViewCell *cell = (StoryTableViewCell *) sender.view;
-    NSInteger index = cell.tag;
-    NSInteger currentImageIndex = _imageIndexes[@(index)].integerValue;
-    if (currentImageIndex) {
-        // TODO
-    }
-}
-
-- (IBAction)swipeRightGestureRecognizer:(UISwipeGestureRecognizer *)sender {
-    StoryTableViewCell *cell = (StoryTableViewCell *) sender.view;
-    NSInteger index = cell.tag;
-    NSInteger currentImageIndex = _imageIndexes[@(index)].integerValue;
-    if (currentImageIndex < _topStories[index].images.count - 1) {
-        // TODO
-    }
-}
-
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -173,27 +157,13 @@ static NSInteger const kNumberOfStories = 10;
         return [UITableViewCell new];
     }
     cell.tag = indexPath.row;
-    NSInteger imageIndex = 0;
-    if (_topStories[indexPath.row].images.count > 1) {
-        if (!_imageIndexes[@(indexPath.row)]) {
-            _imageIndexes[@(indexPath.row)] = @(0);
-        } else {
-            imageIndex = _imageIndexes[@(indexPath.row)].integerValue;
-        }
-        [cell addGestureRecognizer:self.swipeLeftGestureRecognizer];
-        [cell addGestureRecognizer:self.swipeRightGestureRecognizer];
-    }
-    [cell setStory:_topStories[indexPath.row] imageIndex:imageIndex];
+    [cell setStory:_topStories[indexPath.row]];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
     forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
-    NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
-    if (indexPath.section == lastSectionIndex && indexPath.row == lastRowIndex) {
-        [self loadTopStories];
-    }
+    // TODO: Load more news feed
 }
 
 #pragma mark - Response Handler
@@ -222,7 +192,6 @@ static NSInteger const kNumberOfStories = 10;
                 [_topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
                 _startIndex += kNumberOfStories;
                 // TODO: Handle error
-                // TODO: Fix can't read UTF-8 story issue
                 [self.tableView reloadData];
             }
             break;
@@ -234,6 +203,42 @@ static NSInteger const kNumberOfStories = 10;
         SearchFriendViewController *searchFriendTableViewController = [segue destinationViewController];
         searchFriendTableViewController.users = _searchResult;
         searchFriendTableViewController.keyword = self.txtSearch.text;
+    }
+}
+
+#pragma mark - Request Handler
+
+- (void)registerRequestHandler {
+    [ClientSocketController registerRequestHandler:kAddImageToStory receiver:self];
+}
+
+- (void)handleRequest:(NSString *)actionName message:(NSString *)message {
+    NSInteger index = [_requestActions indexOfObject:actionName];
+    switch (index) {
+        case AddImageToStory: {
+            NSArray *array = [message componentsSeparatedByString:@"-"];
+            if ([array containsObject:@""]) {
+                return;
+            }
+            NSInteger storyId = [array[0] integerValue];
+            NSString *imageString = array[1];
+            for (Story *story in _topStories) {
+                if (story.storyId.integerValue == storyId) {
+                    for (id image in story.images) {
+                        if (![image isKindOfClass:[UIImage class]]) {
+                            UIImage *decodedImage = [Utils decodeBase64String:imageString];
+                            if (decodedImage) {
+                                story.images[[story.images indexOfObject:image]] = decodedImage;
+                                [self.tableView reloadData];
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
     }
 }
 
