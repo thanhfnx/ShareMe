@@ -17,6 +17,9 @@ NSString *const kServerHost = @"127.0.0.1";
 int const kServerPort = 1994;
 
 NSString *const kMessageFormat = @"%@~%@~%@";
+NSString *const kFinalMessageFormat = @"%@%ld-%@%@";
+NSInteger const kDefaultBufferLength = 1024;
+NSString *const kStartOfStream = @"<!START>";
 NSString *const kEndOfStream = @"<!END>";
 NSString *const kDelim = @"~";
 
@@ -47,5 +50,6 @@ NSString *const kUserSendRequestAction = @"USER_SEND_FRIEND_REQUEST";
 NSString *const kUserCreateNewStoryAction = @"USER_CREATE_NEW_STORY";
 
 NSString *const kUserGetTopStoriesAction = @"USER_GET_TOP_STORIES";
+NSString *const kAddImageToStory = @"ADD_IMAGES_TO_STORY";
 
 @end

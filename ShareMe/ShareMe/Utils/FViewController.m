@@ -16,11 +16,11 @@
 
 @implementation FViewController
 
-- (void)showActitvyIndicator {
+- (void)showActitvyIndicator:(UIView *)container frame:(CGRect)frame {
     if (!_vActivityIndicator) {
         _vActivityIndicator = [[NSBundle mainBundle] loadNibNamed:@"ActivityIndicatorView" owner:self options:nil][0];
-        _vActivityIndicator.frame = self.view.frame;
-        [self.view addSubview:_vActivityIndicator];
+        _vActivityIndicator.frame = frame;
+        [container addSubview:_vActivityIndicator];
     } else {
         _vActivityIndicator.hidden = NO;
     }

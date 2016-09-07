@@ -11,7 +11,7 @@
 @interface FViewController : UIViewController
 
 - (void)dismissKeyboard;
-- (void)showActitvyIndicator;
+- (void)showActitvyIndicator:(UIView *)container frame:(CGRect)frame;
 - (void)dismissActitvyIndicator;
 - (void)showMessage:(NSString *)message title:(NSString *)title complete:(void (^)(UIAlertAction *action))complete;
 - (void)showConfirmDialog:(NSString *)message title:(NSString *)title handler:(void (^)(UIAlertAction *action))handler;

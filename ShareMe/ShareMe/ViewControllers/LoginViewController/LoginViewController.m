@@ -103,7 +103,7 @@ static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
 - (IBAction)loginButtonTapped:(UIButton *)sender {
     [self dismissKeyboard];
     if ([self validate]) {
-        [self showActitvyIndicator];
+        [self showActitvyIndicator:self.view frame:self.view.frame];
         [ClientSocketController sendData:[[self getUser] toJSONString] messageType:kSendingRequestSignal actionName:kUserLoginAction
             sender:self];
     }
