@@ -19,7 +19,8 @@
 
 typedef NS_ENUM(NSInteger, UserResponseActions) {
     UserSearchFriendAction,
-    UserGetTopStoriesAction
+    UserGetTopStoriesAction,
+    UserLikeStoryAction
 };
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
@@ -32,13 +33,13 @@ static NSString *const kEmptySearchMessage = @"Please enter friend's name or ema
 static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
 static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
 static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
-static NSString *const kRequestFormat = @"%ld-%ld";
+static NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
+static NSString *const kLikeRequestFormat = @"%ld-%ld";
 static NSInteger const kNumberOfStories = 10;
 
 @interface NewsFeedViewController () {
     User *_currentUser;
     NSArray<User *> *_searchResult;
-    NSMutableArray<Story *> *_topStories;
     NSArray<NSString *> *_responseActions;
     NSArray<NSString *> *_requestActions;
     NSInteger _startIndex;
@@ -63,24 +64,31 @@ static NSInteger const kNumberOfStories = 10;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
     CGRect frame = self.navigationItem.titleView.frame;
-    frame.size.width = [Utils screenWidth];
+    frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _responseActions = @[
         kUserSearchFriendAction,
-        kUserGetTopStoriesAction
+        kUserGetTopStoriesAction,
+        kUserLikeStoryAction
     ];
     _requestActions = @[kAddImageToStory];
     _startIndex = 0;
-    _topStories = [NSMutableArray array];
+    self.topStories = [NSMutableArray array];
     [self loadTopStories];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 
 #pragma mark - IBAction
 
 - (void)loadTopStories {
-    [ClientSocketController sendData:[NSString stringWithFormat:kRequestFormat, _startIndex,
-        kNumberOfStories] messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction sender:self];
+    [ClientSocketController sendData:[NSString stringWithFormat:kGetTopStoriesRequestFormat,
+        _currentUser.userId.integerValue, [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex, kNumberOfStories]
+        messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction sender:self];
 }
 
 - (IBAction)btnSearchTapped:(UIButton *)sender {
@@ -107,6 +115,13 @@ static NSInteger const kNumberOfStories = 10;
 
 - (IBAction)btnReloadTapped:(UIButton *)sender {
     // TODO: Reload news feed
+}
+
+- (IBAction)btnLikeTapped:(UIButton *)sender {
+    NSInteger storyId = self.topStories[sender.superview.tag].storyId.integerValue;
+    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
+        _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
+        sender:self];
 }
 
 - (IBAction)btnNewStoryTapped:(id)sender {
@@ -147,7 +162,7 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _topStories.count;
+    return self.topStories.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -156,14 +171,25 @@ static NSInteger const kNumberOfStories = 10;
     if (!cell) {
         return [UITableViewCell new];
     }
-    cell.tag = indexPath.row;
-    [cell setStory:_topStories[indexPath.row]];
+    cell.contentView.tag = indexPath.row;
+    [cell setStory:self.topStories[indexPath.row]];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
     forRowAtIndexPath:(NSIndexPath *)indexPath {
     // TODO: Load more news feed
+}
+
+- (void)reloadSingleCell:(Story *)story {
+    CGPoint offset = self.tableView.contentOffset;
+    [UIView setAnimationsEnabled:NO];
+    [self.tableView beginUpdates];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.topStories indexOfObject:story] inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
+    self.tableView.contentOffset = offset;
 }
 
 #pragma mark - Response Handler
@@ -189,12 +215,52 @@ static NSInteger const kNumberOfStories = 10;
                 // TODO: Replace blank table view
             } else {
                 NSError *error;
-                [_topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
+                [self.topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
                 _startIndex += kNumberOfStories;
                 // TODO: Handle error
                 [self.tableView reloadData];
             }
             break;
+        case UserLikeStoryAction:
+            if (![message isEqualToString:kFailureMessage]) {
+                NSArray *array = [message componentsSeparatedByString:@"-"];
+                if ([array containsObject:@""]) {
+                    return;
+                }
+                NSString *likeMessage = array[0];
+                NSInteger storyId = [array[1] integerValue];
+                NSInteger numberOfLikedUsers = [array[2] integerValue];
+                [self updateLikeStory:likeMessage storyId:storyId numberOfLikedUsers:numberOfLikedUsers];
+            }
+            break;
+    }
+}
+
+- (void)updateLikeStory:(NSString *)likeMessage storyId:(NSInteger)storyId
+    numberOfLikedUsers:(NSInteger)numberOfLikedUsers {
+    if ([likeMessage isEqualToString:kLikedMessage]) {
+        for (Story *story in self.topStories) {
+            if (story.storyId.integerValue == storyId) {
+                story.numberOfLikedUsers = @(numberOfLikedUsers);
+                if (!story.likedUsers) {
+                    story.likedUsers = (NSMutableArray<User, Optional> *)[NSMutableArray
+                        arrayWithObject:_currentUser];
+                } else {
+                    [story.likedUsers addObject:_currentUser];
+                }
+                [self reloadSingleCell:story];
+                break;
+            }
+        }
+    } else if ([likeMessage isEqualToString:kUnlikedMessage]) {
+        for (Story *story in self.topStories) {
+            if (story.storyId.integerValue == storyId) {
+                story.numberOfLikedUsers = @(numberOfLikedUsers);
+                [story.likedUsers removeAllObjects];
+                [self reloadSingleCell:story];
+                break;
+            }
+        }
     }
 }
 
@@ -222,17 +288,21 @@ static NSInteger const kNumberOfStories = 10;
             }
             NSInteger storyId = [array[0] integerValue];
             NSString *imageString = array[1];
-            for (Story *story in _topStories) {
-                if (story.storyId.integerValue == storyId) {
-                    for (id image in story.images) {
-                        if (![image isKindOfClass:[UIImage class]]) {
-                            UIImage *decodedImage = [Utils decodeBase64String:imageString];
-                            if (decodedImage) {
-                                story.images[[story.images indexOfObject:image]] = decodedImage;
-                                [self.tableView reloadData];
-                            }
-                            break;
-                        }
+            [self addImageToStory:storyId imageString:imageString];
+            break;
+        }
+    }
+}
+
+- (void)addImageToStory:(NSInteger)storyId imageString:(NSString *)imageString {
+    for (Story *story in self.topStories) {
+        if (story.storyId.integerValue == storyId) {
+            for (id image in story.images) {
+                if (![image isKindOfClass:[UIImage class]]) {
+                    UIImage *decodedImage = [Utils decodeBase64String:imageString];
+                    if (decodedImage) {
+                        story.images[[story.images indexOfObject:image]] = decodedImage;
+                        [self reloadSingleCell:story];
                     }
                     break;
                 }

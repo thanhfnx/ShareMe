@@ -97,7 +97,7 @@ static NSString *const kSearchLabelTitle = @"Search result for '%@':";
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _relationStatuses = [NSMutableArray array];
     CGRect frame = self.navigationItem.titleView.frame;
-    frame.size.width = [Utils screenWidth];
+    frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
     self.tableView.estimatedRowHeight = 80.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -358,6 +358,7 @@ static NSString *const kSearchLabelTitle = @"Search result for '%@':";
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
                 [self removeUser:_currentUser.receivedRequests user:user];
+                [self addUserIfNotExist:_currentUser.friends user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
             }

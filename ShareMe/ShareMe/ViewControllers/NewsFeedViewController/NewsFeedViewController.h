@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FViewController.h"
 
+@class Story;
+
 @interface NewsFeedViewController : FViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
+@property (strong, nonatomic) NSMutableArray<Story *> *topStories;
 @end

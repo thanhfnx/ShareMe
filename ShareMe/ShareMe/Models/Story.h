@@ -24,5 +24,7 @@
 @property (strong, nonatomic) NSMutableArray<Optional> *images;
 @property (strong, nonatomic) NSMutableArray<Comment, Optional> *comments;
 @property (strong, nonatomic) NSMutableArray<User, Optional> *likedUsers;
+@property (strong, nonatomic) NSNumber<Optional> *numberOfLikedUsers;
+@property (strong, nonatomic) NSNumber<Optional> *numberOfComments;
 
 @end

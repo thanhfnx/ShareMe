@@ -14,6 +14,7 @@
 #import "Utils.h"
 #import "Story.h"
 #import "FDateFormatter.h"
+#import "NewsFeedViewController.h"
 
 static NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
 static NSString *const kDeleteButtonImage = @"delete";
@@ -24,11 +25,15 @@ static NSString *const kAddNewStoryErrorMessage = @"Something went wrong! Can no
 static CGFloat const kMaxImageWidth = 1920.0f;
 static CGFloat const kMaxImageHeight = 1080.0f;
 static NSInteger const kNumberOfCell = 4;
+static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
 
 @interface NewStoryViewController () {
     NSMutableArray<UIImage *> *_images;
     CGFloat _cellWidth;
     NSDateFormatter *_dateFormatter;
+    Story *_story;
+    User *_currentUser;
+    BOOL _isStoryUnsaved;
 }
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -48,16 +53,18 @@ static NSInteger const kNumberOfCell = 4;
 - (void)viewDidLoad {
     [super viewDidLoad];
     CGRect frame = self.navigationItem.titleView.frame;
-    frame.size.width = [Utils screenWidth];
+    frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
     [self.txvContent becomeFirstResponder];
     _images = [NSMutableArray array];
     _dateFormatter = [FDateFormatter sharedDateFormatter];
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
-    _cellWidth = ([Utils screenWidth] - 8.0f * (kNumberOfCell + 1)) / kNumberOfCell;
+    _cellWidth = ([UIViewConstant screenWidth] - 8.0f * (kNumberOfCell + 1)) / kNumberOfCell;
+    _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    _isStoryUnsaved = YES;
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
         name:UIKeyboardWillShowNotification object:nil];
@@ -89,7 +96,7 @@ static NSInteger const kNumberOfCell = 4;
 #pragma mark - IBAction
 
 - (IBAction)btnBackTapped:(UIButton *)sender {
-    if ([self.txvContent hasText] || _images.count > 0) {
+    if (_isStoryUnsaved && ([self.txvContent hasText] || _images.count > 0)) {
         [self showConfirmDialog:kConfirmDiscardStory title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];
         }];
@@ -119,11 +126,13 @@ static NSInteger const kNumberOfCell = 4;
 
 - (IBAction)btnPostTapped:(UIButton *)sender {
     if ([self.txvContent hasText] || _images.count > 0) {
+        _isStoryUnsaved = NO;
         [self dismissKeyboard];
         CGRect frame = [[UIScreen mainScreen] bounds];
         frame.origin.y -= 44.0f;
         [self showActitvyIndicator:self.view frame:frame];
-        [ClientSocketController sendData:[[self getStory] toJSONString] messageType:kSendingRequestSignal
+        [self getStory];
+        [ClientSocketController sendData:[_story toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewStoryAction sender:self];
     }
 }
@@ -137,19 +146,21 @@ static NSInteger const kNumberOfCell = 4;
 
 #pragma mark - Packing entity
 
-- (Story *)getStory {
-    Story *story = [[Story alloc] init];
-    User *creator = [[User alloc] init];
-    creator.userId = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser.userId;
-    story.creator = creator;
-    story.content = self.txvContent.text;
-    story.createdTime = [_dateFormatter stringFromDate:[NSDate date]];
-    story.images = [NSMutableArray<Optional> array];
-    for (UIImage *imageData in _images) {
-        [story.images addObject:[UIImageJPEGRepresentation(imageData, 0.9f)
-            base64EncodedStringWithOptions:kNilOptions]];
+- (void)getStory {
+    if (!_story) {
+        _story = [[Story alloc] init];
     }
-    return story;
+    User *creator = [[User alloc] init];
+    creator.userId = _currentUser.userId;
+    _story.creator = creator;
+    _story.content = self.txvContent.text;
+    _story.createdTime = [_dateFormatter stringFromDate:[NSDate date]];
+    _story.images = [NSMutableArray<Optional> array];
+    for (UIImage *imageData in _images) {
+        [_story.images addObject:[NSString stringWithFormat:kImageMessageFormat,
+            imageData.size.width * [UIViewConstant screenScale], imageData.size.height * [UIViewConstant screenScale],
+            [UIImageJPEGRepresentation(imageData, 0.9f) base64EncodedStringWithOptions:kNilOptions]]];
+    }
 }
 
 #pragma mark - Show / hide keyboard
@@ -226,8 +237,7 @@ static NSInteger const kNumberOfCell = 4;
         width = asset.pixelWidth * ratio;
         height = asset.pixelHeight * ratio;
     }
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    image = [Utils resize:image scaledToSize:CGSizeMake(width / scale, height / scale)];
+    image = [Utils resize:image scaledToSize:CGSizeMake(width / [UIViewConstant screenScale], height / [UIViewConstant screenScale])];
     return image;
 }
 
@@ -257,8 +267,14 @@ static NSInteger const kNumberOfCell = 4;
     if ([message isEqualToString:kFailureMessage]) {
         [self showMessage:kAddNewStoryErrorMessage title:kDefaultMessageTitle complete:nil];
     } else {
+        _story.storyId = @(message.integerValue);
+        _story.creator = _currentUser;
+        _story.images = _images;
+        NewsFeedViewController *newsFeedViewController = self.navigationController.viewControllers[0];
+        if (newsFeedViewController) {
+            [newsFeedViewController.topStories insertObject:_story atIndex:0];
+        }
         [self.navigationController popViewControllerAnimated:YES];
-        // TODO: Add new story to news feed
     }
 }
 

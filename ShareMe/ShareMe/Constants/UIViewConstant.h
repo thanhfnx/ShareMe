@@ -18,4 +18,7 @@
 
 extern NSString *const kDefaultFontName;
 
++ (CGFloat)screenScale;
++ (CGFloat)screenWidth;
+
 @end

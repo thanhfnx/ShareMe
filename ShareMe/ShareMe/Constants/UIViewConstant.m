@@ -24,4 +24,12 @@
 
 NSString *const kDefaultFontName = @"Helvetica-Light";
 
++ (CGFloat)screenScale {
+    return [[UIScreen mainScreen] scale];
+}
+
++ (CGFloat)screenWidth {
+    return CGRectGetWidth([[UIScreen mainScreen] bounds]);
+}
+
 @end

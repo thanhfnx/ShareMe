@@ -10,6 +10,7 @@
 #import "Story.h"
 #import "Utils.h"
 #import "SocketConstant.h"
+#import "UIViewConstant.h"
 
 @implementation StoryTableViewCell
 
@@ -39,21 +40,21 @@
             case 1: {
                 view = (UIView *)nibObjects[0];
                 if (firstImageType == ImageTypeLongWidth) {
-                    height += [Utils screenWidth] / kLandscapeImageRatio;
+                    height += [UIViewConstant screenWidth] / kLandscapeImageRatio;
                 } else if (firstImageType == ImageTypeLongHeight) {
-                    height += [Utils screenWidth] / kPortraitImageRatio;
+                    height += [UIViewConstant screenWidth] / kPortraitImageRatio;
                 } else {
-                    height += [Utils screenWidth] * (firstImageSize.height / firstImageSize.width);
+                    height += [UIViewConstant screenWidth] * (firstImageSize.height / firstImageSize.width);
                 }
                 break;
             }
             case 2: {
                 if (firstImageType == ImageTypeLongHeight || firstImageType == ImageTypePortrait) {
                     view = (UIView *)nibObjects[2];
-                    height += ([Utils screenWidth] - 2.0f) / (kPortraitImageRatio * 2);
+                    height += ([UIViewConstant screenWidth] - 2.0f) / (kPortraitImageRatio * 2);
                 } else {
                     view = (UIView *)nibObjects[1];
-                    height += [Utils screenWidth] / (kLandscapeImageRatio / 2);
+                    height += [UIViewConstant screenWidth] / (kLandscapeImageRatio / 2);
                     height += 2.0f;
                 }
                 break;
@@ -64,7 +65,7 @@
                 } else {
                     view = (UIView *)nibObjects[3];
                 }
-                height += [Utils screenWidth];
+                height += [UIViewConstant screenWidth];
                 break;
             }
             case 4 ... NSIntegerMax: {
@@ -73,28 +74,41 @@
                 } else {
                     view = (UIView *)nibObjects[5];
                 }
-                height += [Utils screenWidth];
+                height += [UIViewConstant screenWidth];
                 break;
             }
         }
         self.contentImageViewHeightConstraint.constant = height;
         [self.likeButtonTopSpacingConstraint setConstant:height + 8.0f];
-        CGRect frame = CGRectMake(0.0f, 0.0f, [Utils screenWidth], height);
+        CGRect frame = CGRectMake(0.0f, 0.0f, [UIViewConstant screenWidth], height);
         view.frame = frame;
         [self.vContentImages addSubview:view];
         [view.subviews enumerateObjectsUsingBlock:^(id view, NSUInteger index, BOOL *stop){
             if ([view isKindOfClass:[UIImageView class]] && [story.images[index] isKindOfClass:[UIImage class]]) {
                 ((UIImageView *)view).image = story.images[index];
-                if (index == 3 && story.images.count > 4) {
-                    self.lblNumberOfRemainingImages.text = [NSString stringWithFormat:@"+%ld", story.images.count - 4];
-                    self.lblNumberOfRemainingImages.hidden = NO;
-                }
+            } else if ([view isKindOfClass:[UILabel class]] && story.images.count > 4 && [story.images[3]
+                isKindOfClass:[UIImage class]]) {
+                UILabel *lblNumberOfRemainingImages = view;
+                lblNumberOfRemainingImages.text = [NSString stringWithFormat:@"+%ld", story.images.count - 4];
+                lblNumberOfRemainingImages.hidden = NO;
             }
         }];
     }
-    // TODO: Replace sample data
-    self.lblNumberOfComments.text = [Utils stringfromNumber:723233];
-    self.lblNumberOfLikes.text = [Utils stringfromNumber:411];
+    if (story.numberOfLikedUsers) {
+        self.lblNumberOfLikes.text = [Utils stringfromNumber:story.numberOfLikedUsers.integerValue];
+        if (story.likedUsers.count) {
+            [self.btnLike setImage:[UIImage imageNamed:@"loved"] forState:UIControlStateNormal];
+        } else {
+            [self.btnLike setImage:[UIImage imageNamed:@"love"] forState:UIControlStateNormal];
+        }
+    } else {
+        self.lblNumberOfLikes.text = @"";
+    }
+    if (story.numberOfComments) {
+        self.lblNumberOfComments.text = [Utils stringfromNumber:story.numberOfComments.integerValue];
+    } else {
+        self.lblNumberOfComments.text = @"";
+    }
 }
 
 @end
