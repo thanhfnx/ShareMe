@@ -71,7 +71,7 @@ static NSInteger const kMinimumPasswordLength = 6;
     for (UIView *view in nibObjects) {
         view.frame = screenRect;
         [self.scrollView addSubview:view];
-        screenRect.origin.x += [Utils screenWidth];
+        screenRect.origin.x += [UIViewConstant screenWidth];
     }
     _currentPage = 0;
     _dateFormatter = [FDateFormatter sharedDateFormatter];
@@ -298,11 +298,11 @@ static NSInteger const kMinimumPasswordLength = 6;
 - (IBAction)btnNextToViewTapped:(UIButton *)sender {
     if ([self validate]) {
         CGRect screenRect = self.view.frame;
-        screenRect.origin.x = [Utils screenWidth];
+        screenRect.origin.x = [UIViewConstant screenWidth];
         _currentPage++;
         [self dismissKeyboard];
         [UIView animateWithDuration:0.3 animations:^{
-            self.scrollView.contentOffset = CGPointMake([Utils screenWidth] * _currentPage, 0.0f);
+            self.scrollView.contentOffset = CGPointMake([UIViewConstant screenWidth] * _currentPage, 0.0f);
         }];
     }
 }

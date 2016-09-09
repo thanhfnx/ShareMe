@@ -51,5 +51,8 @@ extern NSString *const kUserCreateNewStoryAction;
 
 extern NSString *const kUserGetTopStoriesAction;
 extern NSString *const kAddImageToStory;
+extern NSString *const kUserLikeStoryAction;
+extern NSString *const kLikedMessage;
+extern NSString *const kUnlikedMessage;
 
 @end

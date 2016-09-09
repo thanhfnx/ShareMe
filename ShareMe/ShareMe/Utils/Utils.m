@@ -22,10 +22,6 @@ CGFloat const kLongHeightImageRatio = 0.5f;
 
 @implementation Utils
 
-+ (CGFloat)screenWidth {
-    return CGRectGetWidth([[UIScreen mainScreen] bounds]);
-}
-
 + (UIImage *)getAvatar:(NSString *)imageString gender:(BOOL)gender {
     if (imageString.length) {
         NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageString
@@ -69,17 +65,18 @@ CGFloat const kLongHeightImageRatio = 0.5f;
     NSDateFormatter *dateFormatter = [FDateFormatter sharedDateFormatter];
     dateFormatter.dateFormat = kDefaultDateTimeFormat;
     NSDate *date = [dateFormatter dateFromString:dateString];
-    NSInteger minutes = [[NSDate date] timeDiffFromDate:date unit:NSCalendarUnitMinute].minute;
+    NSDate *today = [NSDate date];
+    NSInteger minutes = [today timeDiffFromDate:date unit:NSCalendarUnitMinute].minute;
     if (minutes == 0) {
         return @"just now";
     } else if (minutes < 60) {
         return [NSString stringWithFormat:@"%ldm", minutes];
     }
-    NSInteger hours = [[NSDate date] timeDiffFromDate:date unit:NSCalendarUnitHour].hour;
+    NSInteger hours = [today timeDiffFromDate:date unit:NSCalendarUnitHour].hour;
     if (hours > 0 && hours < 24) {
         return [NSString stringWithFormat:@"%ldh", hours];
     }
-    NSInteger days = [[NSDate date] timeDiffFromDate:date unit:NSCalendarUnitDay].day;
+    NSInteger days = [today timeDiffFromDate:date unit:NSCalendarUnitDay].day;
     if (days > 0 && days < 7) {
         return [NSString stringWithFormat:@"%ldd", days];
     }

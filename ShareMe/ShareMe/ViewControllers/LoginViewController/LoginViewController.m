@@ -73,11 +73,12 @@ static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
 
 #pragma mark - Packing Entity
 
-- (User *)getUser {
-    User *user = [[User alloc] init];
-    user.userName = self.txtUserName.text;
-    user.password = self.txtPassword.text;
-    return user;
+- (void)getUser {
+    if (!_user) {
+        _user = [[User alloc] init];
+    }
+    _user.userName = self.txtUserName.text;
+    _user.password = self.txtPassword.text;
 }
 
 #pragma mark - Validating Data
@@ -104,8 +105,9 @@ static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
     [self dismissKeyboard];
     if ([self validate]) {
         [self showActitvyIndicator:self.view frame:self.view.frame];
-        [ClientSocketController sendData:[[self getUser] toJSONString] messageType:kSendingRequestSignal actionName:kUserLoginAction
-            sender:self];
+        [self getUser];
+        [ClientSocketController sendData:[_user toJSONString] messageType:kSendingRequestSignal
+            actionName:kUserLoginAction sender:self];
     }
 }
 

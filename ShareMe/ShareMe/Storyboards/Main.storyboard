@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Po7-Rq-A1U">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Po7-Rq-A1U">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -542,7 +542,7 @@
                                                     <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                                 </textView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOB-lj-64N">
-                                                    <rect key="frame" x="96" y="342.5" width="0.0" height="0.0"/>
+                                                    <rect key="frame" x="102" y="342.5" width="0.0" height="0.0"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -562,12 +562,15 @@
                                                     <state key="normal" image="comment"/>
                                                 </button>
                                                 <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ebo-lE-owr">
-                                                    <rect key="frame" x="64" y="330.5" width="24" height="24"/>
+                                                    <rect key="frame" x="70" y="330.5" width="24" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="24" id="Rl7-6D-f9J"/>
                                                         <constraint firstAttribute="width" secondItem="Ebo-lE-owr" secondAttribute="height" multiplier="1:1" id="vwq-tg-5Uy"/>
                                                     </constraints>
                                                     <state key="normal" image="love"/>
+                                                    <connections>
+                                                        <action selector="btnLikeTapped:" destination="jff-La-OfD" eventType="touchUpInside" id="yYb-aw-TnY"/>
+                                                    </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xaf-DE-5ex">
                                                     <rect key="frame" x="0.0" y="361.5" width="320" height="1"/>
@@ -576,11 +579,11 @@
                                                         <constraint firstAttribute="height" constant="0.5" id="RHU-Xm-wCA"/>
                                                     </constraints>
                                                 </view>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AG1-H0-FFe">
+                                                <view autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AG1-H0-FFe">
                                                     <rect key="frame" x="0.0" y="322.5" width="320" height="0.0"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" id="Ejk-7D-uCA"/>
+                                                        <constraint firstAttribute="height" priority="999" id="Ejk-7D-uCA"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -594,7 +597,7 @@
                                                 <constraint firstItem="zKQ-3p-ZuQ" firstAttribute="leading" secondItem="aid-JR-Dgi" secondAttribute="trailing" constant="8" id="EHd-gP-5XM"/>
                                                 <constraint firstItem="zKQ-3p-ZuQ" firstAttribute="centerY" secondItem="Ebo-lE-owr" secondAttribute="centerY" id="EOc-hs-4Ep"/>
                                                 <constraint firstItem="9mo-L7-eAG" firstAttribute="top" secondItem="o2S-LG-bf9" secondAttribute="top" constant="16" id="FIz-Lk-C1V"/>
-                                                <constraint firstItem="Ebo-lE-owr" firstAttribute="leading" secondItem="o2S-LG-bf9" secondAttribute="leading" constant="64" id="FoV-cU-g2j"/>
+                                                <constraint firstItem="Ebo-lE-owr" firstAttribute="leading" secondItem="o2S-LG-bf9" secondAttribute="leading" constant="70" id="FoV-cU-g2j"/>
                                                 <constraint firstItem="xaf-DE-5ex" firstAttribute="top" secondItem="Ebo-lE-owr" secondAttribute="bottom" constant="7" id="JHu-te-1JY"/>
                                                 <constraint firstItem="awu-Gv-hGn" firstAttribute="top" secondItem="9mo-L7-eAG" secondAttribute="top" id="MCD-4g-xQ1"/>
                                                 <constraint firstAttribute="trailing" secondItem="ITS-le-TBD" secondAttribute="trailing" constant="8" id="Nec-9V-9ld"/>
@@ -615,6 +618,8 @@
                                         </tableViewCellContentView>
                                         <gestureRecognizers/>
                                         <connections>
+                                            <outlet property="btnComment" destination="aid-JR-Dgi" id="zax-cj-nwT"/>
+                                            <outlet property="btnLike" destination="Ebo-lE-owr" id="VBl-wQ-lh9"/>
                                             <outlet property="contentImageViewHeightConstraint" destination="Ejk-7D-uCA" id="wLZ-Qe-sHg"/>
                                             <outlet property="imvAvatar" destination="9mo-L7-eAG" id="ifR-Y0-SxE"/>
                                             <outlet property="lblCreatedTime" destination="r0R-sr-ptd" id="Ggg-Sc-LOY"/>

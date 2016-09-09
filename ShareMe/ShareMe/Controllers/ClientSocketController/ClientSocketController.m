@@ -110,7 +110,11 @@ static NSData *kRemainData;
             bytesRead = [_inputStream read:buffer maxLength:bufferLength];
             offset += bufferLength;
             temp = [[NSString alloc] initWithBytes:buffer length:bytesRead encoding:NSUTF8StringEncoding];
-            _receivedMessage = [_receivedMessage stringByAppendingString:temp];
+            if (temp) {
+                _receivedMessage = [_receivedMessage stringByAppendingString:temp];
+            } else {
+                // TODO: Fix encoding
+            }
         }
         _receivedMessage = [_receivedMessage substringToIndex:[_receivedMessage rangeOfString:kEndOfStream].location];
     }

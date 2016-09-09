@@ -15,6 +15,7 @@
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     sharedDateFormatter = [[self alloc] init];
+    [((NSDateFormatter *)sharedDateFormatter) setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
   });
   return sharedDateFormatter;
 }

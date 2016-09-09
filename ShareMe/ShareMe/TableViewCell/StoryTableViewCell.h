@@ -20,7 +20,8 @@
 @property (weak, nonatomic) IBOutlet UIView *vContentImages;
 @property (weak, nonatomic) IBOutlet UILabel *lblNumberOfLikes;
 @property (weak, nonatomic) IBOutlet UILabel *lblNumberOfComments;
-@property (weak, nonatomic) IBOutlet UILabel *lblNumberOfRemainingImages;
+@property (weak, nonatomic) IBOutlet UIButton *btnLike;
+@property (weak, nonatomic) IBOutlet UIButton *btnComment;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentImageViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *likeButtonTopSpacingConstraint;
 
