@@ -87,6 +87,7 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    self.scRequestType.selectedSegmentIndex = 0;
     [super viewWillAppear:animated];
     [self.tableView reloadData];
 }

@@ -55,7 +55,7 @@ static NSString *const kSendRequestErrorMessage = @"Something went wrong! Can no
 static NSString *const kUnfriendErrorMessage = @"Something went wrong! Can not unfriend!";
 static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
 static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
-static NSString *const kSearchLabelTitle = @"Search result for '%@':";
+static NSString *const kSearchLabelTitle = @"Search results for '%@':";
 
 @interface SearchFriendViewController () {
     User *_currentUser;
@@ -101,8 +101,6 @@ static NSString *const kSearchLabelTitle = @"Search result for '%@':";
     self.navigationItem.titleView.frame = frame;
     self.tableView.estimatedRowHeight = 80.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

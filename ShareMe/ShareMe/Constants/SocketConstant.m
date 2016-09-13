@@ -51,8 +51,11 @@ NSString *const kUserCreateNewStoryAction = @"USER_CREATE_NEW_STORY";
 
 NSString *const kUserGetTopStoriesAction = @"USER_GET_TOP_STORIES";
 NSString *const kAddImageToStory = @"ADD_IMAGES_TO_STORY";
-NSString *const kUserLikeStoryAction = @"USER_LIKE_STORY_ACTION";
+NSString *const kUserLikeStoryAction = @"USER_LIKE_STORY";
 NSString *const kLikedMessage = @"LIKED";
 NSString *const kUnlikedMessage = @"UNLIKED";
+
+NSString *const kUserGetTopCommentsAction = @"USER_GET_TOP_COMMENTS";
+NSString *const kUserCreateNewCommentAction = @"USER_CREATE_NEW_COMMENT";
 
 @end

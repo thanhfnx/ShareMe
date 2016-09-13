@@ -17,10 +17,9 @@
 #import "NewsFeedViewController.h"
 
 static NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
-static NSString *const kDeleteButtonImage = @"delete";
 static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kConfirmMessageTitle = @"Confirm";
-static NSString *const kConfirmDiscardStory = @"Are you sure to discard this story?";
+static NSString *const kConfirmDiscardStory = @"This story is unsaved! Are you sure to discard this story?";
 static NSString *const kAddNewStoryErrorMessage = @"Something went wrong! Can not post new story!";
 static CGFloat const kMaxImageWidth = 1920.0f;
 static CGFloat const kMaxImageHeight = 1080.0f;
@@ -79,23 +78,14 @@ static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
 
 #pragma mark - UITextViewDelegate
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    if (![textView hasText]) {
-        self.lblPlaceHolder.hidden = NO;
-    }
-}
-
 - (void)textViewDidChange:(UITextView *)textView {
-    if (![textView hasText]) {
-        self.lblPlaceHolder.hidden = NO;
-    } else {
-        self.lblPlaceHolder.hidden = YES;
-    }
+    self.lblPlaceHolder.hidden = [self.txvContent hasText];
 }
 
 #pragma mark - IBAction
 
 - (IBAction)btnBackTapped:(UIButton *)sender {
+    [self dismissKeyboard];
     if (_isStoryUnsaved && ([self.txvContent hasText] || _images.count > 0)) {
         [self showConfirmDialog:kConfirmDiscardStory title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
             [self.navigationController popViewControllerAnimated:YES];

@@ -55,4 +55,7 @@ extern NSString *const kUserLikeStoryAction;
 extern NSString *const kLikedMessage;
 extern NSString *const kUnlikedMessage;
 
+extern NSString *const kUserGetTopCommentsAction;
+extern NSString *const kUserCreateNewCommentAction;
+
 @end

@@ -13,6 +13,7 @@
 #import "UIViewController+RequestHandler.h"
 #import "MainTabBarViewController.h"
 #import "SearchFriendViewController.h"
+#import "CommentsViewController.h"
 #import "Utils.h"
 #import "Story.h"
 #import "User.h"
@@ -32,6 +33,7 @@ static NSString *const kStoryReuseIdentifier = @"StoryCell";
 static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
 static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
 static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
+static NSString *const kGoToCommentSegueIdentifier = @"goToComment";
 static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
 static NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
@@ -43,6 +45,7 @@ static NSInteger const kNumberOfStories = 10;
     NSArray<NSString *> *_responseActions;
     NSArray<NSString *> *_requestActions;
     NSInteger _startIndex;
+    NSInteger _storyId;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -61,8 +64,6 @@ static NSInteger const kNumberOfStories = 10;
     [self registerRequestHandler];
     self.tableView.estimatedRowHeight = 44.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
@@ -118,8 +119,8 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (IBAction)btnLikeTapped:(UIButton *)sender {
-    NSInteger storyId = self.topStories[sender.superview.tag].storyId.integerValue;
-    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
+    _storyId = self.topStories[sender.superview.tag].storyId.integerValue;
+    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, _storyId,
         _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
         sender:self];
 }
@@ -127,6 +128,11 @@ static NSInteger const kNumberOfStories = 10;
 - (IBAction)btnNewStoryTapped:(id)sender {
     [self.navigationController.tabBarController.tabBar setHidden:YES];
     [self performSegueWithIdentifier:kGoToNewStorySegueIdentifier sender:self];
+}
+
+- (IBAction)btnCommentTapped:(UIButton *)sender {
+    _storyId = self.topStories[sender.superview.tag].storyId.integerValue;
+    [self performSegueWithIdentifier:kGoToCommentSegueIdentifier sender:self];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -200,7 +206,7 @@ static NSInteger const kNumberOfStories = 10;
         case UserSearchFriendAction:
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:[NSString stringWithFormat:kEmptySearchResultMessage, self.txtSearch.text]
-                            title:kDefaultMessageTitle complete:nil];
+                    title:kDefaultMessageTitle complete:nil];
             } else {
                 NSError *error;
                 _searchResult = [User arrayOfModelsFromString:message error:&error];
@@ -269,6 +275,9 @@ static NSInteger const kNumberOfStories = 10;
         SearchFriendViewController *searchFriendTableViewController = [segue destinationViewController];
         searchFriendTableViewController.users = _searchResult;
         searchFriendTableViewController.keyword = self.txtSearch.text;
+    } else if ([segue.identifier isEqualToString:kGoToCommentSegueIdentifier]) {
+        CommentsViewController *commentsViewController = [segue destinationViewController];
+        commentsViewController.storyId = _storyId;
     }
 }
 
