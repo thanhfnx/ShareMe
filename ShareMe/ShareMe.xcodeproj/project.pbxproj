@@ -38,6 +38,8 @@
 		92D50D841D6540770022772A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D50D831D6540770022772A /* Assets.xcassets */; };
 		92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EB835F1D6BDB9E004119FD /* RegisterViewController.m */; };
 		92EB83651D6BEC1E004119FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92EB83641D6BEC1E004119FD /* Main.storyboard */; };
+		92F840501D86A1FE00D32163 /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F8404F1D86A1FE00D32163 /* CommentsViewController.m */; };
+		92F840531D86A3E600D32163 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F840521D86A3E600D32163 /* CommentTableViewCell.m */; };
 		A0A54C367DD48DE731058ED9 /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +109,10 @@
 		92EB835E1D6BDB9E004119FD /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		92EB835F1D6BDB9E004119FD /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		92EB83641D6BEC1E004119FD /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		92F8404E1D86A1FE00D32163 /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
+		92F8404F1D86A1FE00D32163 /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
+		92F840511D86A3E600D32163 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTableViewCell.h; sourceTree = "<group>"; };
+		92F840521D86A3E600D32163 /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +147,8 @@
 				924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */,
 				92AF4F711D6ED3E100B92297 /* SearchFriendTableViewCell.h */,
 				92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */,
+				92F840511D86A3E600D32163 /* CommentTableViewCell.h */,
+				92F840521D86A3E600D32163 /* CommentTableViewCell.m */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -148,6 +156,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				92F8404D1D86A1E600D32163 /* CommentsViewController */,
 				92CE61F71D6FFC9A00E31C34 /* NewStoryViewController */,
 				92A77CBB1D6ED07E00FD19A3 /* SearchFriendViewController */,
 				924E109A1D6DA73C004DE853 /* MainTabBarViewController.h */,
@@ -360,6 +369,15 @@
 			path = Storyboards;
 			sourceTree = "<group>";
 		};
+		92F8404D1D86A1E600D32163 /* CommentsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92F8404E1D86A1FE00D32163 /* CommentsViewController.h */,
+				92F8404F1D86A1FE00D32163 /* CommentsViewController.m */,
+			);
+			path = CommentsViewController;
+			sourceTree = "<group>";
+		};
 		BB9E4F5B67AD624D9659C549 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -503,6 +521,7 @@
 				92441ABB1D66A96500F5426A /* User.m in Sources */,
 				928688761D702C9C0078A599 /* Utils.m in Sources */,
 				92441ABA1D66A96100F5426A /* Story.m in Sources */,
+				92F840531D86A3E600D32163 /* CommentTableViewCell.m in Sources */,
 				92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
 				92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */,
@@ -514,6 +533,7 @@
 				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
 				924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */,
 				92C869891D78267B0022F0D6 /* FDateFormatter.m in Sources */,
+				92F840501D86A1FE00D32163 /* CommentsViewController.m in Sources */,
 				924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */,
 				92C869861D7807430022F0D6 /* NSDate+TimeDiff.m in Sources */,
 				92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */,

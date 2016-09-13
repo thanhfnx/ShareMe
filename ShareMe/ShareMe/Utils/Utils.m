@@ -31,7 +31,7 @@ CGFloat const kLongHeightImageRatio = 0.5f;
     if (gender) {
         return [UIImage imageNamed:kDefaultMaleAvatar];
     } else {
-        return [UIImage imageNamed:kDefaultMaleAvatar];
+        return [UIImage imageNamed:kDefaultFemaleAvatar];
     }
 }
 
