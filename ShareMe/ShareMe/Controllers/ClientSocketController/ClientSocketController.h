@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SocketConstant.h"
+#import "ApplicationConstants.h"
 
 @interface ClientSocketController : NSObject <NSStreamDelegate>
 

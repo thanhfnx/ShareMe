@@ -26,7 +26,7 @@ static NSString *const kGetTopCommentsMessageFormat = @"%ld-%ld-%ld";
 static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kConfirmMessageTitle = @"Confirm";
 static NSString *const kConfirmDiscardComment = @"This comment is unsaved! Are you sure to discard this comment?";
-static NSString *const kAddNewCommentErrorMessage = @"Something went wrong! Can not post new story!";
+static NSString *const kAddNewCommentErrorMessage = @"Something went wrong! Can not add new comment!";
 static NSInteger const kNumberOfComments = 10;
 
 @interface CommentsViewController () {
@@ -115,6 +115,13 @@ static NSInteger const kNumberOfComments = 10;
     return cell;
 }
 
+- (void)reloadDataWithAnimated:(BOOL)animated {
+    [self.tableView reloadData];
+    NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
+        animated:animated];
+}
+
 #pragma mark - Packing entity
 
 - (void)getComment {
@@ -182,7 +189,7 @@ static NSInteger const kNumberOfComments = 10;
                 [_topComments addObjectsFromArray:[[[array reverseObjectEnumerator] allObjects] mutableCopy]];
                 _startIndex += kNumberOfComments;;
                 // TODO: Handle error
-                [self.tableView reloadData];
+                [self reloadDataWithAnimated:NO];
             }
             break;
         case UserCreateNewCommentAction:
@@ -192,8 +199,9 @@ static NSInteger const kNumberOfComments = 10;
                 _comment.commentId = @(message.integerValue);
                 _comment.creator = _currentUser;
                 [_topComments addObject:_comment];
-                [self.txvAddComment setText:nil];
-                [self.tableView reloadData];
+                [self.txvAddComment setText:@""];
+                self.lblPlaceHolder.hidden = NO;
+                [self reloadDataWithAnimated:YES];
             }
             break;
     }

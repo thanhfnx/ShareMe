@@ -25,7 +25,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
 };
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
-    AddImageToStory
+    AddImageToStoryAction,
+    AddNewStoryToUserAction
 };
 
 static NSString *const kDefaultMessageTitle = @"Warning";
@@ -46,6 +47,7 @@ static NSInteger const kNumberOfStories = 10;
     NSArray<NSString *> *_requestActions;
     NSInteger _startIndex;
     NSInteger _storyId;
+    NSMutableDictionary<NSIndexPath *, NSNumber *> *heightForIndexPath;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -61,9 +63,6 @@ static NSInteger const kNumberOfStories = 10;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self registerRequestHandler];
-    self.tableView.estimatedRowHeight = 44.0f;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
@@ -73,10 +72,21 @@ static NSInteger const kNumberOfStories = 10;
         kUserGetTopStoriesAction,
         kUserLikeStoryAction
     ];
-    _requestActions = @[kAddImageToStory];
+    _requestActions = @[
+        kAddImageToStoryAction,
+        kAddNewStoryToUserAction
+    ];
+    [self registerRequestHandler];
     _startIndex = 0;
     self.topStories = [NSMutableArray array];
+    heightForIndexPath = [NSMutableDictionary dictionary];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAllData:)
+        name:kUpdateNewsFeedNotificationName object:nil];
     [self loadTopStories];
+}
+
+- (void)didReceiveMemoryWarning {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kUpdateNewsFeedNotificationName object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -115,7 +125,7 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (IBAction)btnReloadTapped:(UIButton *)sender {
-    // TODO: Reload news feed
+    [self.tableView reloadData];
 }
 
 - (IBAction)btnLikeTapped:(UIButton *)sender {
@@ -125,7 +135,7 @@ static NSInteger const kNumberOfStories = 10;
         sender:self];
 }
 
-- (IBAction)btnNewStoryTapped:(id)sender {
+- (IBAction)btnNewStoryTapped:(UIButton *)sender {
     [self.navigationController.tabBarController.tabBar setHidden:YES];
     [self performSegueWithIdentifier:kGoToNewStorySegueIdentifier sender:self];
 }
@@ -182,20 +192,37 @@ static NSInteger const kNumberOfStories = 10;
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!heightForIndexPath[indexPath]) {
+        return UITableViewAutomaticDimension;
+    } else {
+        return heightForIndexPath[indexPath].floatValue;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
     forRowAtIndexPath:(NSIndexPath *)indexPath {
+    heightForIndexPath[indexPath] = @(cell.frame.size.height);
     // TODO: Load more news feed
 }
 
 - (void)reloadSingleCell:(Story *)story {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.topStories indexOfObject:story] inSection:0];
     CGPoint offset = self.tableView.contentOffset;
     [UIView setAnimationsEnabled:NO];
     [self.tableView beginUpdates];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.topStories indexOfObject:story] inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
     [UIView setAnimationsEnabled:YES];
     self.tableView.contentOffset = offset;
+}
+
+- (void)reloadAllData:(NSNotification *)notification {
+    [self.tableView reloadData];
 }
 
 #pragma mark - Response Handler
@@ -244,7 +271,7 @@ static NSInteger const kNumberOfStories = 10;
 
 - (void)updateLikeStory:(NSString *)likeMessage storyId:(NSInteger)storyId
     numberOfLikedUsers:(NSInteger)numberOfLikedUsers {
-    if ([likeMessage isEqualToString:kLikedMessage]) {
+    if ([likeMessage isEqualToString:kLikedMessageAction]) {
         for (Story *story in self.topStories) {
             if (story.storyId.integerValue == storyId) {
                 story.numberOfLikedUsers = @(numberOfLikedUsers);
@@ -258,7 +285,7 @@ static NSInteger const kNumberOfStories = 10;
                 break;
             }
         }
-    } else if ([likeMessage isEqualToString:kUnlikedMessage]) {
+    } else if ([likeMessage isEqualToString:kUnlikedMessageAction]) {
         for (Story *story in self.topStories) {
             if (story.storyId.integerValue == storyId) {
                 story.numberOfLikedUsers = @(numberOfLikedUsers);
@@ -284,13 +311,15 @@ static NSInteger const kNumberOfStories = 10;
 #pragma mark - Request Handler
 
 - (void)registerRequestHandler {
-    [ClientSocketController registerRequestHandler:kAddImageToStory receiver:self];
+    for (NSString *action in _requestActions) {
+        [ClientSocketController registerRequestHandler:action receiver:self];
+    }
 }
 
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
-        case AddImageToStory: {
+        case AddImageToStoryAction: {
             NSArray *array = [message componentsSeparatedByString:@"-"];
             if ([array containsObject:@""]) {
                 return;
@@ -298,6 +327,14 @@ static NSInteger const kNumberOfStories = 10;
             NSInteger storyId = [array[0] integerValue];
             NSString *imageString = array[1];
             [self addImageToStory:storyId imageString:imageString];
+            break;
+        }
+        case AddNewStoryToUserAction: {
+            NSError *error;
+            Story *story = [[Story alloc] initWithString:message error:&error];
+            [self.topStories insertObject:story atIndex:0];
+            // TODO: Handle error
+            [self.tableView reloadData];
             break;
         }
     }

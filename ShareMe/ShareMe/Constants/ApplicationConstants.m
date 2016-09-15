@@ -1,14 +1,14 @@
 //
-//  SocketConstant.m
+//  ApplicationConstants.m
 //  ShareMe
 //
 //  Created by Nguyen Xuan Thanh on 8/19/16.
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
-#import "SocketConstant.h"
+#import "ApplicationConstants.h"
 
-@implementation SocketConstant
+@implementation ApplicationConstants
 
 NSString *const kSendingRequestSignal = @"TO";
 NSString *const kReceivingRequestSignal = @"RE";
@@ -36,11 +36,18 @@ NSString *const kUserAcceptRequestAction = @"USER_ACCEPT_FRIEND_REQUEST";
 NSString *const kUserDeclineRequestAction = @"USER_DECLINE_FRIEND_REQUEST";
 NSString *const kUserCancelRequestAction = @"USER_CANCEL_FRIEND_REQUEST";
 
+NSString *const kAddAcceptRequestToClientsAction = @"ACCEPT_FRIEND_REQUEST_TO_CLIENTS";
+NSString *const kAddDeclineRequestToClientsAction = @"DECLINE_FRIEND_REQUEST_TO_CLIENTS";
+NSString *const kAddCancelRequestToClientsAction = @"CANCEL_FRIEND_REQUEST_TO_CLIENTS";
+
 NSString *const kUserSendRequestToUserAction = @"SEND_FRIEND_REQUEST_TO_USER";
 NSString *const kUserCancelRequestToUserAction = @"SEND_CANCEL_FRIEND_REQUEST_TO_USER";
 NSString *const kUserAddFriendToUserAction = @"ADD_FRIEND_TO_USER";
 NSString *const kUserDeclineRequestToUserAction = @"DECLINE_FRIEND_REQUEST_TO_USER";
 NSString *const kUserUnfriendToUserAction = @"UNFRIEND_TO_USER";
+
+NSString *const kAddSendRequestToClientsAction = @"SEND_FRIEND_REQUEST_TO_CLIENTS";
+NSString *const kAddUnfriendToClientsAction = @"UNFRIEND_TO_CLIENTS";
 
 NSString *const kUserSearchFriendAction = @"USER_SEARCH_FRIEND";
 
@@ -50,12 +57,15 @@ NSString *const kUserSendRequestAction = @"USER_SEND_FRIEND_REQUEST";
 NSString *const kUserCreateNewStoryAction = @"USER_CREATE_NEW_STORY";
 
 NSString *const kUserGetTopStoriesAction = @"USER_GET_TOP_STORIES";
-NSString *const kAddImageToStory = @"ADD_IMAGES_TO_STORY";
+NSString *const kAddNewStoryToUserAction = @"ADD_NEW_STORY_TO_USER";
+NSString *const kAddImageToStoryAction = @"ADD_IMAGE_TO_STORY";
 NSString *const kUserLikeStoryAction = @"USER_LIKE_STORY";
-NSString *const kLikedMessage = @"LIKED";
-NSString *const kUnlikedMessage = @"UNLIKED";
+NSString *const kLikedMessageAction = @"LIKED";
+NSString *const kUnlikedMessageAction = @"UNLIKED";
 
 NSString *const kUserGetTopCommentsAction = @"USER_GET_TOP_COMMENTS";
 NSString *const kUserCreateNewCommentAction = @"USER_CREATE_NEW_COMMENT";
+
+NSString *const kUpdateNewsFeedNotificationName = @"UPDATE_NEWS_FEED";
 
 @end

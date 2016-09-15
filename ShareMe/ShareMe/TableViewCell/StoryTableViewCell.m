@@ -9,7 +9,7 @@
 #import "StoryTableViewCell.h"
 #import "Story.h"
 #import "Utils.h"
-#import "SocketConstant.h"
+#import "ApplicationConstants.h"
 #import "UIViewConstant.h"
 
 @implementation StoryTableViewCell
