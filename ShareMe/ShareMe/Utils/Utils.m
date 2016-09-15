@@ -22,13 +22,13 @@ CGFloat const kLongHeightImageRatio = 0.5f;
 
 @implementation Utils
 
-+ (UIImage *)getAvatar:(NSString *)imageString gender:(BOOL)gender {
++ (UIImage *)getAvatar:(NSString *)imageString gender:(NSNumber *)gender {
     if (imageString.length) {
         NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageString
             options:NSDataBase64DecodingIgnoreUnknownCharacters];
         return [UIImage imageWithData:imageData];
     }
-    if (gender) {
+    if (gender.boolValue) {
         return [UIImage imageNamed:kDefaultMaleAvatar];
     } else {
         return [UIImage imageNamed:kDefaultFemaleAvatar];

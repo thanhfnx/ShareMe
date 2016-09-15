@@ -27,9 +27,7 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [ClientSocketController sendData:kEmptyMessage messageType:kSendingRequestSignal actionName:kCloseConnection
-        sender:nil];
-    [_clientSocketController closeSocket];
+    [self.window endEditing:YES];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -40,6 +38,8 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    [ClientSocketController sendData:kEmptyMessage messageType:kSendingRequestSignal actionName:kCloseConnection
+        sender:nil];
     [_clientSocketController closeSocket];
 }
 

@@ -1,5 +1,5 @@
 //
-//  SocketConstant.h
+//  ApplicationConstants.h
 //  ShareMe
 //
 //  Created by Nguyen Xuan Thanh on 8/19/16.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SocketConstant : NSObject
+@interface ApplicationConstants : NSObject
 
 extern NSString *const kSendingRequestSignal;
 extern NSString *const kReceivingRequestSignal;
@@ -36,11 +36,18 @@ extern NSString *const kUserAcceptRequestAction;
 extern NSString *const kUserDeclineRequestAction;
 extern NSString *const kUserCancelRequestAction;
 
+extern NSString *const kAddAcceptRequestToClientsAction;
+extern NSString *const kAddDeclineRequestToClientsAction;
+extern NSString *const kAddCancelRequestToClientsAction;
+
 extern NSString *const kUserSendRequestToUserAction;
 extern NSString *const kUserCancelRequestToUserAction;
 extern NSString *const kUserAddFriendToUserAction;
 extern NSString *const kUserDeclineRequestToUserAction;
 extern NSString *const kUserUnfriendToUserAction;
+
+extern NSString *const kAddSendRequestToClientsAction;
+extern NSString *const kAddUnfriendToClientsAction;
 
 extern NSString *const kUserSearchFriendAction;
 
@@ -50,12 +57,15 @@ extern NSString *const kUserSendRequestAction;
 extern NSString *const kUserCreateNewStoryAction;
 
 extern NSString *const kUserGetTopStoriesAction;
-extern NSString *const kAddImageToStory;
+extern NSString *const kAddNewStoryToUserAction;
+extern NSString *const kAddImageToStoryAction;
 extern NSString *const kUserLikeStoryAction;
-extern NSString *const kLikedMessage;
-extern NSString *const kUnlikedMessage;
+extern NSString *const kLikedMessageAction;
+extern NSString *const kUnlikedMessageAction;
 
 extern NSString *const kUserGetTopCommentsAction;
 extern NSString *const kUserCreateNewCommentAction;
+
+extern NSString *const kUpdateNewsFeedNotificationName;
 
 @end

@@ -28,7 +28,7 @@ extern CGFloat const kLongHeightImageRatio;
 
 @interface Utils : NSObject
 
-+ (UIImage *)getAvatar:(NSString *)imageString gender:(BOOL)gender;
++ (UIImage *)getAvatar:(NSString *)imageString gender:(NSNumber *)gender;
 + (UIImage *)resize:(UIImage *)image scaledToSize:(CGSize)newSize;
 + (NSString *)stringfromNumber:(NSUInteger)number;
 + (NSString *)timeDiffFromDate:(NSString *)dateString;

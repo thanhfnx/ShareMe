@@ -33,6 +33,7 @@ static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
     Story *_story;
     User *_currentUser;
     BOOL _isStoryUnsaved;
+    NewsFeedViewController *_newsFeedViewController;
 }
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -116,6 +117,7 @@ static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
 
 - (IBAction)btnPostTapped:(UIButton *)sender {
     if ([self.txvContent hasText] || _images.count > 0) {
+        _newsFeedViewController = self.navigationController.viewControllers[0];
         _isStoryUnsaved = NO;
         [self dismissKeyboard];
         CGRect frame = [[UIScreen mainScreen] bounds];
@@ -260,10 +262,8 @@ static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
         _story.storyId = @(message.integerValue);
         _story.creator = _currentUser;
         _story.images = _images;
-        NewsFeedViewController *newsFeedViewController = self.navigationController.viewControllers[0];
-        if (newsFeedViewController) {
-            [newsFeedViewController.topStories insertObject:_story atIndex:0];
-        }
+        [_newsFeedViewController.topStories insertObject:_story atIndex:0];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateNewsFeedNotificationName object:nil];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }

@@ -20,7 +20,12 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     UserSendRequestToUserAction,
     UserDeclineRequestToUserAction,
     UserCancelRequestToUserAction,
-    UserAddFriendToUserAction
+    UserAddFriendToUserAction,
+    AddAcceptRequestToClientsAction,
+    AddDeclineRequestToClientsAction,
+    AddCancelRequestToClientsAction,
+    AddSendRequestToClientsAction,
+    AddUnfriendToClientsAction
 };
 
 typedef NS_ENUM(NSInteger, UserResponseActions) {
@@ -63,18 +68,23 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self registerRequestHandler];
     _requestActions = @[
         kUserSendRequestToUserAction,
         kUserDeclineRequestToUserAction,
         kUserCancelRequestToUserAction,
-        kUserAddFriendToUserAction
+        kUserAddFriendToUserAction,
+        kAddAcceptRequestToClientsAction,
+        kAddDeclineRequestToClientsAction,
+        kAddCancelRequestToClientsAction,
+        kAddSendRequestToClientsAction,
+        kAddUnfriendToClientsAction
     ];
     _responseActions = @[
         kUserAcceptRequestAction,
         kUserDeclineRequestAction,
         kUserCancelRequestAction
     ];
+    [self registerRequestHandler];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _receivedRequests = _currentUser.receivedRequests;
     _sentRequests = _currentUser.sentRequests;
@@ -177,10 +187,9 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
 #pragma mark - Request Handler
 
 - (void)registerRequestHandler {
-    [ClientSocketController registerRequestHandler:kUserSendRequestToUserAction receiver:self];
-    [ClientSocketController registerRequestHandler:kUserCancelRequestToUserAction receiver:self];
-    [ClientSocketController registerRequestHandler:kUserAddFriendToUserAction receiver:self];
-    [ClientSocketController registerRequestHandler:kUserDeclineRequestToUserAction receiver:self];
+    for (NSString *action in _requestActions) {
+        [ClientSocketController registerRequestHandler:action receiver:self];
+    }
 }
 
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
@@ -201,6 +210,22 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
             break;
         case UserDeclineRequestToUserAction:
             [self removeUser:_currentUser.sentRequests user:user];
+            break;
+        case AddAcceptRequestToClientsAction:
+            [self removeUser:_currentUser.receivedRequests user:user];
+            [self addUserIfNotExist:_currentUser.friends user:user];
+            break;
+        case AddDeclineRequestToClientsAction:
+            [self removeUser:_currentUser.receivedRequests user:user];
+            break;
+        case AddCancelRequestToClientsAction:
+            [self removeUser:_currentUser.sentRequests user:user];
+            break;
+        case AddSendRequestToClientsAction:
+            [self addUserIfNotExist:_currentUser.sentRequests user:user];
+            break;
+        case AddUnfriendToClientsAction:
+            [self removeUser:_currentUser.friends user:user];
             break;
     }
     if (self.isViewLoaded && self.view.window) {
@@ -245,6 +270,7 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
                 [self removeUser:_currentUser.receivedRequests user:user];
+                [self addUserIfNotExist:_currentUser.friends user:user];
                 [self.tableView reloadData];
             }
             break;

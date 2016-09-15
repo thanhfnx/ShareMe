@@ -18,7 +18,7 @@
 		92441AB91D66A95C00F5426A /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9D1D669F0E00F5426A /* Message.m */; };
 		92441ABA1D66A96100F5426A /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441A9F1D669F0E00F5426A /* Story.m */; };
 		92441ABB1D66A96500F5426A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AA11D669F0E00F5426A /* User.m */; };
-		92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AE51D66AD3400F5426A /* SocketConstant.m */; };
+		92441AE61D66AD3400F5426A /* ApplicationConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AE51D66AD3400F5426A /* ApplicationConstants.m */; };
 		924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108C1D6D99FE004DE853 /* RequestViewController.m */; };
 		924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */; };
 		924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */; };
@@ -68,8 +68,8 @@
 		92441AAE1D66A2A500F5426A /* RequestHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RequestHandler.h; sourceTree = "<group>"; };
 		92441AB01D66A2E100F5426A /* UIViewController+ResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ResponseHandler.h"; sourceTree = "<group>"; };
 		92441AB11D66A2E100F5426A /* UIViewController+RequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RequestHandler.h"; sourceTree = "<group>"; };
-		92441AE41D66AD3400F5426A /* SocketConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketConstant.h; sourceTree = "<group>"; };
-		92441AE51D66AD3400F5426A /* SocketConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketConstant.m; sourceTree = "<group>"; };
+		92441AE41D66AD3400F5426A /* ApplicationConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationConstants.h; sourceTree = "<group>"; };
+		92441AE51D66AD3400F5426A /* ApplicationConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationConstants.m; sourceTree = "<group>"; };
 		924E108B1D6D99FE004DE853 /* RequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestViewController.h; sourceTree = "<group>"; };
 		924E108C1D6D99FE004DE853 /* RequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestViewController.m; sourceTree = "<group>"; };
 		924E108E1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceivedRequestTableViewCell.h; sourceTree = "<group>"; };
@@ -236,8 +236,8 @@
 		92441AE31D66AD1600F5426A /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				92441AE41D66AD3400F5426A /* SocketConstant.h */,
-				92441AE51D66AD3400F5426A /* SocketConstant.m */,
+				92441AE41D66AD3400F5426A /* ApplicationConstants.h */,
+				92441AE51D66AD3400F5426A /* ApplicationConstants.m */,
 				92AF4F741D6ED72E00B92297 /* UIViewConstant.h */,
 				92AF4F751D6ED72E00B92297 /* UIViewConstant.m */,
 			);
@@ -540,7 +540,7 @@
 				92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */,
 				920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */,
 				929A87AD1D711FEF0027385D /* FViewController.m in Sources */,
-				92441AE61D66AD3400F5426A /* SocketConstant.m in Sources */,
+				92441AE61D66AD3400F5426A /* ApplicationConstants.m in Sources */,
 				92441AB51D66A94200F5426A /* main.m in Sources */,
 				922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */,
 				924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */,
