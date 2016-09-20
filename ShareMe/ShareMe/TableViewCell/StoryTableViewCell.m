@@ -94,17 +94,20 @@
             }
         }];
     }
-    if (story.numberOfLikedUsers) {
+    if (story.numberOfLikedUsers.integerValue) {
         self.lblNumberOfLikes.text = [Utils stringfromNumber:story.numberOfLikedUsers.integerValue];
         if (story.likedUsers.count) {
             [self.btnLike setImage:[UIImage imageNamed:@"loved"] forState:UIControlStateNormal];
+            self.lblNumberOfLikes.textColor = [UIColor redColor];
         } else {
             [self.btnLike setImage:[UIImage imageNamed:@"love"] forState:UIControlStateNormal];
+            self.lblNumberOfLikes.textColor = [UIColor lightGrayColor];
         }
     } else {
         self.lblNumberOfLikes.text = @"";
+        [self.btnLike setImage:[UIImage imageNamed:@"love"] forState:UIControlStateNormal];
     }
-    if (story.numberOfComments) {
+    if (story.numberOfComments.integerValue) {
         self.lblNumberOfComments.text = [Utils stringfromNumber:story.numberOfComments.integerValue];
     } else {
         self.lblNumberOfComments.text = @"";

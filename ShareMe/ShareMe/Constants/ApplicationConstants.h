@@ -62,10 +62,13 @@ extern NSString *const kAddImageToStoryAction;
 extern NSString *const kUserLikeStoryAction;
 extern NSString *const kLikedMessageAction;
 extern NSString *const kUnlikedMessageAction;
+extern NSString *const kUpdateLikedUsersAction;
 
 extern NSString *const kUserGetTopCommentsAction;
 extern NSString *const kUserCreateNewCommentAction;
 
 extern NSString *const kUpdateNewsFeedNotificationName;
+
+extern NSString *const kGoToListFriendSegueIdentifier;
 
 @end
