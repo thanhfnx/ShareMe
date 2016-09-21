@@ -29,6 +29,8 @@
 		929139531D758D5700A0E972 /* ThumbnailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */; };
 		929A87AD1D711FEF0027385D /* FViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929A87AC1D711FEF0027385D /* FViewController.m */; };
 		92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */; };
+		92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A920691D90C89D00C6F007 /* FriendsViewController.m */; };
+		92A9206D1D90C9F600C6F007 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A9206C1D90C9F600C6F007 /* FriendTableViewCell.m */; };
 		92AF4F731D6ED3E100B92297 /* SearchFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */; };
 		92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4F751D6ED72E00B92297 /* UIViewConstant.m */; };
 		92B7CE9C1D7094900077240B /* ActivityIndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B7CE9B1D7094900077240B /* ActivityIndicatorView.xib */; };
@@ -89,6 +91,10 @@
 		929A87AC1D711FEF0027385D /* FViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FViewController.m; sourceTree = "<group>"; };
 		92A77CBC1D6ED09500FD19A3 /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendViewController.h; sourceTree = "<group>"; };
 		92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendViewController.m; sourceTree = "<group>"; };
+		92A920681D90C89D00C6F007 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
+		92A920691D90C89D00C6F007 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
+		92A9206B1D90C9F600C6F007 /* FriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendTableViewCell.h; sourceTree = "<group>"; };
+		92A9206C1D90C9F600C6F007 /* FriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendTableViewCell.m; sourceTree = "<group>"; };
 		92AF4F711D6ED3E100B92297 /* SearchFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendTableViewCell.h; sourceTree = "<group>"; };
 		92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendTableViewCell.m; sourceTree = "<group>"; };
 		92AF4F741D6ED72E00B92297 /* UIViewConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewConstant.h; sourceTree = "<group>"; };
@@ -149,6 +155,8 @@
 				92AF4F721D6ED3E100B92297 /* SearchFriendTableViewCell.m */,
 				92F840511D86A3E600D32163 /* CommentTableViewCell.h */,
 				92F840521D86A3E600D32163 /* CommentTableViewCell.m */,
+				92A9206B1D90C9F600C6F007 /* FriendTableViewCell.h */,
+				92A9206C1D90C9F600C6F007 /* FriendTableViewCell.m */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -156,6 +164,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				92A920671D90C88500C6F007 /* FriendsViewController */,
 				92F8404D1D86A1E600D32163 /* CommentsViewController */,
 				92CE61F71D6FFC9A00E31C34 /* NewStoryViewController */,
 				92A77CBB1D6ED07E00FD19A3 /* SearchFriendViewController */,
@@ -292,6 +301,15 @@
 				92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */,
 			);
 			path = SearchFriendViewController;
+			sourceTree = "<group>";
+		};
+		92A920671D90C88500C6F007 /* FriendsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92A920681D90C89D00C6F007 /* FriendsViewController.h */,
+				92A920691D90C89D00C6F007 /* FriendsViewController.m */,
+			);
+			path = FriendsViewController;
 			sourceTree = "<group>";
 		};
 		92CE61F71D6FFC9A00E31C34 /* NewStoryViewController */ = {
@@ -527,9 +545,11 @@
 				92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
 				924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */,
+				92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */,
 				92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */,
 				924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */,
 				929139531D758D5700A0E972 /* ThumbnailCollectionViewCell.m in Sources */,
+				92A9206D1D90C9F600C6F007 /* FriendTableViewCell.m in Sources */,
 				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
 				924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */,
 				92C869891D78267B0022F0D6 /* FDateFormatter.m in Sources */,

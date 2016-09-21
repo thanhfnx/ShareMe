@@ -88,6 +88,13 @@ static NSData *kRemainData;
     }
 }
 
++ (void)resignRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver {
+    NSMutableArray *array = [kRequests valueForKey:actionName];
+    if (array && [array containsObject:receiver]) {
+        [array removeObject:receiver];
+    }
+}
+
 #pragma mark - Process message from server
 
 - (void)readMessage {

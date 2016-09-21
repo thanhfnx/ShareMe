@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "FViewController.h"
 
+@class Story;
+
 @interface CommentsViewController : FViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
-@property (nonatomic) NSInteger storyId;
+@property (strong, nonatomic) Story *story;
 
 @end

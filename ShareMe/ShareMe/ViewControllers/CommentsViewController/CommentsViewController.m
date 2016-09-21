@@ -27,6 +27,11 @@ static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kConfirmMessageTitle = @"Confirm";
 static NSString *const kConfirmDiscardComment = @"This comment is unsaved! Are you sure to discard this comment?";
 static NSString *const kAddNewCommentErrorMessage = @"Something went wrong! Can not add new comment!";
+static NSString *const kEmptyLikedUsersLabelText = @"Be the first to like this.";
+static NSString *const kSelfLikeLabelText = @"You like this.";
+static NSString *const kOneLikeLabelText = @"1 person like this.";
+static NSString *const kSelfLikeWithOthersLabelText = @"You and %ld other(s) like this.";
+static NSString *const kManyLikeLabelText = @"%ld people like this.";
 static NSInteger const kNumberOfComments = 10;
 
 @interface CommentsViewController () {
@@ -43,6 +48,8 @@ static NSInteger const kNumberOfComments = 10;
 @property (weak, nonatomic) IBOutlet UITextView *txvAddComment;
 @property (weak, nonatomic) IBOutlet UILabel *lblPlaceHolder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentViewBottomConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *btnLike;
+@property (weak, nonatomic) IBOutlet UILabel *lblLikedUsers;
 
 @end
 
@@ -56,8 +63,6 @@ static NSInteger const kNumberOfComments = 10;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
     [self.txvAddComment becomeFirstResponder];
-    self.tableView.estimatedRowHeight = 44.0f;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
     _startIndex = 0;
     _topComments = [NSMutableArray array];
     _responseActions = @[
@@ -67,6 +72,7 @@ static NSInteger const kNumberOfComments = 10;
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _dateFormatter = [FDateFormatter sharedDateFormatter];
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
+    [self updateLikedUsers];
     [self loadComments];
 }
 
@@ -84,9 +90,45 @@ static NSInteger const kNumberOfComments = 10;
 }
 
 - (void)loadComments {
-    [ClientSocketController sendData:[NSString stringWithFormat:kGetTopCommentsMessageFormat, self.storyId,
-        _startIndex, kNumberOfComments] messageType:kSendingRequestSignal
+    [ClientSocketController sendData:[NSString stringWithFormat:kGetTopCommentsMessageFormat,
+        self.story.storyId.integerValue, _startIndex, kNumberOfComments] messageType:kSendingRequestSignal
         actionName:kUserGetTopCommentsAction sender:self];
+}
+
+- (void)updateLikedUsers {
+    UIImage *likedImage = [UIImage imageNamed:@"loved"];
+    UIImage *unlikedImage = [UIImage imageNamed:@"love"];
+    switch (self.story.numberOfLikedUsers.integerValue) {
+        case 0: {
+            [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
+            self.lblLikedUsers.text = kEmptyLikedUsersLabelText;
+            break;
+        }
+        case 1: {
+            User *firstUser = self.story.likedUsers[0];
+            if (firstUser.userId.integerValue == _currentUser.userId.integerValue) {
+                self.lblLikedUsers.text = kSelfLikeLabelText;
+                [self.btnLike setImage:likedImage forState:UIControlStateNormal];
+            } else {
+                self.lblLikedUsers.text = kOneLikeLabelText;
+                [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
+            }
+            break;
+        }
+        case 2 ... NSIntegerMax: {
+            User *firstUser = self.story.likedUsers[0];
+            if (firstUser.userId.integerValue == _currentUser.userId.integerValue) {
+                self.lblLikedUsers.text = [NSString stringWithFormat:kSelfLikeWithOthersLabelText,
+                    self.story.numberOfLikedUsers.integerValue - 1];
+                [self.btnLike setImage:likedImage forState:UIControlStateNormal];
+            } else {
+                self.lblLikedUsers.text = [NSString stringWithFormat:kManyLikeLabelText,
+                    self.story.numberOfLikedUsers.integerValue];
+                [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
+            }
+            break;
+        }
+    }
 }
 
 #pragma mark - UITextViewDelegate
@@ -115,6 +157,14 @@ static NSInteger const kNumberOfComments = 10;
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
 - (void)reloadDataWithAnimated:(BOOL)animated {
     [self.tableView reloadData];
     NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
@@ -125,16 +175,14 @@ static NSInteger const kNumberOfComments = 10;
 #pragma mark - Packing entity
 
 - (void)getComment {
-    if (!_comment) {
-        _comment = [[Comment alloc] init];
-    }
+    _comment = [[Comment alloc] init];
     User *creator = [[User alloc] init];
     creator.userId = _currentUser.userId;
     _comment.creator = creator;
     _comment.content = self.txvAddComment.text;
     _comment.createdTime = [_dateFormatter stringFromDate:[NSDate date]];
     Story *story = [[Story alloc] init];
-    story.storyId = @(self.storyId);
+    story.storyId = @(self.story.storyId.integerValue);
     _comment.story = story;
 }
 
@@ -180,7 +228,7 @@ static NSInteger const kNumberOfComments = 10;
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message {
     NSInteger index = [_responseActions indexOfObject:actionName];
     switch (index) {
-        case UserGetTopCommentsAction:
+        case UserGetTopCommentsAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 // TODO: Replace blank table view
             } else {
@@ -192,7 +240,8 @@ static NSInteger const kNumberOfComments = 10;
                 [self reloadDataWithAnimated:NO];
             }
             break;
-        case UserCreateNewCommentAction:
+        }
+        case UserCreateNewCommentAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kAddNewCommentErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -204,6 +253,20 @@ static NSInteger const kNumberOfComments = 10;
                 [self reloadDataWithAnimated:YES];
             }
             break;
+        }
+    }
+}
+
+- (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user {
+    BOOL isExist = NO;
+    for (User *temp in array) {
+        if (temp.userId == user.userId) {
+            isExist = YES;
+            break;
+        }
+    }
+    if (!isExist) {
+        [array addObject:user];
     }
 }
 

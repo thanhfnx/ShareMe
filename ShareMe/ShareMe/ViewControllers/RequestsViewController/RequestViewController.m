@@ -88,8 +88,6 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _receivedRequests = _currentUser.receivedRequests;
     _sentRequests = _currentUser.sentRequests;
-    self.tableView.estimatedRowHeight = 80.0f;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
     UIFont *font = [UIFont fontWithName:kDefaultFontName size:15];
@@ -152,6 +150,14 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
         }
     }
     return [UITableViewCell new];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - IBAction

@@ -26,7 +26,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddImageToStoryAction,
-    AddNewStoryToUserAction
+    AddNewStoryToUserAction,
+    UpdateLikedUsersAction
 };
 
 static NSString *const kDefaultMessageTitle = @"Warning";
@@ -46,7 +47,7 @@ static NSInteger const kNumberOfStories = 10;
     NSArray<NSString *> *_responseActions;
     NSArray<NSString *> *_requestActions;
     NSInteger _startIndex;
-    NSInteger _storyId;
+    NSInteger _selectedIndex;
     NSMutableDictionary<NSIndexPath *, NSNumber *> *heightForIndexPath;
 }
 
@@ -74,7 +75,8 @@ static NSInteger const kNumberOfStories = 10;
     ];
     _requestActions = @[
         kAddImageToStoryAction,
-        kAddNewStoryToUserAction
+        kAddNewStoryToUserAction,
+        kUpdateLikedUsersAction
     ];
     [self registerRequestHandler];
     _startIndex = 0;
@@ -98,7 +100,8 @@ static NSInteger const kNumberOfStories = 10;
 
 - (void)loadTopStories {
     [ClientSocketController sendData:[NSString stringWithFormat:kGetTopStoriesRequestFormat,
-        _currentUser.userId.integerValue, [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex, kNumberOfStories]
+        _currentUser.userId.integerValue, [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex,
+        kNumberOfStories]
         messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction sender:self];
 }
 
@@ -124,13 +127,17 @@ static NSInteger const kNumberOfStories = 10;
         actionName:kUserSearchFriendAction sender:self];
 }
 
+- (IBAction)swipeToLeftGestureRecognizer:(UISwipeGestureRecognizer *)sender {
+    [self performSegueWithIdentifier:kGoToListFriendSegueIdentifier sender:self];
+}
+
 - (IBAction)btnReloadTapped:(UIButton *)sender {
     [self.tableView reloadData];
 }
 
 - (IBAction)btnLikeTapped:(UIButton *)sender {
-    _storyId = self.topStories[sender.superview.tag].storyId.integerValue;
-    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, _storyId,
+    NSInteger storyId = self.topStories[sender.superview.tag].storyId.integerValue;
+    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
         _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
         sender:self];
 }
@@ -141,7 +148,7 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (IBAction)btnCommentTapped:(UIButton *)sender {
-    _storyId = self.topStories[sender.superview.tag].storyId.integerValue;
+    _selectedIndex = sender.superview.tag;
     [self performSegueWithIdentifier:kGoToCommentSegueIdentifier sender:self];
 }
 
@@ -263,22 +270,23 @@ static NSInteger const kNumberOfStories = 10;
                 NSString *likeMessage = array[0];
                 NSInteger storyId = [array[1] integerValue];
                 NSInteger numberOfLikedUsers = [array[2] integerValue];
-                [self updateLikeStory:likeMessage storyId:storyId numberOfLikedUsers:numberOfLikedUsers];
+                [self updateLikeStory:likeMessage userId:_currentUser.userId.integerValue storyId:storyId
+                    numberOfLikedUsers:numberOfLikedUsers];
             }
             break;
     }
 }
 
-- (void)updateLikeStory:(NSString *)likeMessage storyId:(NSInteger)storyId
+- (void)updateLikeStory:(NSString *)likeMessage userId:(NSInteger)userId storyId:(NSInteger)storyId
     numberOfLikedUsers:(NSInteger)numberOfLikedUsers {
     if ([likeMessage isEqualToString:kLikedMessageAction]) {
         for (Story *story in self.topStories) {
             if (story.storyId.integerValue == storyId) {
                 story.numberOfLikedUsers = @(numberOfLikedUsers);
-                if (!story.likedUsers) {
+                if (userId == _currentUser.userId.integerValue && !story.likedUsers) {
                     story.likedUsers = (NSMutableArray<User, Optional> *)[NSMutableArray
                         arrayWithObject:_currentUser];
-                } else {
+                } else if (userId == _currentUser.userId.integerValue && story.likedUsers) {
                     [story.likedUsers addObject:_currentUser];
                 }
                 [self reloadSingleCell:story];
@@ -289,7 +297,9 @@ static NSInteger const kNumberOfStories = 10;
         for (Story *story in self.topStories) {
             if (story.storyId.integerValue == storyId) {
                 story.numberOfLikedUsers = @(numberOfLikedUsers);
-                [story.likedUsers removeAllObjects];
+                if (userId == _currentUser.userId.integerValue) {
+                    [story.likedUsers removeAllObjects];
+                }
                 [self reloadSingleCell:story];
                 break;
             }
@@ -304,7 +314,7 @@ static NSInteger const kNumberOfStories = 10;
         searchFriendTableViewController.keyword = self.txtSearch.text;
     } else if ([segue.identifier isEqualToString:kGoToCommentSegueIdentifier]) {
         CommentsViewController *commentsViewController = [segue destinationViewController];
-        commentsViewController.storyId = _storyId;
+        commentsViewController.story = _topStories[_selectedIndex];
     }
 }
 
@@ -335,6 +345,18 @@ static NSInteger const kNumberOfStories = 10;
             [self.topStories insertObject:story atIndex:0];
             // TODO: Handle error
             [self.tableView reloadData];
+            break;
+        }
+        case UpdateLikedUsersAction: {
+            NSArray *array = [message componentsSeparatedByString:@"-"];
+            if ([array containsObject:@""]) {
+                return;
+            }
+            NSInteger userId = [array[0] integerValue];
+            NSString *likeMessage = array[1];
+            NSInteger storyId = [array[2] integerValue];
+            NSInteger numberOfLikedUsers = [array[3] integerValue];
+            [self updateLikeStory:likeMessage userId:userId storyId:storyId numberOfLikedUsers:numberOfLikedUsers];
             break;
         }
     }

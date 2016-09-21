@@ -16,5 +16,6 @@
 + (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
     sender:(UIViewController *)sender;
 + (void)registerRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver;
++ (void)resignRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver;
 
 @end

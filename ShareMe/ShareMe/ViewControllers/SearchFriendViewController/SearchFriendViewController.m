@@ -110,8 +110,6 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
-    self.tableView.estimatedRowHeight = 80.0f;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -174,6 +172,14 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
     cell.btnAction.tag = indexPath.row;
     [cell setUser:self.users[indexPath.row] relationStatus:_relationStatuses[indexPath.row].integerValue];
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UIScrollViewDelegate
