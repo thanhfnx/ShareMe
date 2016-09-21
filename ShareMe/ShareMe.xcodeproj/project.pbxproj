@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9203403D1D9287E500619B28 /* WhoLikeThisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9203403C1D9287E500619B28 /* WhoLikeThisViewController.m */; };
 		920391151D6D343E00BC5BE0 /* NewsFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391141D6D343E00BC5BE0 /* NewsFeedViewController.m */; };
 		920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */; };
 		922945011D7D40C300913B0C /* NewsFeedImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922945001D7D40C300913B0C /* NewsFeedImageView.xib */; };
@@ -49,6 +50,8 @@
 		0EDEA1FB161204A0BD2CE6B5 /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
 		735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7931857DC026561F20153570 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
+		9203403B1D9287E500619B28 /* WhoLikeThisViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhoLikeThisViewController.h; sourceTree = "<group>"; };
+		9203403C1D9287E500619B28 /* WhoLikeThisViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhoLikeThisViewController.m; sourceTree = "<group>"; };
 		920391131D6D343E00BC5BE0 /* NewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedViewController.h; sourceTree = "<group>"; };
 		920391141D6D343E00BC5BE0 /* NewsFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsFeedViewController.m; sourceTree = "<group>"; };
 		920391171D6D3EAB00BC5BE0 /* StoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewCell.h; sourceTree = "<group>"; };
@@ -133,6 +136,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9203403A1D9287C800619B28 /* WhoLikeThisViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9203403B1D9287E500619B28 /* WhoLikeThisViewController.h */,
+				9203403C1D9287E500619B28 /* WhoLikeThisViewController.m */,
+			);
+			path = WhoLikeThisViewController;
+			sourceTree = "<group>";
+		};
 		9203910F1D6D33F600BC5BE0 /* NewsFeedViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,6 +176,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				9203403A1D9287C800619B28 /* WhoLikeThisViewController */,
 				92A920671D90C88500C6F007 /* FriendsViewController */,
 				92F8404D1D86A1E600D32163 /* CommentsViewController */,
 				92CE61F71D6FFC9A00E31C34 /* NewStoryViewController */,
@@ -566,6 +579,7 @@
 				924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */,
 				92AF4F731D6ED3E100B92297 /* SearchFriendTableViewCell.m in Sources */,
 				920391151D6D343E00BC5BE0 /* NewsFeedViewController.m in Sources */,
+				9203403D1D9287E500619B28 /* WhoLikeThisViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

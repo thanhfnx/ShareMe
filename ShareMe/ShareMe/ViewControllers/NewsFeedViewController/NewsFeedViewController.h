@@ -10,9 +10,12 @@
 #import "FViewController.h"
 
 @class Story;
+@class Comment;
 
 @interface NewsFeedViewController : FViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) NSMutableArray<Story *> *topStories;
+
+- (void)addCommentToStory:(Comment *)comment;
 
 @end

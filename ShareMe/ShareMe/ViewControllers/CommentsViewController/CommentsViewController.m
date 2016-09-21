@@ -8,8 +8,10 @@
 
 #import "CommentsViewController.h"
 #import "MainTabBarViewController.h"
+#import "NewsFeedViewController.h"
 #import "ClientSocketController.h"
 #import "CommentTableViewCell.h"
+#import "WhoLikeThisViewController.h"
 #import "FDateFormatter.h"
 #import "Utils.h"
 #import "Comment.h"
@@ -18,7 +20,13 @@
 
 typedef NS_ENUM(NSInteger, UserResponseActions) {
     UserGetTopCommentsAction,
-    UserCreateNewCommentAction
+    UserCreateNewCommentAction,
+    UserLikeStoryAction
+};
+
+typedef NS_ENUM(NSInteger, UserRequestActions) {
+    AddNewCommentToUserAction,
+    UpdateLikedUsersAction
 };
 
 static NSString *const kCommentReuseIdentifier = @"CommentCell";
@@ -32,7 +40,9 @@ static NSString *const kSelfLikeLabelText = @"You like this.";
 static NSString *const kOneLikeLabelText = @"1 person like this.";
 static NSString *const kSelfLikeWithOthersLabelText = @"You and %ld other(s) like this.";
 static NSString *const kManyLikeLabelText = @"%ld people like this.";
+static NSString *const kLikeRequestFormat = @"%ld-%ld";
 static NSInteger const kNumberOfComments = 10;
+static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 
 @interface CommentsViewController () {
     Comment *_comment;
@@ -49,7 +59,7 @@ static NSInteger const kNumberOfComments = 10;
 @property (weak, nonatomic) IBOutlet UILabel *lblPlaceHolder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentViewBottomConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *btnLike;
-@property (weak, nonatomic) IBOutlet UILabel *lblLikedUsers;
+@property (weak, nonatomic) IBOutlet UIButton *btnWhoLikeThis;
 
 @end
 
@@ -67,7 +77,12 @@ static NSInteger const kNumberOfComments = 10;
     _topComments = [NSMutableArray array];
     _responseActions = @[
         kUserGetTopCommentsAction,
-        kUserCreateNewCommentAction
+        kUserCreateNewCommentAction,
+        kUserLikeStoryAction
+    ];
+    _requestActions = @[
+        kAddNewCommentToUserAction,
+        kUpdateLikedUsersAction
     ];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _dateFormatter = [FDateFormatter sharedDateFormatter];
@@ -78,6 +93,7 @@ static NSInteger const kNumberOfComments = 10;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self registerRequestHandler];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
         name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
@@ -85,6 +101,7 @@ static NSInteger const kNumberOfComments = 10;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [self resignRequestHandler];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -101,29 +118,27 @@ static NSInteger const kNumberOfComments = 10;
     switch (self.story.numberOfLikedUsers.integerValue) {
         case 0: {
             [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
-            self.lblLikedUsers.text = kEmptyLikedUsersLabelText;
+            [self.btnWhoLikeThis setTitle:kEmptyLikedUsersLabelText forState:UIControlStateNormal];
             break;
         }
         case 1: {
-            User *firstUser = self.story.likedUsers[0];
-            if (firstUser.userId.integerValue == _currentUser.userId.integerValue) {
-                self.lblLikedUsers.text = kSelfLikeLabelText;
+            if (self.story.likedUsers.count) {
+                [self.btnWhoLikeThis setTitle:kSelfLikeLabelText forState:UIControlStateNormal];
                 [self.btnLike setImage:likedImage forState:UIControlStateNormal];
             } else {
-                self.lblLikedUsers.text = kOneLikeLabelText;
+                [self.btnWhoLikeThis setTitle:kOneLikeLabelText forState:UIControlStateNormal];
                 [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
             }
             break;
         }
         case 2 ... NSIntegerMax: {
-            User *firstUser = self.story.likedUsers[0];
-            if (firstUser.userId.integerValue == _currentUser.userId.integerValue) {
-                self.lblLikedUsers.text = [NSString stringWithFormat:kSelfLikeWithOthersLabelText,
-                    self.story.numberOfLikedUsers.integerValue - 1];
+            if (self.story.likedUsers.count) {
+                [self.btnWhoLikeThis setTitle:[NSString stringWithFormat:kSelfLikeWithOthersLabelText,
+                    self.story.numberOfLikedUsers.integerValue - 1] forState:UIControlStateNormal];
                 [self.btnLike setImage:likedImage forState:UIControlStateNormal];
             } else {
-                self.lblLikedUsers.text = [NSString stringWithFormat:kManyLikeLabelText,
-                    self.story.numberOfLikedUsers.integerValue];
+                [self.btnWhoLikeThis setTitle:[NSString stringWithFormat:kManyLikeLabelText,
+                    self.story.numberOfLikedUsers.integerValue] forState:UIControlStateNormal];
                 [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
             }
             break;
@@ -207,6 +222,18 @@ static NSInteger const kNumberOfComments = 10;
     }
 }
 
+- (IBAction)btnLikeTapped:(UIButton *)sender {
+    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, self.story.storyId.integerValue,
+        _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
+        sender:self];
+}
+
+- (IBAction)btnWhoLikeThisTapped:(UIButton *)sender {
+    if (self.story.numberOfLikedUsers.integerValue) {
+        [self performSegueWithIdentifier:kGoToWhoLikeThisSegueIdentifier sender:self];
+    }
+}
+
 #pragma mark - Show / hide keyboard
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -251,8 +278,46 @@ static NSInteger const kNumberOfComments = 10;
                 [self.txvAddComment setText:@""];
                 self.lblPlaceHolder.hidden = NO;
                 [self reloadDataWithAnimated:YES];
+                NewsFeedViewController *newsFeedViewController = self.navigationController.viewControllers[0];
+                [newsFeedViewController addCommentToStory:_comment];
             }
             break;
+        }
+        case UserLikeStoryAction: {
+            if (![message isEqualToString:kFailureMessage]) {
+                NSArray *array = [message componentsSeparatedByString:@"-"];
+                if ([array containsObject:@""]) {
+                    return;
+                }
+                NSString *likeMessage = array[0];
+                NSInteger storyId = [array[1] integerValue];
+                NSInteger numberOfLikedUsers = [array[2] integerValue];
+                [self updateLikeStory:likeMessage userId:_currentUser.userId.integerValue storyId:storyId
+                    numberOfLikedUsers:numberOfLikedUsers];
+                [self updateLikedUsers];
+            }
+            break;
+        }
+    }
+}
+
+- (void)updateLikeStory:(NSString *)likeMessage userId:(NSInteger)userId storyId:(NSInteger)storyId
+    numberOfLikedUsers:(NSInteger)numberOfLikedUsers {
+    if ([likeMessage isEqualToString:kLikedMessageAction]) {
+        if (self.story.storyId.integerValue == storyId) {
+            self.story.numberOfLikedUsers = @(numberOfLikedUsers);
+            if (userId == _currentUser.userId.integerValue && !self.story.likedUsers) {
+                self.story.likedUsers = (NSMutableArray<User, Optional> *)[NSMutableArray arrayWithObject:_currentUser];
+            } else if (userId == _currentUser.userId.integerValue && self.story.likedUsers) {
+                [self.story.likedUsers addObject:_currentUser];
+            }
+        }
+    } else if ([likeMessage isEqualToString:kUnlikedMessageAction]) {
+        if (self.story.storyId.integerValue == storyId) {
+            self.story.numberOfLikedUsers = @(numberOfLikedUsers);
+            if (userId == _currentUser.userId.integerValue) {
+                [self.story.likedUsers removeAllObjects];
+            }
         }
     }
 }
@@ -267,6 +332,47 @@ static NSInteger const kNumberOfComments = 10;
     }
     if (!isExist) {
         [array addObject:user];
+    }
+}
+
+#pragma mark - Request Handler
+
+- (void)registerRequestHandler {
+    for (NSString *action in _requestActions) {
+        [ClientSocketController registerRequestHandler:action receiver:self];
+    }
+}
+
+- (void)resignRequestHandler {
+    for (NSString *action in _requestActions) {
+        [ClientSocketController resignRequestHandler:action receiver:self];
+    }
+}
+
+- (void)handleRequest:(NSString *)actionName message:(NSString *)message {
+    NSInteger index = [_requestActions indexOfObject:actionName];
+    switch (index) {
+        case AddNewCommentToUserAction: {
+            NSError *error;
+            Comment *comment = [[Comment alloc] initWithString:message error:&error];
+            // TODO: Handle error
+            if (comment) {
+                [_topComments addObject:comment];
+                [self reloadDataWithAnimated:YES];
+            }
+            break;
+        }
+        case UpdateLikedUsersAction: {
+            [self updateLikedUsers];
+            break;
+        }
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kGoToWhoLikeThisSegueIdentifier]) {
+        WhoLikeThisViewController *whoLikeThisViewController = [segue destinationViewController];
+        whoLikeThisViewController.storyId = self.story.storyId.integerValue;
     }
 }
 

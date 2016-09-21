@@ -63,11 +63,14 @@ NSString *const kUserLikeStoryAction = @"USER_LIKE_STORY";
 NSString *const kLikedMessageAction = @"LIKED";
 NSString *const kUnlikedMessageAction = @"UNLIKED";
 NSString *const kUpdateLikedUsersAction = @"UPDATE_LIKED_USERS";
+NSString *const kAddNewCommentToUserAction = @"ADD_NEW_COMMENT_TO_USER";
 
 NSString *const kUserGetTopCommentsAction = @"USER_GET_TOP_COMMENTS";
 NSString *const kUserCreateNewCommentAction = @"USER_CREATE_NEW_COMMENT";
 
 NSString *const kUpdateNewsFeedNotificationName = @"UPDATE_NEWS_FEED";
+
+NSString *const kUserGetLikedUsersAction = @"USER_GET_LIKED_USERS";
 
 NSString *const kGoToListFriendSegueIdentifier = @"goToListFriend";
 

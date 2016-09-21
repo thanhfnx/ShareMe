@@ -27,7 +27,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
 typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddImageToStoryAction,
     AddNewStoryToUserAction,
-    UpdateLikedUsersAction
+    UpdateLikedUsersAction,
+    AddNewCommentToUserAction
 };
 
 static NSString *const kDefaultMessageTitle = @"Warning";
@@ -76,7 +77,8 @@ static NSInteger const kNumberOfStories = 10;
     _requestActions = @[
         kAddImageToStoryAction,
         kAddNewStoryToUserAction,
-        kUpdateLikedUsersAction
+        kUpdateLikedUsersAction,
+        kAddNewCommentToUserAction
     ];
     [self registerRequestHandler];
     _startIndex = 0;
@@ -237,7 +239,7 @@ static NSInteger const kNumberOfStories = 10;
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message {
     NSInteger index = [_responseActions indexOfObject:actionName];
     switch (index) {
-        case UserSearchFriendAction:
+        case UserSearchFriendAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:[NSString stringWithFormat:kEmptySearchResultMessage, self.txtSearch.text]
                     title:kDefaultMessageTitle complete:nil];
@@ -250,7 +252,8 @@ static NSInteger const kNumberOfStories = 10;
                 self.txtSearch.text = @"";
             }
             break;
-        case UserGetTopStoriesAction:
+        }
+        case UserGetTopStoriesAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 // TODO: Replace blank table view
             } else {
@@ -261,7 +264,8 @@ static NSInteger const kNumberOfStories = 10;
                 [self.tableView reloadData];
             }
             break;
-        case UserLikeStoryAction:
+        }
+        case UserLikeStoryAction: {
             if (![message isEqualToString:kFailureMessage]) {
                 NSArray *array = [message componentsSeparatedByString:@"-"];
                 if ([array containsObject:@""]) {
@@ -274,6 +278,7 @@ static NSInteger const kNumberOfStories = 10;
                     numberOfLikedUsers:numberOfLikedUsers];
             }
             break;
+        }
     }
 }
 
@@ -357,6 +362,29 @@ static NSInteger const kNumberOfStories = 10;
             NSInteger storyId = [array[2] integerValue];
             NSInteger numberOfLikedUsers = [array[3] integerValue];
             [self updateLikeStory:likeMessage userId:userId storyId:storyId numberOfLikedUsers:numberOfLikedUsers];
+            break;
+        }
+        case AddNewCommentToUserAction: {
+            NSError *error;
+            Comment *comment = [[Comment alloc] initWithString:message error:&error];
+            // TODO: Handle error
+            if (comment) {
+                [self addCommentToStory:comment];
+            }
+        }
+    }
+}
+
+- (void)addCommentToStory:(Comment *)comment {
+    for (Story *story in self.topStories) {
+        if (story.storyId.integerValue == comment.story.storyId.integerValue) {
+            story.numberOfComments = @(story.numberOfComments.integerValue + 1);
+            if (comment.creator.userId.integerValue == _currentUser.userId.integerValue && !story.comments) {
+                story.comments = (NSMutableArray<Comment, Optional> *)[NSMutableArray arrayWithObject:comment];
+            } else if (comment.creator.userId.integerValue == _currentUser.userId.integerValue && story.comments) {
+                [story.comments addObject:comment];
+            }
+            [self reloadSingleCell:story];
             break;
         }
     }
