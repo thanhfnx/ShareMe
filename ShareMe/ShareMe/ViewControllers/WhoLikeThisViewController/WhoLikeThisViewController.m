@@ -1,12 +1,12 @@
 //
-//  SearchFriendTableViewController.m
+//  WhoLikeThisViewController.m
 //  ShareMe
 //
-//  Created by Nguyen Xuan Thanh on 8/25/16.
+//  Created by Nguyen Xuan Thanh on 9/21/16.
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
-#import "SearchFriendViewController.h"
+#import "WhoLikeThisViewController.h"
 #import "UIViewController+RequestHandler.h"
 #import "UIViewController+ResponseHandler.h"
 #import "ClientSocketController.h"
@@ -36,15 +36,15 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 };
 
 typedef NS_ENUM(NSInteger, UserResponseActions) {
+    UserGetLikedUsersAction,
     UserAcceptRequestAction,
     UserDeclineRequestAction,
     UserCancelRequestAction,
     UserSendRequestAction,
-    UserUnfriendAction,
-    UserSearchFriendAction
+    UserUnfriendAction
 };
 
-static NSString *const kSearchFriendReuseIdentifier = @"SearchFriendCell";
+static NSString *const kLikedUserReuseIdentifier = @"LikedUserCell";
 static NSString *const kConfirmMessageTitle = @"Confirm";
 static NSString *const kRequestFormat = @"%ld-%ld";
 static NSString *const kConfirmUnfriendMessage = @"Do you really want to unfriend %@?";
@@ -58,26 +58,21 @@ static NSString *const kDeclineRequestErrorMessage = @"Something went wrong! Can
 static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can not cancel friend request!";
 static NSString *const kSendRequestErrorMessage = @"Something went wrong! Can not send friend request!";
 static NSString *const kUnfriendErrorMessage = @"Something went wrong! Can not unfriend!";
-static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
-static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
-static NSString *const kSearchLabelTitle = @"Search results for '%@':";
+static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can not get liked users!";
 
-@interface SearchFriendViewController () {
+@interface WhoLikeThisViewController () {
     User *_currentUser;
+    NSArray<User *> *_users;
     NSMutableArray<NSNumber *> *_relationStatuses;
     NSArray<NSString *> *_requestActions;
     NSArray<NSString *> *_responseActions;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *lblTitle;
-@property (weak, nonatomic) IBOutlet UITextField *txtSearch;
-@property (weak, nonatomic) IBOutlet UILabel *lblSearchTitle;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldLeadingConstraint;
 
 @end
 
-@implementation SearchFriendViewController
+@implementation WhoLikeThisViewController
 
 #pragma mark - UIView Life Cycle
 
@@ -96,12 +91,12 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
         kAddUnfriendToClientsAction
     ];
     _responseActions = @[
+        kUserGetLikedUsersAction,
         kUserAcceptRequestAction,
         kUserDeclineRequestAction,
         kUserCancelRequestAction,
         kUserSendRequestAction,
-        kUserUnfriendAction,
-        kUserSearchFriendAction
+        kUserUnfriendAction
     ];
     [self registerRequestHandler];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
@@ -109,6 +104,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
+    [self loadLikedUsers];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -117,9 +113,14 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
     [self.tableView reloadData];
 }
 
+- (void)loadLikedUsers {
+    [ClientSocketController sendData:[@(self.storyId) stringValue] messageType:kSendingRequestSignal
+        actionName:kUserGetLikedUsersAction sender:self];
+}
+
 - (void)setRelationStatuses {
     [_relationStatuses removeAllObjects];
-    for (User *user in self.users) {
+    for (User *user in _users) {
         NSInteger status = NotFriendRelation;
         for (User *temp in _currentUser.friends) {
             if (user.userId == temp.userId) {
@@ -158,18 +159,17 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    [self.lblSearchTitle setText:[NSString stringWithFormat:kSearchLabelTitle, self.keyword]];
-    return self.users.count;
+    return _users.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SearchFriendTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kSearchFriendReuseIdentifier
+    SearchFriendTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kLikedUserReuseIdentifier
         forIndexPath:indexPath];
     if (!cell) {
         return [UITableViewCell new];
     }
     cell.btnAction.tag = indexPath.row;
-    [cell setUser:self.users[indexPath.row] relationStatus:_relationStatuses[indexPath.row].integerValue];
+    [cell setUser:_users[indexPath.row] relationStatus:_relationStatuses[indexPath.row].integerValue];
     return cell;
 }
 
@@ -181,54 +181,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
     return UITableViewAutomaticDimension;
 }
 
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self dissmissKeyboard];
-}
-
-- (void)dissmissKeyboard {
-    [self.txtSearch resignFirstResponder];
-    [self.searchTextFieldLeadingConstraint setConstant:-10.0f];
-    [self.navigationItem.titleView setNeedsUpdateConstraints];
-    [UIView animateWithDuration:0.4 animations:^{
-        [self.navigationItem.titleView layoutIfNeeded];
-        self.lblTitle.alpha = 1.0f;
-    }];
-}
-
-#pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField == self.txtSearch) {
-        [self btnSearchTapped:nil];
-        return YES;
-    }
-    return NO;
-}
-
 #pragma mark - IBAction
-
-- (IBAction)btnSearchTapped:(UIButton *)sender {
-    if (self.lblTitle.alpha == 1.0f) {
-        [self.searchTextFieldLeadingConstraint setConstant:-self.lblTitle.frame.size.width];
-        [self.navigationItem.titleView setNeedsUpdateConstraints];
-        [UIView animateWithDuration:0.4 animations:^{
-            self.lblTitle.alpha = 0.0f;
-            [self.navigationItem.titleView layoutIfNeeded];
-        }];
-        [self.txtSearch becomeFirstResponder];
-        return;
-    }
-    if ([self.txtSearch.text isEqualToString:@""]) {
-        [self showMessage:kEmptySearchMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
-            [self.txtSearch becomeFirstResponder];
-        }];
-        return;
-    }
-    [ClientSocketController sendData:self.txtSearch.text messageType:kSendingRequestSignal
-        actionName:kUserSearchFriendAction sender:self];
-}
 
 - (IBAction)btnBackTapped:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -238,9 +191,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
     NSInteger index = sender.tag;
     switch (_relationStatuses[index].integerValue) {
         case FriendRelation: {
-            NSString *fullName = [self.users[index] fullName];
+            NSString *fullName = [_users[index] fullName];
             NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
-                self.users[index].userId.integerValue];
+                _users[index].userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmUnfriendMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
                 [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserUnfriendAction
@@ -249,9 +202,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             break;
         }
         case SentRequestRelation: {
-            NSString *fullName = [self.users[index] fullName];
+            NSString *fullName = [_users[index] fullName];
             NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
-                self.users[index].userId.integerValue];
+                _users[index].userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmCancelRequestMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
                 [ClientSocketController sendData:data messageType:kSendingRequestSignal
@@ -260,21 +213,21 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             break;
         }
         case ReceivedRequestRelation: {
-            NSString *fullName = [self.users[index] fullName];
+            NSString *fullName = [_users[index] fullName];
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:kConfirmMessageTitle
                 message:[NSString stringWithFormat:kConfirmAcceptMessage, fullName]
                 preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *acceptAction = [UIAlertAction actionWithTitle:kAcceptButtonTitle
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
-                    self.users[index].userId.integerValue];
+                    _users[index].userId.integerValue];
                 [ClientSocketController sendData:data messageType:kSendingRequestSignal
                     actionName:kUserAcceptRequestAction sender:self];
             }];
             UIAlertAction *declineAction = [UIAlertAction actionWithTitle:kDeclineButtonTitle
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
-                    self.users[index].userId.integerValue];
+                    _users[index].userId.integerValue];
                 [ClientSocketController sendData:data messageType:kSendingRequestSignal
                     actionName:kUserDeclineRequestAction sender:self];
             }];
@@ -288,7 +241,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
         }
         case NotFriendRelation: {
             NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
-                self.users[index].userId.integerValue];
+                _users[index].userId.integerValue];
             [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserSendRequestAction
                 sender:self];
             break;
@@ -378,7 +331,19 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message {
     NSInteger index = [_responseActions indexOfObject:actionName];
     switch (index) {
-        case UserAcceptRequestAction:
+        case UserGetLikedUsersAction: {
+            if ([message isEqualToString:kFailureMessage]) {
+                [self showMessage:kGetLikedUsersErrorMessage title:kDefaultMessageTitle complete:nil];
+            } else {
+                NSError *error;
+                _users = [User arrayOfModelsFromString:message error:&error];
+                // TODO: Handle error
+                [self setRelationStatuses];
+                [self.tableView reloadData];
+            }
+            break;
+        }
+        case UserAcceptRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kAcceptRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -391,7 +356,8 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 [self.tableView reloadData];
             }
             break;
-        case UserDeclineRequestAction:
+        }
+        case UserDeclineRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kDeclineRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -403,7 +369,8 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 [self.tableView reloadData];
             }
             break;
-        case UserCancelRequestAction:
+        }
+        case UserCancelRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kCancelRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -415,7 +382,8 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 [self.tableView reloadData];
             }
             break;
-        case UserSendRequestAction:
+        }
+        case UserSendRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kSendRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -427,7 +395,8 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 [self.tableView reloadData];
             }
             break;
-        case UserUnfriendAction:
+        }
+        case UserUnfriendAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kUnfriendErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -439,21 +408,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 [self.tableView reloadData];
             }
             break;
-        case UserSearchFriendAction:
-            if ([message isEqualToString:kFailureMessage]) {
-                [self showMessage:[NSString stringWithFormat:kEmptySearchResultMessage, self.txtSearch.text]
-                    title:kDefaultMessageTitle complete:nil];
-            } else {
-                NSError *error;
-                self.users = [User arrayOfModelsFromString:message error:&error];
-                // TODO: Handle error
-                [self setRelationStatuses];
-                self.keyword = self.txtSearch.text;
-                self.txtSearch.text = @"";
-                [self dismissKeyboard];
-                [self.tableView reloadData];
-            }
-            break;
+        }
     }
 }
 
