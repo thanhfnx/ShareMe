@@ -15,10 +15,12 @@ typedef NS_ENUM(NSInteger, Relations) {
     FriendRelation,
     SentRequestRelation,
     ReceivedRequestRelation,
-    NotFriendRelation
+    NotFriendRelation,
+    SelfRelation
 };
 
 static NSString *const kFriendButtonTitle = @"Friends";
+static NSString *const kSelfButtonTitle = @"You";
 static NSString *const kSentRequestButtonTitle = @"Cancel";
 static NSString *const kReceivedRequestButtonTitle = @"Reply";
 static NSString *const kNotFriendButtonTitle = @"Add";
@@ -33,26 +35,36 @@ static NSString *const kNotFriendButtonTitle = @"Add";
     UIColor *actionButtonTitleColor;
     UIColor *actionButtonBackgroundColor;
     switch (relationStatus) {
-        case FriendRelation:
+        case FriendRelation: {
             actionButtonTitle = kFriendButtonTitle;
             actionButtonTitleColor = [UIColor whiteColor];
             actionButtonBackgroundColor = [UIColor defaultThemeColor];
             break;
-        case SentRequestRelation:
+        }
+        case SentRequestRelation: {
             actionButtonTitle = kSentRequestButtonTitle;
             actionButtonTitleColor = [UIColor defaultThemeColor];
             actionButtonBackgroundColor = [UIColor whiteColor];
             break;
-        case ReceivedRequestRelation:
+        }
+        case ReceivedRequestRelation: {
             actionButtonTitle = kReceivedRequestButtonTitle;
             actionButtonTitleColor = [UIColor defaultThemeColor];
             actionButtonBackgroundColor = [UIColor whiteColor];
             break;
-        case NotFriendRelation:
+        }
+        case NotFriendRelation: {
             actionButtonTitle = kNotFriendButtonTitle;
             actionButtonTitleColor = [UIColor whiteColor];
             actionButtonBackgroundColor = [UIColor defaultThemeColor];
             break;
+        }
+        case SelfRelation: {
+            actionButtonTitle = kSelfButtonTitle;
+            actionButtonTitleColor = [UIColor whiteColor];
+            actionButtonBackgroundColor = [UIColor defaultThemeColor];
+            break;
+        }
     }
     [self.btnAction setTitle:actionButtonTitle forState:UIControlStateNormal];
     [self.btnAction setTitleColor:actionButtonTitleColor forState:UIControlStateNormal];

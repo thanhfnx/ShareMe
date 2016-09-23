@@ -117,6 +117,13 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
     [self.tableView reloadData];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
+        [self resignRequestHandler];
+    }
+}
+
 - (void)setRelationStatuses {
     [_relationStatuses removeAllObjects];
     for (User *user in self.users) {
@@ -301,6 +308,12 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
         [ClientSocketController registerRequestHandler:action receiver:self];
+    }
+}
+
+- (void)resignRequestHandler {
+    for (NSString *action in _requestActions) {
+        [ClientSocketController resignRequestHandler:action receiver:self];
     }
 }
 

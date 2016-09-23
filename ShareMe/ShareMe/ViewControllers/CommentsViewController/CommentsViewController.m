@@ -84,6 +84,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
         kAddNewCommentToUserAction,
         kUpdateLikedUsersAction
     ];
+    [self registerRequestHandler];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _dateFormatter = [FDateFormatter sharedDateFormatter];
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
@@ -93,7 +94,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self registerRequestHandler];
+    [self.tableView reloadData];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
         name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
@@ -101,7 +102,10 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [self resignRequestHandler];
+    [super viewWillDisappear:animated];
+    if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
+        [self resignRequestHandler];
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -115,6 +119,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 - (void)updateLikedUsers {
     UIImage *likedImage = [UIImage imageNamed:@"loved"];
     UIImage *unlikedImage = [UIImage imageNamed:@"love"];
+    [self.btnWhoLikeThis setTitle:@"" forState:UIControlStateNormal];
     switch (self.story.numberOfLikedUsers.integerValue) {
         case 0: {
             [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
@@ -206,9 +211,11 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 - (IBAction)btnBackTapped:(UIButton *)sender {
     if ([self.txvAddComment hasText]) {
         [self showConfirmDialog:kConfirmDiscardComment title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
+            [self dismissKeyboard];
             [self.navigationController popViewControllerAnimated:YES];
         }];
     } else {
+        [self dismissKeyboard];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -230,6 +237,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 
 - (IBAction)btnWhoLikeThisTapped:(UIButton *)sender {
     if (self.story.numberOfLikedUsers.integerValue) {
+        [self dismissKeyboard];
         [self performSegueWithIdentifier:kGoToWhoLikeThisSegueIdentifier sender:self];
     }
 }

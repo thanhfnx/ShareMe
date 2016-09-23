@@ -72,6 +72,9 @@ NSString *const kUpdateNewsFeedNotificationName = @"UPDATE_NEWS_FEED";
 
 NSString *const kUserGetLikedUsersAction = @"USER_GET_LIKED_USERS";
 
+NSString *const kGetUserByIdAction = @"GET_USER_BY_ID";
+
 NSString *const kGoToListFriendSegueIdentifier = @"goToListFriend";
+NSString *const kGoToUserTimelineSegueIdentifier = @"goToUserTimeline";
 
 @end
