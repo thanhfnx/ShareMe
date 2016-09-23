@@ -19,7 +19,8 @@ typedef NS_ENUM(NSInteger, Relations) {
     FriendRelation,
     SentRequestRelation,
     ReceivedRequestRelation,
-    NotFriendRelation
+    NotFriendRelation,
+    SelfRelation
 };
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
@@ -32,7 +33,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddDeclineRequestToClientsAction,
     AddCancelRequestToClientsAction,
     AddSendRequestToClientsAction,
-    AddUnfriendToClientsAction
+    AddUnfriendToClientsAction,
+    UpdateLikedUsersAction
 };
 
 typedef NS_ENUM(NSInteger, UserResponseActions) {
@@ -41,7 +43,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
     UserDeclineRequestAction,
     UserCancelRequestAction,
     UserSendRequestAction,
-    UserUnfriendAction
+    UserUnfriendAction,
+    GetUserByIdAction
 };
 
 static NSString *const kLikedUserReuseIdentifier = @"LikedUserCell";
@@ -62,7 +65,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
 
 @interface WhoLikeThisViewController () {
     User *_currentUser;
-    NSArray<User *> *_users;
+    NSMutableArray<User *> *_users;
     NSMutableArray<NSNumber *> *_relationStatuses;
     NSArray<NSString *> *_requestActions;
     NSArray<NSString *> *_responseActions;
@@ -88,7 +91,8 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
         kAddDeclineRequestToClientsAction,
         kAddCancelRequestToClientsAction,
         kAddSendRequestToClientsAction,
-        kAddUnfriendToClientsAction
+        kAddUnfriendToClientsAction,
+        kUpdateLikedUsersAction
     ];
     _responseActions = @[
         kUserGetLikedUsersAction,
@@ -96,7 +100,8 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
         kUserDeclineRequestAction,
         kUserCancelRequestAction,
         kUserSendRequestAction,
-        kUserUnfriendAction
+        kUserUnfriendAction,
+        kGetUserByIdAction
     ];
     [self registerRequestHandler];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
@@ -113,6 +118,13 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
     [self.tableView reloadData];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
+        [self resignRequestHandler];
+    }
+}
+
 - (void)loadLikedUsers {
     [ClientSocketController sendData:[@(self.storyId) stringValue] messageType:kSendingRequestSignal
         actionName:kUserGetLikedUsersAction sender:self];
@@ -122,6 +134,11 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
     [_relationStatuses removeAllObjects];
     for (User *user in _users) {
         NSInteger status = NotFriendRelation;
+        if (user.userId == _currentUser.userId) {
+            status = SelfRelation;
+            [_relationStatuses addObject:[NSNumber numberWithInteger:status]];
+            continue;
+        }
         for (User *temp in _currentUser.friends) {
             if (user.userId == temp.userId) {
                 status = FriendRelation;
@@ -257,48 +274,106 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
     }
 }
 
+- (void)resignRequestHandler {
+    for (NSString *action in _requestActions) {
+        [ClientSocketController resignRequestHandler:action receiver:self];
+    }
+}
+
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
     NSError *error;
     User *user = [[User alloc] initWithString:message error:&error];
     // TODO: Handle error
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
-        case UserUnfriendToUserAction:
+        case UserUnfriendToUserAction: {
             [self removeUser:_currentUser.friends user:user];
             break;
-        case UserSendRequestToUserAction:
+        }
+        case UserSendRequestToUserAction: {
             [self addUserIfNotExist:_currentUser.receivedRequests user:user];
             break;
-        case UserCancelRequestToUserAction:
+        }
+        case UserCancelRequestToUserAction: {
             [self removeUser:_currentUser.receivedRequests user:user];
             break;
-        case UserAddFriendToUserAction:
+        }
+        case UserAddFriendToUserAction: {
             [self addUserIfNotExist:_currentUser.friends user:user];
             [self removeUser:_currentUser.sentRequests user:user];
             break;
-        case UserDeclineRequestToUserAction:
+        }
+        case UserDeclineRequestToUserAction: {
             [self removeUser:_currentUser.sentRequests user:user];
             break;
-        case AddAcceptRequestToClientsAction:
+        }
+        case AddAcceptRequestToClientsAction: {
             [self removeUser:_currentUser.receivedRequests user:user];
             [self addUserIfNotExist:_currentUser.friends user:user];
             break;
-        case AddDeclineRequestToClientsAction:
+        }
+        case AddDeclineRequestToClientsAction: {
             [self removeUser:_currentUser.receivedRequests user:user];
             break;
-        case AddCancelRequestToClientsAction:
+        }
+        case AddCancelRequestToClientsAction: {
             [self removeUser:_currentUser.sentRequests user:user];
             break;
-        case AddSendRequestToClientsAction:
+        }
+        case AddSendRequestToClientsAction: {
             [self addUserIfNotExist:_currentUser.sentRequests user:user];
             break;
-        case AddUnfriendToClientsAction:
+        }
+        case AddUnfriendToClientsAction: {
             [self removeUser:_currentUser.friends user:user];
             break;
+        }
+        case UpdateLikedUsersAction: {
+            NSArray *array = [message componentsSeparatedByString:@"-"];
+            if ([array containsObject:@""]) {
+                return;
+            }
+            NSInteger userId = [array[0] integerValue];
+            NSString *likeMessage = array[1];
+            [self updateLikeStory:likeMessage userId:userId];
+            break;
+        }
     }
     if (self.isViewLoaded && self.view.window) {
         [self setRelationStatuses];
         [self.tableView reloadData];
+    }
+}
+
+- (void)updateLikeStory:(NSString *)likeMessage userId:(NSInteger)userId {
+    if ([likeMessage isEqualToString:kLikedMessageAction]) {
+        for (User *user in _currentUser.friends) {
+            if (user.userId.integerValue == userId) {
+                [_users addObject:user];
+                return;
+            }
+        }
+        for (User *user in _currentUser.sentRequests) {
+            if (user.userId.integerValue == userId) {
+                [_users addObject:user];
+                return;
+            }
+        }
+        for (User *user in _currentUser.receivedRequests) {
+            if (user.userId.integerValue == userId) {
+                [_users addObject:user];
+                return;
+            }
+        }
+        [ClientSocketController sendData:[@(userId) stringValue] messageType:kSendingRequestSignal
+            actionName:kGetUserByIdAction sender:self];
+    } else if ([likeMessage isEqualToString:kUnlikedMessageAction]) {
+        for (User *user in _users) {
+            if (user.userId.integerValue == userId) {
+                [_users removeObject:user];
+                break;
+            }
+        }
     }
 }
 
@@ -404,6 +479,17 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
                 [self removeUser:_currentUser.friends user:user];
+                [self setRelationStatuses];
+                [self.tableView reloadData];
+            }
+            break;
+        }
+        case GetUserByIdAction: {
+            if (![message isEqualToString:kFailureMessage]) {
+                NSError *error;
+                User *user = [[User alloc] initWithString:message error:&error];
+                // TODO: Handle error
+                [_users addObject:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
             }

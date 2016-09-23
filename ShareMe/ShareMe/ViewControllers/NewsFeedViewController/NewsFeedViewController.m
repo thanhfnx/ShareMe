@@ -134,10 +134,12 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (IBAction)btnReloadTapped:(UIButton *)sender {
+    [self dismissKeyboard];
     [self.tableView reloadData];
 }
 
 - (IBAction)btnLikeTapped:(UIButton *)sender {
+    [self dismissKeyboard];
     NSInteger storyId = self.topStories[sender.superview.tag].storyId.integerValue;
     [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
         _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
@@ -198,6 +200,8 @@ static NSInteger const kNumberOfStories = 10;
     }
     cell.contentView.tag = indexPath.row;
     [cell setStory:self.topStories[indexPath.row]];
+    [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName, cell.lblUserName]
+        userId:self.topStories[indexPath.row].creator.userId.integerValue];
     return cell;
 }
 
@@ -313,6 +317,7 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kGoToSearchFriendSegueIdentifier]) {
         SearchFriendViewController *searchFriendTableViewController = [segue destinationViewController];
         searchFriendTableViewController.users = _searchResult;

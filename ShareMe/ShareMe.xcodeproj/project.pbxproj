@@ -29,6 +29,7 @@
 		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
 		929139531D758D5700A0E972 /* ThumbnailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */; };
 		929A87AD1D711FEF0027385D /* FViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929A87AC1D711FEF0027385D /* FViewController.m */; };
+		92A610BD1D94C94600635510 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A610BC1D94C94600635510 /* TimelineViewController.m */; };
 		92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */; };
 		92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A920691D90C89D00C6F007 /* FriendsViewController.m */; };
 		92A9206D1D90C9F600C6F007 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A9206C1D90C9F600C6F007 /* FriendTableViewCell.m */; };
@@ -92,6 +93,8 @@
 		929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailCollectionViewCell.m; sourceTree = "<group>"; };
 		929A87AB1D711FEF0027385D /* FViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FViewController.h; sourceTree = "<group>"; };
 		929A87AC1D711FEF0027385D /* FViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FViewController.m; sourceTree = "<group>"; };
+		92A610BB1D94C94600635510 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
+		92A610BC1D94C94600635510 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
 		92A77CBC1D6ED09500FD19A3 /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendViewController.h; sourceTree = "<group>"; };
 		92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchFriendViewController.m; sourceTree = "<group>"; };
 		92A920681D90C89D00C6F007 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
@@ -176,6 +179,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				92A610BA1D94C91900635510 /* TimelineViewController */,
 				9203403A1D9287C800619B28 /* WhoLikeThisViewController */,
 				92A920671D90C88500C6F007 /* FriendsViewController */,
 				92F8404D1D86A1E600D32163 /* CommentsViewController */,
@@ -305,6 +309,15 @@
 				929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */,
 			);
 			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
+		92A610BA1D94C91900635510 /* TimelineViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92A610BB1D94C94600635510 /* TimelineViewController.h */,
+				92A610BC1D94C94600635510 /* TimelineViewController.m */,
+			);
+			path = TimelineViewController;
 			sourceTree = "<group>";
 		};
 		92A77CBB1D6ED07E00FD19A3 /* SearchFriendViewController */ = {
@@ -558,6 +571,7 @@
 				92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
 				924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */,
+				92A610BD1D94C94600635510 /* TimelineViewController.m in Sources */,
 				92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */,
 				92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */,
 				924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */,

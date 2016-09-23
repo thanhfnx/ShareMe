@@ -7,9 +7,12 @@
 //
 
 #import "FViewController.h"
+#import "ApplicationConstants.h"
+#import "TimelineViewController.h"
 
 @interface FViewController () {
     UIView *_vActivityIndicator;
+    NSInteger _preparedUserId;
 }
 
 @end
@@ -51,6 +54,29 @@
 
 - (void)dismissKeyboard {
     [self.view endEditing:YES];
+}
+
+- (void)setTapGestureRecognizer:(NSArray<UIView *> *)views userId:(NSInteger)userId {
+    UITapGestureRecognizer *tapGestureRecognizer;
+    for (UIView *view in views) {
+        view.tag = userId;
+        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToUserProfile:)];
+        tapGestureRecognizer.numberOfTapsRequired = 1;
+        view.userInteractionEnabled = YES;
+        [view addGestureRecognizer:tapGestureRecognizer];
+    }
+}
+
+- (void)goToUserProfile:(UITapGestureRecognizer *)sender {
+    _preparedUserId = [sender view].tag;
+    [self performSegueWithIdentifier:kGoToUserTimelineSegueIdentifier sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kGoToUserTimelineSegueIdentifier]) {
+        TimelineViewController *timelineViewController = [segue destinationViewController];
+        timelineViewController.userId = _preparedUserId;
+    }
 }
 
 @end

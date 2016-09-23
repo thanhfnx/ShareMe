@@ -72,6 +72,9 @@ extern NSString *const kUpdateNewsFeedNotificationName;
 
 extern NSString *const kUserGetLikedUsersAction;
 
+extern NSString *const kGetUserByIdAction;
+
 extern NSString *const kGoToListFriendSegueIdentifier;
+extern NSString *const kGoToUserTimelineSegueIdentifier;
 
 @end
