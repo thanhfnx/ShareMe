@@ -17,6 +17,9 @@
 - (void)showMessage:(NSString *)message title:(NSString *)title complete:(void (^)(UIAlertAction *action))complete;
 - (void)showConfirmDialog:(NSString *)message title:(NSString *)title handler:(void (^)(UIAlertAction *action))handler;
 - (void)setTapGestureRecognizer:(NSArray<UIView *> *)views userId:(NSInteger)userId;
+- (void)setSwipeGestureRecognizer;
 - (void)goToUserProfile:(UITapGestureRecognizer *)sender;
+- (void)goToPreviousViewController:(UISwipeGestureRecognizer *)sender;
+- (void)goToOnlineFriends:(UISwipeGestureRecognizer *)sender;
 
 @end

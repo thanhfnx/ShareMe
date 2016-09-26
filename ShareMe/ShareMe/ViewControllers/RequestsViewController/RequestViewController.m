@@ -14,6 +14,7 @@
 #import "UIViewController+RequestHandler.h"
 #import "UIViewController+ResponseHandler.h"
 #import "UIViewConstant.h"
+#import "Utils.h"
 #import "User.h"
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
@@ -143,6 +144,8 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
                 [cell setUser:_receivedRequests[indexPath.row]];
                 cell.btnAccept.tag = indexPath.row;
                 cell.btnDecline.tag = indexPath.row;
+                [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName, cell.lblUserName]
+                    userId:_receivedRequests[indexPath.row].userId.integerValue];
                 return cell;
             }
         }
@@ -152,6 +155,8 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
             if (cell) {
                 [cell setUser:_sentRequests[indexPath.row]];
                 cell.btnCancel.tag = indexPath.row;
+                [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName, cell.lblUserName]
+                    userId:_sentRequests[indexPath.row].userId.integerValue];
                 return cell;
             }
         }
@@ -212,67 +217,8 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
 }
 
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
-    NSError *error;
-    User *user = [[User alloc] initWithString:message error:&error];
-    // TODO: Handle error
-    NSInteger index = [_requestActions indexOfObject:actionName];
-    switch (index) {
-        case UserSendRequestToUserAction:
-            [self addUserIfNotExist:_currentUser.receivedRequests user:user];
-            break;
-        case UserCancelRequestToUserAction:
-            [self removeUser:_currentUser.receivedRequests user:user];
-            break;
-        case UserAddFriendToUserAction:
-            [self addUserIfNotExist:_currentUser.friends user:user];
-            [self removeUser:_currentUser.sentRequests user:user];
-            break;
-        case UserDeclineRequestToUserAction:
-            [self removeUser:_currentUser.sentRequests user:user];
-            break;
-        case AddAcceptRequestToClientsAction:
-            [self removeUser:_currentUser.receivedRequests user:user];
-            [self addUserIfNotExist:_currentUser.friends user:user];
-            break;
-        case AddDeclineRequestToClientsAction:
-            [self removeUser:_currentUser.receivedRequests user:user];
-            break;
-        case AddCancelRequestToClientsAction:
-            [self removeUser:_currentUser.sentRequests user:user];
-            break;
-        case AddSendRequestToClientsAction:
-            [self addUserIfNotExist:_currentUser.sentRequests user:user];
-            break;
-        case AddUnfriendToClientsAction:
-            [self removeUser:_currentUser.friends user:user];
-            break;
-    }
     if (self.isViewLoaded && self.view.window) {
         [self.tableView reloadData];
-    }
-}
-
-#pragma mark - Process Entity
-
-- (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user {
-    BOOL isExist = NO;
-    for (User *temp in array) {
-        if (temp.userId == user.userId) {
-            isExist = YES;
-            break;
-        }
-    }
-    if (!isExist) {
-        [array addObject:user];
-    }
-}
-
-- (void)removeUser:(NSMutableArray *)array user:(User *)user {
-    for (User *temp in array) {
-        if (temp.userId == user.userId) {
-            [array removeObject:temp];
-            break;
-        }
     }
 }
 
@@ -288,8 +234,8 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self removeUser:_currentUser.receivedRequests user:user];
-                [self addUserIfNotExist:_currentUser.friends user:user];
+                [Utils removeUser:_currentUser.receivedRequests user:user];
+                [Utils addUserIfNotExist:_currentUser.friends user:user];
                 [self.tableView reloadData];
             }
             break;
@@ -300,7 +246,7 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self removeUser:_currentUser.receivedRequests user:user];
+                [Utils removeUser:_currentUser.receivedRequests user:user];
                 [self.tableView reloadData];
             }
             break;
@@ -311,7 +257,7 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self removeUser:_currentUser.sentRequests user:user];
+                [Utils removeUser:_currentUser.sentRequests user:user];
                 [self.tableView reloadData];
             }
             break;

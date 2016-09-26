@@ -16,4 +16,6 @@
 
 @property (nonatomic) NSInteger userId;
 
+- (void)addCommentToStory:(Comment *)comment;
+
 @end

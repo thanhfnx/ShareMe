@@ -10,6 +10,7 @@
 #import "UIViewController+RequestHandler.h"
 #import "ApplicationConstants.h"
 #import "ClientSocketController.h"
+#import "Utils.h"
 #import "User.h"
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
@@ -70,69 +71,45 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
         case UserUnfriendToUserAction: {
-            [self removeUser:self.loggedInUser.friends user:user];
+            [Utils removeUser:self.loggedInUser.friends user:user];
             break;
         }
         case UserSendRequestToUserAction: {
-            [self addUserIfNotExist:self.loggedInUser.receivedRequests user:user];
+            [Utils addUserIfNotExist:self.loggedInUser.receivedRequests user:user];
             break;
         }
         case UserCancelRequestToUserAction: {
-            [self removeUser:self.loggedInUser.receivedRequests user:user];
+            [Utils removeUser:self.loggedInUser.receivedRequests user:user];
             break;
         }
         case UserAddFriendToUserAction: {
-            [self addUserIfNotExist:self.loggedInUser.friends user:user];
-            [self removeUser:self.loggedInUser.sentRequests user:user];
+            [Utils addUserIfNotExist:self.loggedInUser.friends user:user];
+            [Utils removeUser:self.loggedInUser.sentRequests user:user];
             break;
         }
         case UserDeclineRequestToUserAction: {
-            [self removeUser:self.loggedInUser.sentRequests user:user];
+            [Utils removeUser:self.loggedInUser.sentRequests user:user];
             break;
         }
         case AddAcceptRequestToClientsAction: {
-            [self removeUser:self.loggedInUser.receivedRequests user:user];
-            [self addUserIfNotExist:self.loggedInUser.friends user:user];
+            [Utils removeUser:self.loggedInUser.receivedRequests user:user];
+            [Utils addUserIfNotExist:self.loggedInUser.friends user:user];
             break;
         }
         case AddDeclineRequestToClientsAction: {
-            [self removeUser:self.loggedInUser.receivedRequests user:user];
+            [Utils removeUser:self.loggedInUser.receivedRequests user:user];
             break;
         }
         case AddCancelRequestToClientsAction: {
-            [self removeUser:self.loggedInUser.sentRequests user:user];
+            [Utils removeUser:self.loggedInUser.sentRequests user:user];
             break;
         }
         case AddSendRequestToClientsAction: {
-            [self addUserIfNotExist:self.loggedInUser.sentRequests user:user];
+            [Utils addUserIfNotExist:self.loggedInUser.sentRequests user:user];
             break;
         }
         case AddUnfriendToClientsAction: {
-            [self removeUser:self.loggedInUser.friends user:user];
-            break;
-        }
-    }
-}
-
-#pragma mark - Process Entity
-
-- (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user {
-    BOOL isExist = NO;
-    for (User *temp in array) {
-        if (temp.userId == user.userId) {
-            isExist = YES;
-            break;
-        }
-    }
-    if (!isExist) {
-        [array addObject:user];
-    }
-}
-
-- (void)removeUser:(NSMutableArray *)array user:(User *)user {
-    for (User *temp in array) {
-        if (temp.userId == user.userId) {
-            [array removeObject:temp];
+            [Utils removeUser:self.loggedInUser.friends user:user];
             break;
         }
     }

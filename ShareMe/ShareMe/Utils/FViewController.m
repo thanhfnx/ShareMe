@@ -19,6 +19,11 @@
 
 @implementation FViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setSwipeGestureRecognizer];
+}
+
 - (void)showActitvyIndicator:(UIView *)container frame:(CGRect)frame {
     if (!_vActivityIndicator) {
         _vActivityIndicator = [[NSBundle mainBundle] loadNibNamed:@"ActivityIndicatorView" owner:self options:nil][0];
@@ -67,8 +72,33 @@
     }
 }
 
+- (void)setSwipeGestureRecognizer {
+    UISwipeGestureRecognizer *swipeGestureRecognizer;
+    if (self.navigationController && [self.navigationController.viewControllers indexOfObject:self] > 0) {
+        swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+            action:@selector(goToPreviousViewController:)];
+        swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    } else if (self.navigationController && [self.navigationController.viewControllers indexOfObject:self] == 0) {
+        swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+            action:@selector(goToOnlineFriends:)];
+        swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    }
+    [self.view addGestureRecognizer:swipeGestureRecognizer];
+}
+
+- (void)goToPreviousViewController:(UISwipeGestureRecognizer *)sender {
+    [self dismissKeyboard];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)goToOnlineFriends:(UISwipeGestureRecognizer *)sender {
+    [self dismissKeyboard];
+    [self performSegueWithIdentifier:kGoToListFriendSegueIdentifier sender:self];
+}
+
 - (void)goToUserProfile:(UITapGestureRecognizer *)sender {
     _preparedUserId = [sender view].tag;
+    [self dismissKeyboard];
     [self performSegueWithIdentifier:kGoToUserTimelineSegueIdentifier sender:self];
 }
 

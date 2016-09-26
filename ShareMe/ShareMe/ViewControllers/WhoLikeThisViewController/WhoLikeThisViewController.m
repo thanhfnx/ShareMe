@@ -187,6 +187,8 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
     }
     cell.btnAction.tag = indexPath.row;
     [cell setUser:_users[indexPath.row] relationStatus:_relationStatuses[indexPath.row].integerValue];
+    [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName, cell.lblUserName]
+        userId:_users[indexPath.row].userId.integerValue];
     return cell;
 }
 
@@ -287,45 +289,45 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
         case UserUnfriendToUserAction: {
-            [self removeUser:_currentUser.friends user:user];
+            [Utils removeUser:_currentUser.friends user:user];
             break;
         }
         case UserSendRequestToUserAction: {
-            [self addUserIfNotExist:_currentUser.receivedRequests user:user];
+            [Utils addUserIfNotExist:_currentUser.receivedRequests user:user];
             break;
         }
         case UserCancelRequestToUserAction: {
-            [self removeUser:_currentUser.receivedRequests user:user];
+            [Utils removeUser:_currentUser.receivedRequests user:user];
             break;
         }
         case UserAddFriendToUserAction: {
-            [self addUserIfNotExist:_currentUser.friends user:user];
-            [self removeUser:_currentUser.sentRequests user:user];
+            [Utils addUserIfNotExist:_currentUser.friends user:user];
+            [Utils removeUser:_currentUser.sentRequests user:user];
             break;
         }
         case UserDeclineRequestToUserAction: {
-            [self removeUser:_currentUser.sentRequests user:user];
+            [Utils removeUser:_currentUser.sentRequests user:user];
             break;
         }
         case AddAcceptRequestToClientsAction: {
-            [self removeUser:_currentUser.receivedRequests user:user];
-            [self addUserIfNotExist:_currentUser.friends user:user];
+            [Utils removeUser:_currentUser.receivedRequests user:user];
+            [Utils addUserIfNotExist:_currentUser.friends user:user];
             break;
         }
         case AddDeclineRequestToClientsAction: {
-            [self removeUser:_currentUser.receivedRequests user:user];
+            [Utils removeUser:_currentUser.receivedRequests user:user];
             break;
         }
         case AddCancelRequestToClientsAction: {
-            [self removeUser:_currentUser.sentRequests user:user];
+            [Utils removeUser:_currentUser.sentRequests user:user];
             break;
         }
         case AddSendRequestToClientsAction: {
-            [self addUserIfNotExist:_currentUser.sentRequests user:user];
+            [Utils addUserIfNotExist:_currentUser.sentRequests user:user];
             break;
         }
         case AddUnfriendToClientsAction: {
-            [self removeUser:_currentUser.friends user:user];
+            [Utils removeUser:_currentUser.friends user:user];
             break;
         }
         case UpdateLikedUsersAction: {
@@ -377,30 +379,6 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
     }
 }
 
-#pragma mark - Process Entity
-
-- (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user {
-    BOOL isExist = NO;
-    for (User *temp in array) {
-        if (temp.userId == user.userId) {
-            isExist = YES;
-            break;
-        }
-    }
-    if (!isExist) {
-        [array addObject:user];
-    }
-}
-
-- (void)removeUser:(NSMutableArray *)array user:(User *)user {
-    for (User *temp in array) {
-        if (temp.userId == user.userId) {
-            [array removeObject:temp];
-            break;
-        }
-    }
-}
-
 #pragma mark - Response Handler
 
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message {
@@ -425,8 +403,8 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self removeUser:_currentUser.receivedRequests user:user];
-                [self addUserIfNotExist:_currentUser.friends user:user];
+                [Utils removeUser:_currentUser.receivedRequests user:user];
+                [Utils addUserIfNotExist:_currentUser.friends user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
             }
@@ -439,7 +417,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self removeUser:_currentUser.receivedRequests user:user];
+                [Utils removeUser:_currentUser.receivedRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
             }
@@ -452,7 +430,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self removeUser:_currentUser.sentRequests user:user];
+                [Utils removeUser:_currentUser.sentRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
             }
@@ -465,7 +443,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self addUserIfNotExist:_currentUser.sentRequests user:user];
+                [Utils addUserIfNotExist:_currentUser.sentRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
             }
@@ -478,7 +456,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
                 // TODO: Handle error
-                [self removeUser:_currentUser.friends user:user];
+                [Utils removeUser:_currentUser.friends user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
             }

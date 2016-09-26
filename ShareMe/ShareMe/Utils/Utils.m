@@ -9,6 +9,7 @@
 #import "Utils.h"
 #import "NSDate+TimeDiff.h"
 #import "FDateFormatter.h"
+#import "User.h"
 
 NSString *const kDateFormat = @"d MMM yy";
 NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd HH:mm:ss";
@@ -102,6 +103,28 @@ CGFloat const kLongHeightImageRatio = 0.5f;
         return ImageTypePortrait;
     } else {
         return ImageTypeLongHeight;
+    }
+}
+
++ (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user {
+    BOOL isExist = NO;
+    for (User *temp in array) {
+        if (temp.userId == user.userId) {
+            isExist = YES;
+            break;
+        }
+    }
+    if (!isExist) {
+        [array addObject:user];
+    }
+}
+
++ (void)removeUser:(NSMutableArray *)array user:(User *)user {
+    for (User *temp in array) {
+        if (temp.userId == user.userId) {
+            [array removeObject:temp];
+            break;
+        }
     }
 }
 
