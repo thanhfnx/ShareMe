@@ -435,7 +435,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-DY-sEr">
-                                        <rect key="frame" x="40" y="12.5" width="30" height="31"/>
+                                        <rect key="frame" x="40" y="12" width="30" height="31"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                         <state key="normal">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -709,7 +709,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQM-BO-D6g">
-                                                    <rect key="frame" x="240" y="19.5" width="72" height="30"/>
+                                                    <rect key="frame" x="240" y="19" width="72" height="30"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="72" id="weR-d5-Cdb"/>
@@ -1248,9 +1248,6 @@
                             <constraint firstAttribute="trailing" secondItem="SLW-Ze-sIG" secondAttribute="trailing" constant="16" id="o57-g1-wJO"/>
                             <constraint firstItem="sgW-sx-va4" firstAttribute="top" secondItem="632-gq-D4K" secondAttribute="bottom" id="oAz-K2-V67"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="Sai-FD-6Fy" appends="YES" id="vmY-ek-siD"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="Kv2-5n-yrV">
                         <nil key="title"/>
@@ -1327,11 +1324,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="83i-Ie-Y30" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="left" id="Sai-FD-6Fy">
-                    <connections>
-                        <action selector="swipeToLeftGestureRecognizer:" destination="jff-La-OfD" id="EwA-rS-Od8"/>
-                    </connections>
-                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-311" y="-294"/>
         </scene>
@@ -1603,7 +1595,7 @@
                                             <rect key="frame" x="16" y="287" width="136" height="30"/>
                                             <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                            <state key="normal" title="Add friend">
+                                            <state key="normal">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <userDefinedRuntimeAttributes>
@@ -1617,6 +1609,9 @@
                                                     <color key="value" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="btnActionTapped:" destination="fyC-3h-qt0" eventType="touchUpInside" id="5Kr-c2-pit"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tdw-WY-W1I">
                                             <rect key="frame" x="168" y="287" width="136" height="30"/>
@@ -1630,6 +1625,9 @@
                                                     <integer key="value" value="5"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="btnMessageTapped:" destination="fyC-3h-qt0" eventType="touchUpInside" id="2NH-dy-Wr3"/>
+                                            </connections>
                                         </button>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Yc-sW-7sW">
                                             <rect key="frame" x="0.0" y="331" width="320" height="1"/>
@@ -1734,6 +1732,7 @@
                                                     </constraints>
                                                     <state key="normal" image="comment"/>
                                                     <connections>
+                                                        <action selector="btnCommentTapped:" destination="fyC-3h-qt0" eventType="touchUpInside" id="N1d-D9-r1H"/>
                                                         <action selector="btnCommentTapped:" destination="jff-La-OfD" eventType="touchUpInside" id="lbp-TF-4Eu"/>
                                                     </connections>
                                                 </button>
@@ -1746,6 +1745,7 @@
                                                     <state key="normal" image="love"/>
                                                     <connections>
                                                         <action selector="btnLikeTapped:" destination="jff-La-OfD" eventType="touchUpInside" id="JCH-Yi-33j"/>
+                                                        <action selector="btnLikeTapped:" destination="fyC-3h-qt0" eventType="touchUpInside" id="L9A-8o-Kmi"/>
                                                     </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zdm-iO-ZlK">
@@ -1870,8 +1870,10 @@
                         <outlet property="imvAvatar" destination="eLl-fP-8I9" id="AKI-FZ-kSf"/>
                         <outlet property="imvCover" destination="UiO-n3-IxS" id="h6Q-aT-vuQ"/>
                         <outlet property="lblFullName" destination="lhh-Eo-EZd" id="VxK-1Z-UDd"/>
+                        <outlet property="lblTimelineHeader" destination="BVa-Ee-hLR" id="kyq-sE-nIc"/>
                         <outlet property="lblUserName" destination="9et-fD-giw" id="OBj-M6-Pin"/>
                         <outlet property="tableView" destination="StU-Xo-3ba" id="eZ3-ax-gz3"/>
+                        <segue destination="PVg-TQ-23E" kind="show" identifier="goToComment" id="5wB-a1-N4w"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Od7-u0-wdn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2069,6 +2071,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="btnAccept" destination="bs8-Yw-iZV" id="2qi-b3-yFM"/>
+                                            <outlet property="btnAcceptWidthConstraint" destination="oeT-LP-G83" id="uRM-vU-lGM"/>
                                             <outlet property="btnDecline" destination="3fJ-3I-xIa" id="UwO-zz-rj5"/>
                                             <outlet property="imvAvatar" destination="71V-uS-3L8" id="5y3-5u-JpL"/>
                                             <outlet property="lblFullName" destination="3dD-p2-Rel" id="8BQ-YP-NWD"/>
@@ -2331,6 +2334,7 @@
         <image name="unloaded" width="52" height="52"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TFe-BW-Jw9"/>
+        <segue reference="wbx-F2-Wqd"/>
+        <segue reference="3bX-dr-45B"/>
     </inferredMetricsTieBreakers>
 </document>

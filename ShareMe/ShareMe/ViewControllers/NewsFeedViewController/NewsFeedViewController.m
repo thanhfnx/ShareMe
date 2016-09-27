@@ -129,10 +129,6 @@ static NSInteger const kNumberOfStories = 10;
         actionName:kUserSearchFriendAction sender:self];
 }
 
-- (IBAction)swipeToLeftGestureRecognizer:(UISwipeGestureRecognizer *)sender {
-    [self performSegueWithIdentifier:kGoToListFriendSegueIdentifier sender:self];
-}
-
 - (IBAction)btnReloadTapped:(UIButton *)sender {
     [self dismissKeyboard];
     [self.tableView reloadData];
@@ -376,6 +372,7 @@ static NSInteger const kNumberOfStories = 10;
             if (comment) {
                 [self addCommentToStory:comment];
             }
+            break;
         }
     }
 }

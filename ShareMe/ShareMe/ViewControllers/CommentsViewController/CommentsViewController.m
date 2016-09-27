@@ -12,6 +12,7 @@
 #import "ClientSocketController.h"
 #import "CommentTableViewCell.h"
 #import "WhoLikeThisViewController.h"
+#import "TimelineViewController.h"
 #import "FDateFormatter.h"
 #import "Utils.h"
 #import "Comment.h"
@@ -174,6 +175,8 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
         return [UITableViewCell new];
     }
     [cell setComment:_topComments[indexPath.row]];
+    [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName]
+        userId:_topComments[indexPath.row].creator.userId.integerValue];
     return cell;
 }
 
@@ -286,8 +289,16 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
                 [self.txvAddComment setText:@""];
                 self.lblPlaceHolder.hidden = NO;
                 [self reloadDataWithAnimated:YES];
-                NewsFeedViewController *newsFeedViewController = self.navigationController.viewControllers[0];
-                [newsFeedViewController addCommentToStory:_comment];
+                NSUInteger index = [self.navigationController.viewControllers indexOfObject:self] - 1;
+                if ([self.navigationController.viewControllers[index] isKindOfClass:[NewsFeedViewController
+                    class]]) {
+                    NewsFeedViewController *newsFeedViewController = self.navigationController.viewControllers[index];
+                    [newsFeedViewController addCommentToStory:_comment];
+                } else if ([self.navigationController.viewControllers[index] isKindOfClass:[TimelineViewController
+                    class]]) {
+                    TimelineViewController *timelineViewController = self.navigationController.viewControllers[index];
+                    [timelineViewController addCommentToStory:_comment];
+                }
             }
             break;
         }
@@ -330,19 +341,6 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
     }
 }
 
-- (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user {
-    BOOL isExist = NO;
-    for (User *temp in array) {
-        if (temp.userId == user.userId) {
-            isExist = YES;
-            break;
-        }
-    }
-    if (!isExist) {
-        [array addObject:user];
-    }
-}
-
 #pragma mark - Request Handler
 
 - (void)registerRequestHandler {
@@ -378,6 +376,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kGoToWhoLikeThisSegueIdentifier]) {
         WhoLikeThisViewController *whoLikeThisViewController = [segue destinationViewController];
         whoLikeThisViewController.storyId = self.story.storyId.integerValue;

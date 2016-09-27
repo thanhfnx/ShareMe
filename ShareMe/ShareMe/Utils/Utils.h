@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class User;
+
 typedef NS_ENUM(NSInteger, ImageType) {
     ImageTypeSquare,
     ImageTypePortrait,
@@ -34,5 +36,7 @@ extern CGFloat const kLongHeightImageRatio;
 + (NSString *)timeDiffFromDate:(NSString *)dateString;
 + (UIImage *)decodeBase64String:(NSString *)base64String;
 + (ImageType)getImageType:(CGSize)size;
++ (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user;
++ (void)removeUser:(NSMutableArray *)array user:(User *)user;
 
 @end
