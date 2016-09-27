@@ -6,6 +6,7 @@
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
+#import <CCBottomRefreshControl/UIScrollView+BottomRefreshControl.h>
 #import "TimelineViewController.h"
 #import "MainTabBarViewController.h"
 #import "StoryTableViewCell.h"
@@ -59,7 +60,7 @@ static NSString *const kGetUserErrorMessage = @"Something went wrong! Can not ge
 static NSString *const kGoToCommentSegueIdentifier = @"goToComment";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
 static NSString *const kTimelineHeaderLabelText = @"%@'s Timeline";
-static NSInteger const kNumberOfStories = 10;
+static NSInteger const kNumberOfStories = 2;
 static NSString *const kFriendButtonTitle = @"Friends";
 static NSString *const kSelfButtonTitle = @"Update Profile";
 static NSString *const kSentRequestButtonTitle = @"Cancel Request";
@@ -88,6 +89,8 @@ static NSString *const kDeclineButtonTitle = @"Decline";
     NSInteger _startIndex;
     NSInteger _selectedIndex;
     NSInteger _relationStatus;
+    UIRefreshControl *_topRefreshControl;
+    UIRefreshControl *_bottomRefreshControl;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -143,6 +146,15 @@ static NSString *const kDeclineButtonTitle = @"Decline";
     headerViewFrame.size.height = self.btnAction.frame.origin.y + self.btnAction.frame.size.height + 16.0f;
     self.headerView.frame = headerViewFrame;
     [self loadTopStoriesOnTimeline];
+    _topRefreshControl = [[UIRefreshControl alloc] init];
+    [_topRefreshControl addTarget:self action:@selector(reloadAllStoriesOnTimeline)
+        forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:_topRefreshControl];
+    _bottomRefreshControl = [UIRefreshControl new];
+    _bottomRefreshControl.triggerVerticalOffset = 50.0f;
+    [_bottomRefreshControl addTarget:self action:@selector(loadTopStoriesOnTimeline)
+        forControlEvents:UIControlEventValueChanged];
+    self.tableView.bottomRefreshControl = _bottomRefreshControl;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -162,10 +174,19 @@ static NSString *const kDeclineButtonTitle = @"Decline";
         actionName:kGetUserByIdAction sender:self];
 }
 
+- (void)reloadAllStoriesOnTimeline {
+    NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, self.userId,
+        [UIViewConstant screenWidth] * [UIViewConstant screenScale], (long)0, kNumberOfStories];
+    [ClientSocketController sendData:message messageType:kSendingRequestSignal
+        actionName:kUserGetStoriesOnTimelineAction sender:self];
+}
+
 - (void)loadTopStoriesOnTimeline {
-    [ClientSocketController sendData:[NSString stringWithFormat:kGetTopStoriesRequestFormat, self.userId,
-        [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex, kNumberOfStories]
-        messageType:kSendingRequestSignal actionName:kUserGetStoriesOnTimelineAction sender:self];
+    _startIndex = _topStories.count;
+    NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, self.userId,
+        [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex, kNumberOfStories];
+    [ClientSocketController sendData:message messageType:kSendingRequestSignal
+        actionName:kUserGetStoriesOnTimelineAction sender:self];
 }
 
 #pragma mark - IBAction
@@ -370,10 +391,19 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             break;
         }
         case UserGetStoriesOnTimelineAction: {
+            if ([_topRefreshControl isRefreshing]) {
+                [_topRefreshControl endRefreshing];
+            }
+            if ([_bottomRefreshControl isRefreshing]) {
+                [_bottomRefreshControl endRefreshing];
+            }
             if ([message isEqualToString:kFailureMessage]) {
                 // TODO: Replace blank table view
             } else {
                 NSError *error;
+                if ([_topRefreshControl isRefreshing]) {
+                    [_topStories removeAllObjects];
+                }
                 [_topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
                 // TODO: Handle error
                 [self.tableView reloadData];

@@ -34,13 +34,21 @@ static NSString *const kEmptyPasswordMessage = @"Password can not be empty!";
 static NSString *const kInvalidPasswordMessage = @"Password can not be less than 6 characters!";
 static NSString *const kEmptyRetypePasswordMessage = @"Retype password can not be empty!";
 static NSString *const kNotMatchRetypePasswordMessage = @"Password and retype password have to be the same!";
+static NSString *const kOpenCameraErrorMessage = @"Something went wrong! Can not open camera!";
+static NSString *const kImagePickerTitle = @"Choose photo";
+static NSString *const kImagePickerMessage = @"Add an profile picture so friends can easily recognize you!";
+static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
 static NSInteger const kMinimumPasswordLength = 6;
+static CGFloat const kMaxImageWidth = 500.0f;
+static CGFloat const kMaxImageHeight = 500.0f;
 
 @interface RegisterViewController () {
     NSDate *_currentDate;
     NSDateFormatter *_dateFormatter;
     NSInteger _currentPage;
     THDatePickerViewController *_datePicker;
+    UIImage *_avatarImage;
+    User *_user;
 }
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -53,6 +61,7 @@ static NSInteger const kMinimumPasswordLength = 6;
 @property (weak, nonatomic) IBOutlet UITextField *txtUserName;
 @property (weak, nonatomic) IBOutlet UITextField *txtPassword;
 @property (weak, nonatomic) IBOutlet UITextField *txtRetypePassword;
+@property (weak, nonatomic) IBOutlet UIImageView *imvAvatar;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *loginButtonBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *backToFirstViewButtonBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *backToSecondViewButtonBottomConstraint;
@@ -189,16 +198,22 @@ static NSInteger const kMinimumPasswordLength = 6;
 
 #pragma mark - Packing Entity
 
-- (User *)getUser{
-    User *user = [[User alloc] init];
-    user.userName = self.txtUserName.text;
-    user.password = self.txtPassword.text;
-    user.firstName = self.txtFirstName.text;
-    user.lastName = self.txtLastName.text;
-    user.email = self.txtEmail.text;
-    user.dateOfBirth = self.txtDateOfBirth.text;
-    user.gender = @(self.rdbGender.selected);
-    return user;
+- (void)getUser{
+    _user = [[User alloc] init];
+    _user.userName = self.txtUserName.text;
+    _user.password = self.txtPassword.text;
+    _user.firstName = self.txtFirstName.text;
+    _user.lastName = self.txtLastName.text;
+    _user.email = self.txtEmail.text;
+    _user.dateOfBirth = self.txtDateOfBirth.text;
+    _user.gender = @(self.rdbGender.selected);
+    _user.avatarImage = [NSMutableArray<Optional> array];
+    if (_avatarImage) {
+        NSString *base64 = [UIImageJPEGRepresentation(_avatarImage, 0.9f) base64EncodedStringWithOptions:kNilOptions];
+        NSString *imageString = [NSString stringWithFormat:kImageMessageFormat, _avatarImage.size.width *
+            [UIViewConstant screenScale], _avatarImage.size.height * [UIViewConstant screenScale], base64];
+        [_user.avatarImage addObject:imageString];
+    }
 }
 
 #pragma mark - Validating Data
@@ -276,7 +291,8 @@ static NSInteger const kMinimumPasswordLength = 6;
             return NO;
         }
         if (![self.txtPassword.text isEqualToString:self.txtRetypePassword.text]) {
-            [self showMessage:kNotMatchRetypePasswordMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
+            [self showMessage:kNotMatchRetypePasswordMessage title:kDefaultMessageTitle
+                complete:^(UIAlertAction *action) {
                 [self.txtRetypePassword becomeFirstResponder];
             }];
             return NO;
@@ -290,7 +306,8 @@ static NSInteger const kMinimumPasswordLength = 6;
 - (IBAction)btnRegisterTapped:(UIButton *)sender {
     [self dismissKeyboard];
     if ([self validate]) {
-        [ClientSocketController sendData:[[self getUser] toJSONString] messageType:kSendingRequestSignal
+        [self getUser];
+        [ClientSocketController sendData:[_user toJSONString] messageType:kSendingRequestSignal
             actionName:kUserRegisterAction sender:self];
     }
 }
@@ -301,6 +318,7 @@ static NSInteger const kMinimumPasswordLength = 6;
         screenRect.origin.x = [UIViewConstant screenWidth];
         _currentPage++;
         [self dismissKeyboard];
+        self.imvAvatar.image = [Utils getAvatar:[NSMutableArray array] gender:@(self.rdbGender.selected)];
         [UIView animateWithDuration:0.3 animations:^{
             self.scrollView.contentOffset = CGPointMake([UIViewConstant screenWidth] * _currentPage, 0.0f);
         }];
@@ -352,6 +370,45 @@ static NSInteger const kMinimumPasswordLength = 6;
         KNSemiModalOptionKeys.animationDuration: @(0.5f), KNSemiModalOptionKeys.shadowOpacity: @(0.3f)}];
 }
 
+- (IBAction)btnAddAvatarTapped:(UIButton *)sender {
+    [self showImagePickerDialog:kImagePickerMessage title:kImagePickerTitle
+        takeFromCameraHandler:^(UIAlertAction *action){
+        [self showCamera];
+    } takeFromLibraryHandler:^(UIAlertAction *action){
+        [self showImagePicker];
+    }];
+}
+
+- (void)goToCurrentPage {
+    CGRect screenRect = self.view.frame;
+    screenRect.origin.x = [UIViewConstant screenWidth] * _currentPage;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.scrollView.contentOffset = CGPointMake(screenRect.size.width * _currentPage, 0.0f);
+    }];
+}
+
+- (void)showCamera {
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [self showMessage:kOpenCameraErrorMessage title:kDefaultMessageTitle complete:nil];
+    } else {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:imagePickerController animated:YES completion:nil];
+    }
+}
+
+- (void)showImagePicker {
+    QBImagePickerController *imagePickerController = [QBImagePickerController new];
+    imagePickerController.delegate = self;
+    imagePickerController.allowsMultipleSelection = NO;
+    imagePickerController.maximumNumberOfSelection = 1;
+    imagePickerController.showsNumberOfSelectedAssets = YES;
+    imagePickerController.assetCollectionSubtypes = @[@(PHAssetCollectionSubtypeSmartAlbumUserLibrary)];
+    imagePickerController.mediaType = QBImagePickerMediaTypeImage;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -376,6 +433,39 @@ static NSInteger const kMinimumPasswordLength = 6;
 -(void)refreshDateOfBirthTextField {
     self.txtDateOfBirth.text = (_currentDate ?
     [_dateFormatter stringFromDate:_currentDate] : kEmptyDateOfBirthTextFieldText);
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self goToCurrentPage];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker
+    didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    _avatarImage = image;
+    self.imvAvatar.image = _avatarImage;
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self goToCurrentPage];
+}
+
+#pragma mark - QBImagePickerControllerDelegate
+
+- (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController
+    didFinishPickingAssets:(NSArray *)assets {
+    if (assets.count) {
+        _avatarImage = [Utils getUIImageFromAsset:assets[0] maxWidth:kMaxImageWidth maxHeight:kMaxImageHeight];
+        self.imvAvatar.image = _avatarImage;
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    [self goToCurrentPage];
+}
+
+- (void)qb_imagePickerControllerDidCancel:(QBImagePickerController *)imagePickerController {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self goToCurrentPage];
 }
 
 #pragma mark - Show / hide keyboard
@@ -412,8 +502,11 @@ static NSInteger const kMinimumPasswordLength = 6;
     } else {
         UIViewController *sender = self.navigationController.viewControllers[0];
         [self.navigationController popToRootViewControllerAnimated:NO];
-        [ClientSocketController sendData:[[self getUser] toJSONString] messageType:kSendingRequestSignal actionName:kUserLoginAction
-            sender:sender];
+        User *user = [[User alloc] init];
+        user.userName = _user.userName;
+        user.password = _user.password;
+        [ClientSocketController sendData:[user toJSONString] messageType:kSendingRequestSignal
+            actionName:kUserLoginAction sender:sender];
     }
 }
 

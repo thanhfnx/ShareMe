@@ -10,6 +10,10 @@
 #import "ApplicationConstants.h"
 #import "TimelineViewController.h"
 
+NSString *const kTakeImageFromCameraActionTitle = @"Take from camera";
+NSString *const kTakeImageFromLibraryActionTitle = @"Take from photo library";
+NSString *const kCancelActionTitle = @"Cancel";
+
 @interface FViewController () {
     UIView *_vActivityIndicator;
     NSInteger _preparedUserId;
@@ -54,6 +58,23 @@
     UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
     [alertController addAction:yesAction];
     [alertController addAction:noAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)showImagePickerDialog:(NSString *)message title:(NSString *)title
+    takeFromCameraHandler:(void (^ _Nullable)(UIAlertAction *action))takeFromCameraHandler
+    takeFromLibraryHandler:(void (^ _Nullable)(UIAlertAction *action))takeFromLibraryHandler {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
+        preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *takeFromCameraAction = [UIAlertAction actionWithTitle:kTakeImageFromCameraActionTitle
+        style:UIAlertActionStyleDefault handler:takeFromCameraHandler];
+    UIAlertAction *takeFromLibraryAction = [UIAlertAction actionWithTitle:kTakeImageFromLibraryActionTitle
+        style:UIAlertActionStyleDefault handler:takeFromLibraryHandler];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:kCancelActionTitle
+        style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:takeFromCameraAction];
+    [alertController addAction:takeFromLibraryAction];
+    [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
 

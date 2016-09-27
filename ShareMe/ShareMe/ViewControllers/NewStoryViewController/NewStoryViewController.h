@@ -11,6 +11,7 @@
 #import <QBImagePickerController/QBImagePickerController.h>
 
 @interface NewStoryViewController : FViewController <UITextFieldDelegate, QBImagePickerControllerDelegate,
-    UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+    UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate,
+    UINavigationControllerDelegate>
 
 @end

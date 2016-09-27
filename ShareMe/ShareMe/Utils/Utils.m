@@ -10,6 +10,7 @@
 #import "NSDate+TimeDiff.h"
 #import "FDateFormatter.h"
 #import "User.h"
+#import "UIViewConstant.h"
 
 NSString *const kDateFormat = @"d MMM yy";
 NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd HH:mm:ss";
@@ -23,9 +24,10 @@ CGFloat const kLongHeightImageRatio = 0.5f;
 
 @implementation Utils
 
-+ (UIImage *)getAvatar:(NSString *)imageString gender:(NSNumber *)gender {
-    if (imageString.length) {
-        NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageString
++ (UIImage *)getAvatar:(NSMutableArray *)imageString gender:(NSNumber *)gender {
+    if (imageString.count) {
+        NSString *image = (NSString *)imageString[0];
+        NSData *imageData = [[NSData alloc] initWithBase64EncodedString:image
             options:NSDataBase64DecodingIgnoreUnknownCharacters];
         return [UIImage imageWithData:imageData];
     }
@@ -37,11 +39,43 @@ CGFloat const kLongHeightImageRatio = 0.5f;
 }
 
 + (UIImage *)resize:(UIImage *)image scaledToSize:(CGSize)newSize {
+    if (CGSizeEqualToSize(image.size, newSize)) {
+        return image;
+    }
     UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0f);
     [image drawInRect:CGRectMake(0.0f, 0.0f, newSize.width, newSize.height)];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();    
     UIGraphicsEndImageContext();
     return newImage;
+}
+
++ (UIImage *)getUIImageFromAsset:(PHAsset *)asset maxWidth:(CGFloat)maxWidth maxHeight:(CGFloat)maxHeight {
+    PHImageManager *manager = [PHImageManager defaultManager];
+    PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
+    __block UIImage *image = [[UIImage alloc] init];
+    option.synchronous = true;
+    [manager requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight)
+        contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage * _Nullable result,
+        NSDictionary * _Nullable info) {
+        image = result;
+    }];
+    NSInteger width, height;
+    if (asset.pixelWidth < maxWidth && asset.pixelHeight < maxHeight) {
+        width = asset.pixelWidth;
+        height = asset.pixelHeight;
+    } else {
+        float ratio;
+        if (asset.pixelWidth > asset.pixelHeight) {
+            ratio = maxWidth / asset.pixelWidth;
+        } else {
+            ratio = maxHeight / asset.pixelHeight;
+        }
+        width = asset.pixelWidth * ratio;
+        height = asset.pixelHeight * ratio;
+    }
+    image = [Utils resize:image scaledToSize:CGSizeMake(width / [UIViewConstant screenScale],
+        height / [UIViewConstant screenScale])];
+    return image;
 }
 
 + (NSString *)stringfromNumber:(NSUInteger)number {

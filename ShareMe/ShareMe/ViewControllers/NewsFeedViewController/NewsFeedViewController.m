@@ -6,6 +6,7 @@
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
+#import <CCBottomRefreshControl/UIScrollView+BottomRefreshControl.h>
 #import "NewsFeedViewController.h"
 #import "ClientSocketController.h"
 #import "StoryTableViewCell.h"
@@ -40,7 +41,7 @@ static NSString *const kGoToCommentSegueIdentifier = @"goToComment";
 static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
 static NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
-static NSInteger const kNumberOfStories = 10;
+static NSInteger const kNumberOfStories = 2;
 
 @interface NewsFeedViewController () {
     User *_currentUser;
@@ -50,6 +51,8 @@ static NSInteger const kNumberOfStories = 10;
     NSInteger _startIndex;
     NSInteger _selectedIndex;
     NSMutableDictionary<NSIndexPath *, NSNumber *> *heightForIndexPath;
+    UIRefreshControl *_topRefreshControl;
+    UIRefreshControl *_bottomRefreshControl;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -81,12 +84,18 @@ static NSInteger const kNumberOfStories = 10;
         kAddNewCommentToUserAction
     ];
     [self registerRequestHandler];
-    _startIndex = 0;
     self.topStories = [NSMutableArray array];
     heightForIndexPath = [NSMutableDictionary dictionary];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAllData:)
         name:kUpdateNewsFeedNotificationName object:nil];
     [self loadTopStories];
+    _topRefreshControl = [[UIRefreshControl alloc] init];
+    [_topRefreshControl addTarget:self action:@selector(reloadAllStories) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:_topRefreshControl];
+    _bottomRefreshControl = [UIRefreshControl new];
+    _bottomRefreshControl.triggerVerticalOffset = 50.0f;
+    [_bottomRefreshControl addTarget:self action:@selector(loadTopStories) forControlEvents:UIControlEventValueChanged];
+    self.tableView.bottomRefreshControl = _bottomRefreshControl;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -100,11 +109,19 @@ static NSInteger const kNumberOfStories = 10;
 
 #pragma mark - IBAction
 
+- (void)reloadAllStories {
+    NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, _currentUser.userId.integerValue,
+        [UIViewConstant screenWidth] * [UIViewConstant screenScale], (long)0, kNumberOfStories];
+    [ClientSocketController sendData:message messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction
+        sender:self];
+}
+
 - (void)loadTopStories {
-    [ClientSocketController sendData:[NSString stringWithFormat:kGetTopStoriesRequestFormat,
-        _currentUser.userId.integerValue, [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex,
-        kNumberOfStories]
-        messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction sender:self];
+    _startIndex = self.topStories.count;
+    NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, _currentUser.userId.integerValue,
+        [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex, kNumberOfStories];
+    [ClientSocketController sendData:message messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction
+        sender:self];
 }
 
 - (IBAction)btnSearchTapped:(UIButton *)sender {
@@ -131,7 +148,7 @@ static NSInteger const kNumberOfStories = 10;
 
 - (IBAction)btnReloadTapped:(UIButton *)sender {
     [self dismissKeyboard];
-    [self.tableView reloadData];
+    [self reloadAllStories];
 }
 
 - (IBAction)btnLikeTapped:(UIButton *)sender {
@@ -216,7 +233,6 @@ static NSInteger const kNumberOfStories = 10;
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
     forRowAtIndexPath:(NSIndexPath *)indexPath {
     heightForIndexPath[indexPath] = @(cell.frame.size.height);
-    // TODO: Load more news feed
 }
 
 - (void)reloadSingleCell:(Story *)story {
@@ -254,12 +270,20 @@ static NSInteger const kNumberOfStories = 10;
             break;
         }
         case UserGetTopStoriesAction: {
+            if ([_topRefreshControl isRefreshing]) {
+                [_topRefreshControl endRefreshing];
+            }
+            if ([_bottomRefreshControl isRefreshing]) {
+                [_bottomRefreshControl endRefreshing];
+            }
             if ([message isEqualToString:kFailureMessage]) {
                 // TODO: Replace blank table view
             } else {
                 NSError *error;
+                if ([_topRefreshControl isRefreshing]) {
+                    [self.topStories removeAllObjects];
+                }
                 [self.topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
-                _startIndex += kNumberOfStories;
                 // TODO: Handle error
                 [self.tableView reloadData];
             }

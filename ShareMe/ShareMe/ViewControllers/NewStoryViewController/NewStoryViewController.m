@@ -21,10 +21,13 @@ static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kConfirmMessageTitle = @"Confirm";
 static NSString *const kConfirmDiscardStory = @"This story is unsaved! Are you sure to discard this story?";
 static NSString *const kAddNewStoryErrorMessage = @"Something went wrong! Can not post new story!";
+static NSString *const kOpenCameraErrorMessage = @"Something went wrong! Can not open camera!";
+static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
+static NSString *const kImagePickerTitle = @"Choose photos";
+static NSString *const kImagePickerMessage = @"Add photos to your story!";
 static CGFloat const kMaxImageWidth = 1920.0f;
 static CGFloat const kMaxImageHeight = 1080.0f;
 static NSInteger const kNumberOfCell = 4;
-static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
 
 @interface NewStoryViewController () {
     NSMutableArray<UIImage *> *_images;
@@ -98,6 +101,26 @@ static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
 }
 
 - (IBAction)btnAddImageTapped:(UIButton *)sender {
+    [self showImagePickerDialog:kImagePickerMessage title:kImagePickerTitle
+        takeFromCameraHandler:^(UIAlertAction *action){
+        [self showCamera];
+    } takeFromLibraryHandler:^(UIAlertAction *action){
+        [self showImagePicker];
+    }];
+}
+
+- (void)showCamera {
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [self showMessage:kOpenCameraErrorMessage title:kDefaultMessageTitle complete:nil];
+    } else {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:imagePickerController animated:YES completion:nil];
+    }
+}
+
+- (void)showImagePicker {
     QBImagePickerController *imagePickerController = [QBImagePickerController new];
     imagePickerController.delegate = self;
     imagePickerController.allowsMultipleSelection = YES;
@@ -187,51 +210,40 @@ static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
     }
 }
 
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self hideCollectionViewIfNeeded];
+    [self.txvContent becomeFirstResponder];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker
+    didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    [_images addObject:image];
+    [self showCollectionView];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.txvContent becomeFirstResponder];
+}
+
 #pragma mark - QBImagePickerControllerDelegate
 
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController
     didFinishPickingAssets:(NSArray *)assets {
     [_images removeAllObjects];
     for (PHAsset *asset in assets) {
-        [_images addObject:[self getUIImageFromAsset:asset]];
+        [_images addObject:[Utils getUIImageFromAsset:asset maxWidth:kMaxImageWidth maxHeight:kMaxImageHeight]];
     }
     [self showCollectionView];
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [self.txvContent becomeFirstResponder];
 }
 
 - (void)qb_imagePickerControllerDidCancel:(QBImagePickerController *)imagePickerController {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [self hideCollectionViewIfNeeded];
     [self.txvContent becomeFirstResponder];
-}
-
-- (UIImage *)getUIImageFromAsset:(PHAsset *)asset {
-    PHImageManager *manager = [PHImageManager defaultManager];
-    PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
-    __block UIImage *image = [[UIImage alloc] init];
-    option.synchronous = true;
-    [manager requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight)
-        contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage * _Nullable result,
-        NSDictionary * _Nullable info) {
-        image = result;
-    }];
-    NSInteger width, height;
-    if (asset.pixelWidth < kMaxImageWidth && asset.pixelHeight < kMaxImageHeight) {
-        width = asset.pixelWidth;
-        height = asset.pixelHeight;
-    } else {
-        float ratio;
-        if (asset.pixelWidth > asset.pixelHeight) {
-            ratio = kMaxImageWidth / asset.pixelWidth;
-        } else {
-            ratio = kMaxImageHeight / asset.pixelHeight;
-        }
-        width = asset.pixelWidth * ratio;
-        height = asset.pixelHeight * ratio;
-    }
-    image = [Utils resize:image scaledToSize:CGSizeMake(width / [UIViewConstant screenScale], height / [UIViewConstant screenScale])];
-    return image;
 }
 
 #pragma mark - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout

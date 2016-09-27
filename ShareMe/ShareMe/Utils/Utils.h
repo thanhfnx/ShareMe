@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QBImagePickerController/QBImagePickerController.h>
 
 @class User;
 
@@ -30,8 +31,9 @@ extern CGFloat const kLongHeightImageRatio;
 
 @interface Utils : NSObject
 
-+ (UIImage *)getAvatar:(NSString *)imageString gender:(NSNumber *)gender;
++ (UIImage *)getAvatar:(NSMutableArray *)imageString gender:(NSNumber *)gender;
 + (UIImage *)resize:(UIImage *)image scaledToSize:(CGSize)newSize;
++ (UIImage *)getUIImageFromAsset:(PHAsset *)asset maxWidth:(CGFloat)maxWidth maxHeight:(CGFloat)maxHeight;
 + (NSString *)stringfromNumber:(NSUInteger)number;
 + (NSString *)timeDiffFromDate:(NSString *)dateString;
 + (UIImage *)decodeBase64String:(NSString *)base64String;
