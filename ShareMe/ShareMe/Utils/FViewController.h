@@ -16,6 +16,9 @@
 - (void)dismissActitvyIndicator;
 - (void)showMessage:(NSString *)message title:(NSString *)title complete:(void (^)(UIAlertAction *action))complete;
 - (void)showConfirmDialog:(NSString *)message title:(NSString *)title handler:(void (^)(UIAlertAction *action))handler;
+- (void)showImagePickerDialog:(NSString *)message title:(NSString *)title
+    takeFromCameraHandler:(void (^)(UIAlertAction *action))takeFromCameraHandler
+    takeFromLibraryHandler:(void (^)(UIAlertAction *action))takeFromLibraryHandler;
 - (void)setTapGestureRecognizer:(NSArray<UIView *> *)views userId:(NSInteger)userId;
 - (void)setSwipeGestureRecognizer;
 - (void)goToUserProfile:(UITapGestureRecognizer *)sender;

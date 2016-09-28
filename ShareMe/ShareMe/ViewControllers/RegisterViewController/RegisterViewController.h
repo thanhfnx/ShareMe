@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "THDatePickerViewController.h"
 #import "FViewController.h"
+#import <QBImagePickerController/QBImagePickerController.h>
 
-@interface RegisterViewController : FViewController <UITextFieldDelegate, THDatePickerDelegate>
+@interface RegisterViewController : FViewController <UITextFieldDelegate, THDatePickerDelegate,
+    UIImagePickerControllerDelegate, UINavigationControllerDelegate, QBImagePickerControllerDelegate>
 
 @end

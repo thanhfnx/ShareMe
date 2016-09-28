@@ -1,16 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RegisterViewController">
             <connections>
                 <outlet property="backToFirstViewButtonBottomConstraint" destination="7CI-fm-7lP" id="tTw-2Z-1Sx"/>
                 <outlet property="backToSecondViewButtonBottomConstraint" destination="7se-T0-8Yl" id="D22-xm-cdJ"/>
+                <outlet property="imvAvatar" destination="z4B-ek-Z2Y" id="U1R-L2-WUF"/>
                 <outlet property="lblTitle" destination="GLK-z5-e9U" id="Jv4-3u-vN5"/>
                 <outlet property="loginButtonBottomConstraint" destination="Mba-gd-rt2" id="bLL-de-WyC"/>
                 <outlet property="rdbGender" destination="Ni8-l1-Tou" id="LgI-6S-svN"/>
@@ -254,13 +256,13 @@
                     </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EJE-Bp-arR">
-                    <rect key="frame" x="103" y="361" width="114" height="30"/>
+                    <rect key="frame" x="130.5" y="361" width="59" height="30"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                    <state key="normal" title="Finish Registraion">
+                    <state key="normal" title="Continue">
                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
-                        <action selector="btnRegisterTapped:" destination="-1" eventType="touchUpInside" id="yLW-Qa-oMA"/>
+                        <action selector="btnNextToViewTapped:" destination="-1" eventType="touchUpInside" id="Ywj-jh-n65"/>
                     </connections>
                 </button>
             </subviews>
@@ -287,6 +289,83 @@
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="800" y="350"/>
+        </view>
+        <view contentMode="scaleToFill" id="zGv-Yx-lEn">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add an avatar" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2G-Qa-Hqs">
+                    <rect key="frame" x="73.5" y="60" width="173" height="36"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z1f-eZ-pMQ">
+                    <rect key="frame" x="132" y="530" width="56" height="30"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Go back">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="btnBackToViewTapped:" destination="-1" eventType="touchUpInside" id="txl-ch-635"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tUM-cJ-5Y6">
+                    <rect key="frame" x="119" y="417" width="82" height="30"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Pick a photo">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="btnAddAvatarTapped:" destination="-1" eventType="touchUpInside" id="XQ6-S4-ewb"/>
+                    </connections>
+                </button>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="z4B-ek-Z2Y">
+                    <rect key="frame" x="40" y="164" width="240" height="240"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="z4B-ek-Z2Y" secondAttribute="height" multiplier="1:1" id="mre-TF-RaR"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                            <integer key="value" value="2"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t9N-DG-OFj">
+                    <rect key="frame" x="103" y="455" width="114" height="30"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Finish Registraion">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="btnRegisterTapped:" destination="-1" eventType="touchUpInside" id="b0C-sm-AVt"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="F2G-Qa-Hqs" firstAttribute="top" secondItem="zGv-Yx-lEn" secondAttribute="top" constant="60" id="5aE-Vy-hRV"/>
+                <constraint firstItem="z4B-ek-Z2Y" firstAttribute="width" secondItem="zGv-Yx-lEn" secondAttribute="width" multiplier="3:4" id="7Cp-sO-e91"/>
+                <constraint firstItem="t9N-DG-OFj" firstAttribute="top" secondItem="tUM-cJ-5Y6" secondAttribute="bottom" constant="8" id="HXc-5e-8xj"/>
+                <constraint firstItem="tUM-cJ-5Y6" firstAttribute="centerX" secondItem="zGv-Yx-lEn" secondAttribute="centerX" id="MxD-PL-rxj"/>
+                <constraint firstItem="z4B-ek-Z2Y" firstAttribute="centerX" secondItem="zGv-Yx-lEn" secondAttribute="centerX" id="NDK-Ba-ZUb"/>
+                <constraint firstItem="tUM-cJ-5Y6" firstAttribute="top" secondItem="z4B-ek-Z2Y" secondAttribute="bottom" constant="13" id="R4M-6g-esu"/>
+                <constraint firstItem="z4B-ek-Z2Y" firstAttribute="centerY" secondItem="zGv-Yx-lEn" secondAttribute="centerY" id="WAj-8f-TNO"/>
+                <constraint firstItem="t9N-DG-OFj" firstAttribute="centerX" secondItem="zGv-Yx-lEn" secondAttribute="centerX" id="iAs-fm-FG4"/>
+                <constraint firstItem="z1f-eZ-pMQ" firstAttribute="centerX" secondItem="zGv-Yx-lEn" secondAttribute="centerX" id="mE6-z4-5WR"/>
+                <constraint firstAttribute="bottom" secondItem="z1f-eZ-pMQ" secondAttribute="bottom" constant="8" id="r2h-1v-e82"/>
+                <constraint firstItem="F2G-Qa-Hqs" firstAttribute="centerX" secondItem="zGv-Yx-lEn" secondAttribute="centerX" id="yS7-u8-gIG"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <point key="canvasLocation" x="1238" y="350"/>
         </view>
     </objects>
     <resources>

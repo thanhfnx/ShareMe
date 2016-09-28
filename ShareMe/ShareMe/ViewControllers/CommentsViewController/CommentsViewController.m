@@ -42,7 +42,7 @@ static NSString *const kOneLikeLabelText = @"1 person like this.";
 static NSString *const kSelfLikeWithOthersLabelText = @"You and %ld other(s) like this.";
 static NSString *const kManyLikeLabelText = @"%ld people like this.";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
-static NSInteger const kNumberOfComments = 10;
+static NSInteger const kNumberOfComments = 2;
 static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 
 @interface CommentsViewController () {
@@ -53,6 +53,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
     NSMutableArray<Comment *> *_topComments;
     User *_currentUser;
     NSDateFormatter *_dateFormatter;
+    UIRefreshControl *_topRefreshControl;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -74,7 +75,6 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
     [self.txvAddComment becomeFirstResponder];
-    _startIndex = 0;
     _topComments = [NSMutableArray array];
     _responseActions = @[
         kUserGetTopCommentsAction,
@@ -91,6 +91,9 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
     [self updateLikedUsers];
     [self loadComments];
+    _topRefreshControl = [[UIRefreshControl alloc] init];
+    [_topRefreshControl addTarget:self action:@selector(loadComments) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:_topRefreshControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -112,6 +115,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 }
 
 - (void)loadComments {
+    _startIndex = _topComments.count;
     [ClientSocketController sendData:[NSString stringWithFormat:kGetTopCommentsMessageFormat,
         self.story.storyId.integerValue, _startIndex, kNumberOfComments] messageType:kSendingRequestSignal
         actionName:kUserGetTopCommentsAction sender:self];
@@ -271,12 +275,16 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
                 // TODO: Replace blank table view
             } else {
                 NSError *error;
-                NSMutableArray *array = [Comment arrayOfModelsFromString:message error:&error];
-                [_topComments addObjectsFromArray:[[[array reverseObjectEnumerator] allObjects] mutableCopy]];
+                NSMutableArray *array = [[[[Comment arrayOfModelsFromString:message error:&error]
+                    reverseObjectEnumerator] allObjects] mutableCopy];
+                [array addObjectsFromArray:_topComments];
+                [_topComments removeAllObjects];
+                [_topComments addObjectsFromArray:array];
                 _startIndex += kNumberOfComments;;
                 // TODO: Handle error
                 [self reloadDataWithAnimated:NO];
             }
+            [_topRefreshControl endRefreshing];
             break;
         }
         case UserCreateNewCommentAction: {
