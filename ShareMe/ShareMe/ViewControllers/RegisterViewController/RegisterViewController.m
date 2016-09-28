@@ -372,9 +372,9 @@ static CGFloat const kMaxImageHeight = 500.0f;
 
 - (IBAction)btnAddAvatarTapped:(UIButton *)sender {
     [self showImagePickerDialog:kImagePickerMessage title:kImagePickerTitle
-        takeFromCameraHandler:^(UIAlertAction *action){
+        takeFromCameraHandler:^(UIAlertAction *action) {
         [self showCamera];
-    } takeFromLibraryHandler:^(UIAlertAction *action){
+    } takeFromLibraryHandler:^(UIAlertAction *action) {
         [self showImagePicker];
     }];
 }

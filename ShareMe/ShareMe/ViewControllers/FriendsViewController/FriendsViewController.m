@@ -9,15 +9,24 @@
 #import "FriendsViewController.h"
 #import "FriendTableViewCell.h"
 #import "MainTabBarViewController.h"
+#import "ClientSocketController.h"
+#import "MessageDetailViewController.h"
 #import "User.h"
+
+typedef NS_ENUM(NSInteger, UserRequestActions) {
+    UpdateOnlineStatusToUserAction
+};
 
 static NSString *const kDefaultMessageTitle = @"Warning";
 static NSString *const kFriendReuseIdentifier = @"FriendCell";
 static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
 static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
+static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
 
 @interface FriendsViewController () {
     User *_currentUser;
+    NSArray<NSString *> *_requestActions;
+    NSInteger _selectedIndex;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -35,11 +44,20 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
+    _requestActions = @[kUpdateOnlineStatusToUserAction];
+    [self registerRequestHandler];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
+        [self resignRequestHandler];
+    }
 }
 
 #pragma mark - UITableViewDatasource, UITableViewDelegate
@@ -60,6 +78,11 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
     }
     [cell setUser:_currentUser.friends[indexPath.row]];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    _selectedIndex = indexPath.row;
+    [self performSegueWithIdentifier:kGoToMessageDetailSegueIdentifier sender:self];
 }
 
 - (void)reloadDataWithAnimated:(BOOL)animated {
@@ -94,6 +117,39 @@ static NSString *const kEmptySearchResultMessage = @"Could not find anything for
     }
     [self.txtSearch resignFirstResponder];
     // TODO: Search friend
+}
+
+
+#pragma mark - Request Handler
+
+- (void)registerRequestHandler {
+    for (NSString *action in _requestActions) {
+        [ClientSocketController registerRequestHandler:action receiver:self];
+    }
+}
+
+- (void)resignRequestHandler {
+    for (NSString *action in _requestActions) {
+        [ClientSocketController resignRequestHandler:action receiver:self];
+    }
+}
+
+- (void)handleRequest:(NSString *)actionName message:(NSString *)message {
+    NSInteger index = [_requestActions indexOfObject:actionName];
+    switch (index) {
+        case UpdateOnlineStatusToUserAction: {
+            [self.tableView reloadData];
+            break;
+        }
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
+    if ([segue.identifier isEqualToString:kGoToMessageDetailSegueIdentifier]) {
+        MessageDetailViewController *messageDetailViewController = [segue destinationViewController];
+        messageDetailViewController.receiver = _currentUser.friends[_selectedIndex];
+    }
 }
 
 @end

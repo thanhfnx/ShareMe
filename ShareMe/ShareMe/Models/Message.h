@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "JSONModel.h"
-#import "User.h"
+
+@class User;
 
 @protocol Message
 
 @end
 
-@interface Message : NSObject
+@interface Message : JSONModel
 
 @property (strong, nonatomic) NSNumber *messageId;
 @property (strong, nonatomic) User<Optional> *sender;

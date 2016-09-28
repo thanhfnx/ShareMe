@@ -75,6 +75,11 @@ extern NSString *const kUserGetLikedUsersAction;
 extern NSString *const kGetUserByIdAction;
 extern NSString *const kUserGetStoriesOnTimelineAction;
 
+extern NSString *const kUpdateOnlineStatusToUserAction;
+extern NSString *const kUserGetMessagesAction;
+extern NSString *const kUserCreateNewMessageAction;
+extern NSString *const kAddNewMessageToUserAction;
+
 extern NSString *const kGoToListFriendSegueIdentifier;
 extern NSString *const kGoToUserTimelineSegueIdentifier;
 

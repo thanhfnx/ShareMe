@@ -38,10 +38,14 @@
 		92B7CE9C1D7094900077240B /* ActivityIndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B7CE9B1D7094900077240B /* ActivityIndicatorView.xib */; };
 		92C869861D7807430022F0D6 /* NSDate+TimeDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C869851D7807430022F0D6 /* NSDate+TimeDiff.m */; };
 		92C869891D78267B0022F0D6 /* FDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C869881D78267B0022F0D6 /* FDateFormatter.m */; };
+		92CB7AF61D9C25310014CE22 /* FLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB7AF51D9C25310014CE22 /* FLabel.m */; };
 		92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CE61F91D6FFCAC00E31C34 /* NewStoryViewController.m */; };
+		92D30A461D9BC9AB0080831C /* MessageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D30A451D9BC9AB0080831C /* MessageDetailViewController.m */; };
+		92D30A491D9BCB220080831C /* MessageDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D30A481D9BCB220080831C /* MessageDetailTableViewCell.m */; };
 		92D50D841D6540770022772A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D50D831D6540770022772A /* Assets.xcassets */; };
 		92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EB835F1D6BDB9E004119FD /* RegisterViewController.m */; };
 		92EB83651D6BEC1E004119FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92EB83641D6BEC1E004119FD /* Main.storyboard */; };
+		92F382421D9BB87B0056A899 /* MessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F382411D9BB87B0056A899 /* MessagesViewController.m */; };
 		92F840501D86A1FE00D32163 /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F8404F1D86A1FE00D32163 /* CommentsViewController.m */; };
 		92F840531D86A3E600D32163 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F840521D86A3E600D32163 /* CommentTableViewCell.m */; };
 		A0A54C367DD48DE731058ED9 /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 735C3B48E172C38BC4493FD5 /* Pods_ShareMe.framework */; };
@@ -110,8 +114,14 @@
 		92C869851D7807430022F0D6 /* NSDate+TimeDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TimeDiff.m"; sourceTree = "<group>"; };
 		92C869871D78267B0022F0D6 /* FDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDateFormatter.h; sourceTree = "<group>"; };
 		92C869881D78267B0022F0D6 /* FDateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDateFormatter.m; sourceTree = "<group>"; };
+		92CB7AF41D9C25310014CE22 /* FLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLabel.h; sourceTree = "<group>"; };
+		92CB7AF51D9C25310014CE22 /* FLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLabel.m; sourceTree = "<group>"; };
 		92CE61F81D6FFCAC00E31C34 /* NewStoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewStoryViewController.h; sourceTree = "<group>"; };
 		92CE61F91D6FFCAC00E31C34 /* NewStoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewStoryViewController.m; sourceTree = "<group>"; };
+		92D30A441D9BC9AB0080831C /* MessageDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDetailViewController.h; sourceTree = "<group>"; };
+		92D30A451D9BC9AB0080831C /* MessageDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDetailViewController.m; sourceTree = "<group>"; };
+		92D30A471D9BCB220080831C /* MessageDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDetailTableViewCell.h; sourceTree = "<group>"; };
+		92D30A481D9BCB220080831C /* MessageDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDetailTableViewCell.m; sourceTree = "<group>"; };
 		92D50D741D6540770022772A /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D50D781D6540770022772A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		92D50D7A1D6540770022772A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -121,6 +131,8 @@
 		92EB835E1D6BDB9E004119FD /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		92EB835F1D6BDB9E004119FD /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		92EB83641D6BEC1E004119FD /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		92F382401D9BB87B0056A899 /* MessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesViewController.h; sourceTree = "<group>"; };
+		92F382411D9BB87B0056A899 /* MessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesViewController.m; sourceTree = "<group>"; };
 		92F8404E1D86A1FE00D32163 /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
 		92F8404F1D86A1FE00D32163 /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
 		92F840511D86A3E600D32163 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTableViewCell.h; sourceTree = "<group>"; };
@@ -172,6 +184,8 @@
 				92F840521D86A3E600D32163 /* CommentTableViewCell.m */,
 				92A9206B1D90C9F600C6F007 /* FriendTableViewCell.h */,
 				92A9206C1D90C9F600C6F007 /* FriendTableViewCell.m */,
+				92D30A471D9BCB220080831C /* MessageDetailTableViewCell.h */,
+				92D30A481D9BCB220080831C /* MessageDetailTableViewCell.m */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -179,6 +193,8 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				92D30A431D9BC9920080831C /* MessageDetailViewController */,
+				92F3823F1D9BB86B0056A899 /* MessagesViewController */,
 				92A610BA1D94C91900635510 /* TimelineViewController */,
 				9203403A1D9287C800619B28 /* WhoLikeThisViewController */,
 				92A920671D90C88500C6F007 /* FriendsViewController */,
@@ -282,6 +298,8 @@
 		928688731D702C6B0078A599 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				92CB7AF41D9C25310014CE22 /* FLabel.h */,
+				92CB7AF51D9C25310014CE22 /* FLabel.m */,
 				928688741D702C9C0078A599 /* Utils.h */,
 				928688751D702C9C0078A599 /* Utils.m */,
 				929A87AB1D711FEF0027385D /* FViewController.h */,
@@ -345,6 +363,15 @@
 				92CE61F91D6FFCAC00E31C34 /* NewStoryViewController.m */,
 			);
 			path = NewStoryViewController;
+			sourceTree = "<group>";
+		};
+		92D30A431D9BC9920080831C /* MessageDetailViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92D30A441D9BC9AB0080831C /* MessageDetailViewController.h */,
+				92D30A451D9BC9AB0080831C /* MessageDetailViewController.m */,
+			);
+			path = MessageDetailViewController;
 			sourceTree = "<group>";
 		};
 		92D50D6B1D6540770022772A = {
@@ -411,6 +438,15 @@
 				92EB83641D6BEC1E004119FD /* Main.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		92F3823F1D9BB86B0056A899 /* MessagesViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92F382401D9BB87B0056A899 /* MessagesViewController.h */,
+				92F382411D9BB87B0056A899 /* MessagesViewController.m */,
+			);
+			path = MessagesViewController;
 			sourceTree = "<group>";
 		};
 		92F8404D1D86A1E600D32163 /* CommentsViewController */ = {
@@ -569,16 +605,20 @@
 				92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
 				92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */,
+				92D30A461D9BC9AB0080831C /* MessageDetailViewController.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
 				924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */,
 				92A610BD1D94C94600635510 /* TimelineViewController.m in Sources */,
 				92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */,
 				92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */,
+				92CB7AF61D9C25310014CE22 /* FLabel.m in Sources */,
+				92D30A491D9BCB220080831C /* MessageDetailTableViewCell.m in Sources */,
 				924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */,
 				929139531D758D5700A0E972 /* ThumbnailCollectionViewCell.m in Sources */,
 				92A9206D1D90C9F600C6F007 /* FriendTableViewCell.m in Sources */,
 				92441AB71D66A95300F5426A /* ClientSocketController.m in Sources */,
 				924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */,
+				92F382421D9BB87B0056A899 /* MessagesViewController.m in Sources */,
 				92C869891D78267B0022F0D6 /* FDateFormatter.m in Sources */,
 				92F840501D86A1FE00D32163 /* CommentsViewController.m in Sources */,
 				924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */,

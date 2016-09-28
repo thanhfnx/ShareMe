@@ -75,6 +75,11 @@ NSString *const kUserGetLikedUsersAction = @"USER_GET_LIKED_USERS";
 NSString *const kGetUserByIdAction = @"GET_USER_BY_ID";
 NSString *const kUserGetStoriesOnTimelineAction = @"USER_GET_STORIES_ON_TIMELINE";
 
+NSString *const kUpdateOnlineStatusToUserAction = @"UPDATE_ONLINE_STATUS_TO_USER";
+NSString *const kUserGetMessagesAction = @"USER_GET_MESSAGES";
+NSString *const kUserCreateNewMessageAction = @"USER_CREATE_NEW_MESSAGE";
+NSString *const kAddNewMessageToUserAction = @"ADD_NEW_MESSAGE_TO_USER";
+
 NSString *const kGoToListFriendSegueIdentifier = @"goToListFriend";
 NSString *const kGoToUserTimelineSegueIdentifier = @"goToUserTimeline";
 

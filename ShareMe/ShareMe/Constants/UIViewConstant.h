@@ -11,6 +11,7 @@
 @interface UIColor (Extentions)
 
 + (UIColor *)defaultThemeColor;
++ (UIColor *)onlineStatusColor;
 
 @end
 
