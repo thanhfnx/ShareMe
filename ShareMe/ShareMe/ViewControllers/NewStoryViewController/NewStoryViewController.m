@@ -102,9 +102,9 @@ static NSInteger const kNumberOfCell = 4;
 
 - (IBAction)btnAddImageTapped:(UIButton *)sender {
     [self showImagePickerDialog:kImagePickerMessage title:kImagePickerTitle
-        takeFromCameraHandler:^(UIAlertAction *action){
+        takeFromCameraHandler:^(UIAlertAction *action) {
         [self showCamera];
-    } takeFromLibraryHandler:^(UIAlertAction *action){
+    } takeFromLibraryHandler:^(UIAlertAction *action) {
         [self showImagePicker];
     }];
 }

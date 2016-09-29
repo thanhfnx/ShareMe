@@ -32,7 +32,7 @@
         CGSize firstImageSize;
         if ([story.images[0] isKindOfClass:[UIImage class]]) {
             firstImageSize = ((UIImage *)story.images[0]).size;
-        } else if ([story.images[0] isKindOfClass:[NSString class]]){
+        } else if ([story.images[0] isKindOfClass:[NSString class]]) {
             firstImageSize = CGSizeFromString(story.images[0]);
         }
         NSInteger firstImageType = [Utils getImageType:firstImageSize];
@@ -83,7 +83,7 @@
         CGRect frame = CGRectMake(0.0f, 0.0f, [UIViewConstant screenWidth], height);
         view.frame = frame;
         [self.vContentImages addSubview:view];
-        [view.subviews enumerateObjectsUsingBlock:^(id view, NSUInteger index, BOOL *stop){
+        [view.subviews enumerateObjectsUsingBlock:^(id view, NSUInteger index, BOOL *stop) {
             if ([view isKindOfClass:[UIImageView class]] && [story.images[index] isKindOfClass:[UIImage class]]) {
                 ((UIImageView *)view).image = story.images[index];
             } else if ([view isKindOfClass:[UILabel class]] && story.images.count > 4 && [story.images[3]

@@ -1,0 +1,20 @@
+//
+//  MessageDetailTableViewCell.h
+//  ShareMe
+//
+//  Created by Nguyen Xuan Thanh on 9/28/16.
+//  Copyright © 2016 Framgia. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@class Message;
+
+@interface MessageDetailTableViewCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UIImageView *imvAvatar;
+@property (weak, nonatomic) IBOutlet UILabel *lblContent;
+
+- (void)setMessage:(Message *)message;
+
+@end

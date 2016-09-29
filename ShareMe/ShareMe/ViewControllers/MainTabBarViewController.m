@@ -23,7 +23,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddDeclineRequestToClientsAction,
     AddCancelRequestToClientsAction,
     AddSendRequestToClientsAction,
-    AddUnfriendToClientsAction
+    AddUnfriendToClientsAction,
+    UpdateOnlineStatusToUserAction
 };
 
 @interface MainTabBarViewController () {
@@ -45,7 +46,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         kAddDeclineRequestToClientsAction,
         kAddCancelRequestToClientsAction,
         kAddSendRequestToClientsAction,
-        kAddUnfriendToClientsAction
+        kAddUnfriendToClientsAction,
+        kUpdateOnlineStatusToUserAction
     ];
     [self registerRequestHandler];
 }
@@ -111,6 +113,42 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         case AddUnfriendToClientsAction: {
             [Utils removeUser:self.loggedInUser.friends user:user];
             break;
+        }
+        case UpdateOnlineStatusToUserAction: {
+            NSArray *array = [message componentsSeparatedByString:@"-"];
+            if ([array containsObject:@""]) {
+                return;
+            }
+            NSInteger userId = [array[0] integerValue];
+            NSString *onlineStatus = array[1];
+            [self updateOnlineStatus:onlineStatus userId:userId];
+            break;
+        }
+    }
+}
+
+- (void)updateOnlineStatus:(NSString *)onlineStatus userId:(NSInteger)userId {
+    if ([onlineStatus isEqualToString:kFailureMessage]) {
+        for (User *user in self.loggedInUser.friends) {
+            if (userId == user.userId.integerValue) {
+                user.status = @(user.status.integerValue - 1);
+            }
+        }
+    } else {
+        NSInteger index = 0;
+        for (User *user in self.loggedInUser.friends) {
+            if (userId == user.userId.integerValue) {
+                index = [self.loggedInUser.friends indexOfObject:user];
+                break;
+            }
+        }
+        if (index) {
+            User *user = self.loggedInUser.friends[index];
+            user.status = @(user.status.integerValue + 1);
+            if (user.status.integerValue == 1) {
+                [self.loggedInUser.friends removeObject:user];
+                [self.loggedInUser.friends insertObject:user atIndex:0];
+            }
         }
     }
 }
