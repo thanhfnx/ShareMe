@@ -80,6 +80,8 @@ extern NSString *const kUserGetMessagesAction;
 extern NSString *const kUserCreateNewMessageAction;
 extern NSString *const kAddNewMessageToUserAction;
 
+extern NSString *const kUserGetLatestMessagesAction;
+
 extern NSString *const kGoToListFriendSegueIdentifier;
 extern NSString *const kGoToUserTimelineSegueIdentifier;
 

@@ -80,6 +80,8 @@ NSString *const kUserGetMessagesAction = @"USER_GET_MESSAGES";
 NSString *const kUserCreateNewMessageAction = @"USER_CREATE_NEW_MESSAGE";
 NSString *const kAddNewMessageToUserAction = @"ADD_NEW_MESSAGE_TO_USER";
 
+NSString *const kUserGetLatestMessagesAction = @"USER_GET_LATEST_MESSAGES";
+
 NSString *const kGoToListFriendSegueIdentifier = @"goToListFriend";
 NSString *const kGoToUserTimelineSegueIdentifier = @"goToUserTimeline";
 

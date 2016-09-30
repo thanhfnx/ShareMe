@@ -31,7 +31,7 @@ static NSString *const kConfirmDiscardMessage = @"This message is unsaved! Are y
 static NSString *const kAddNewMessageErrorMessage = @"Something went wrong! Can not send the message!";
 static NSString *const kSelfMessageReuseIdentifier = @"SelfMessageCell";
 static NSString *const kGetMessagesFormat = @"%ld-%ld-%ld-%ld";
-static NSInteger const kNumberOfMessages = 2;
+static NSInteger const kNumberOfMessages = 20;
 
 @interface MessageDetailViewController () {
     NSMutableArray<Message *> *_messages;
@@ -134,7 +134,6 @@ static NSInteger const kNumberOfMessages = 2;
 
 - (IBAction)btnSendTapped:(UIButton *)sender {
     if ([self.txvNewMessage hasText]) {
-        [self dismissKeyboard];
         [self getMessage];
         [ClientSocketController sendData:[_message toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewMessageAction sender:self];
@@ -160,16 +159,16 @@ static NSInteger const kNumberOfMessages = 2;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     Message *message = _messages[indexPath.row];
     NSString *reuseIdentifier = kFriendMessageReuseIdentifier;
+    message.sender.avatarImage = self.receiver.avatarImage;
     if (message.receiver.userId.integerValue == self.receiver.userId.integerValue) {
         reuseIdentifier = kSelfMessageReuseIdentifier;
+        message.sender.avatarImage = _currentUser.avatarImage;
     }
     MessageDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier
         forIndexPath:indexPath];
     if (!cell) {
         return [UITableViewCell new];
     }
-    message.sender.avatarImage = _currentUser.avatarImage;
-    message.receiver.avatarImage = self.receiver.avatarImage;
     [cell setMessage:message];
     return cell;
 }
@@ -184,9 +183,12 @@ static NSInteger const kNumberOfMessages = 2;
 
 - (void)reloadDataWithAnimated:(BOOL)animated {
     [self.tableView reloadData];
-    NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
-        animated:animated];
+    if (_messages.count) {
+        NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1
+            inSection:0];
+        [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
+            animated:animated];
+    }
 }
 
 #pragma mark - Show / hide keyboard
@@ -232,8 +234,6 @@ static NSInteger const kNumberOfMessages = 2;
                 [self showMessage:kAddNewMessageErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
                 _message.messageId = @(message.integerValue);
-                _message.sender = _currentUser;
-                _message.receiver = self.receiver;
                 [_messages addObject:_message];
                 [self.txvNewMessage setText:@""];
                 self.lblPlaceHolder.hidden = NO;
@@ -265,7 +265,7 @@ static NSInteger const kNumberOfMessages = 2;
             NSError *error;
             Message *receivedMessage = [[Message alloc] initWithString:message error:&error];
             // TODO: Handle error
-            if (receivedMessage) {
+            if (receivedMessage && receivedMessage.sender.userId == self.receiver.userId) {
                 [_messages addObject:receivedMessage];
                 [self reloadDataWithAnimated:YES];
             }

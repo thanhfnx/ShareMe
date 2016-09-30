@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "UIViewConstant.h"
 
-@interface FViewController : UIViewController
+@interface FViewController : UIViewController {
+    BOOL _isSwipeGestureDisable;
+}
 
 - (void)dismissKeyboard;
 - (void)showActitvyIndicator:(UIView *)container frame:(CGRect)frame;

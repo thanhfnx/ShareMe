@@ -34,6 +34,11 @@ static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
 
 #pragma mark - UIView Life Cycle
 
+- (void)viewDidLoad {
+    _isSwipeGestureDisable = YES;
+    [super viewDidLoad];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
         name:UIKeyboardWillShowNotification object:nil];

@@ -41,7 +41,7 @@ static NSString *const kGoToCommentSegueIdentifier = @"goToComment";
 static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
 static NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
-static NSInteger const kNumberOfStories = 2;
+static NSInteger const kNumberOfStories = 10;
 
 @interface NewsFeedViewController () {
     User *_currentUser;
@@ -236,14 +236,16 @@ static NSInteger const kNumberOfStories = 2;
 }
 
 - (void)reloadSingleCell:(Story *)story {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.topStories indexOfObject:story] inSection:0];
-    CGPoint offset = self.tableView.contentOffset;
-    [UIView setAnimationsEnabled:NO];
-    [self.tableView beginUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
-    [UIView setAnimationsEnabled:YES];
-    self.tableView.contentOffset = offset;
+    @synchronized (self) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.topStories indexOfObject:story] inSection:0];
+        CGPoint offset = self.tableView.contentOffset;
+        [UIView setAnimationsEnabled:NO];
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+        [UIView setAnimationsEnabled:YES];
+        self.tableView.contentOffset = offset;
+    }
 }
 
 - (void)reloadAllData:(NSNotification *)notification {
