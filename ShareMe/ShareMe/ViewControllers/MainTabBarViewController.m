@@ -8,10 +8,16 @@
 
 #import "MainTabBarViewController.h"
 #import "UIViewController+RequestHandler.h"
+#import "UIViewController+ResponseHandler.h"
 #import "ApplicationConstants.h"
 #import "ClientSocketController.h"
 #import "Utils.h"
 #import "User.h"
+#import "Message.h"
+
+typedef NS_ENUM(NSInteger, UserResponseActions) {
+    UserGetLatestMessagesAction
+};
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
     UserUnfriendToUserAction,
@@ -27,8 +33,12 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     UpdateOnlineStatusToUserAction
 };
 
+static NSString *const kGetLatestMessagesFormat = @"%ld-%ld-%ld";
+static NSInteger const kNumberOfLatestMessages = 20;
+
 @interface MainTabBarViewController () {
     NSArray<NSString *> *_requestActions;
+    NSArray<NSString *> *_responseActions;
 }
 
 @end
@@ -36,6 +46,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 @implementation MainTabBarViewController
 
 - (void)viewDidLoad {
+    _responseActions = @[kUserGetLatestMessagesAction];
     _requestActions = @[
         kUserUnfriendToUserAction,
         kUserSendRequestToUserAction,
@@ -49,7 +60,32 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         kAddUnfriendToClientsAction,
         kUpdateOnlineStatusToUserAction
     ];
+    self.latestMessages = [NSMutableArray array];
     [self registerRequestHandler];
+    [self loadLatestMessages];
+}
+
+- (void)loadLatestMessages {
+    NSString *message = [NSString stringWithFormat:kGetLatestMessagesFormat, self.loggedInUser.userId.integerValue,
+        (long)0, kNumberOfLatestMessages];
+    [ClientSocketController sendData:message messageType:kSendingRequestSignal actionName:kUserGetLatestMessagesAction
+        sender:self];
+}
+
+#pragma mark - Response Handler
+
+- (void)handleResponse:(NSString *)actionName message:(NSString *)message {
+    NSInteger index = [_responseActions indexOfObject:actionName];
+    switch (index) {
+        case UserGetLatestMessagesAction: {
+            if (![message isEqualToString:kFailureMessage]) {
+                NSError *error;
+                // TODO: Handle error
+                [self.latestMessages addObjectsFromArray:[Message arrayOfModelsFromString:message error:&error]];
+            }
+            break;
+        }
+    }
 }
 
 #pragma mark - Request Handler

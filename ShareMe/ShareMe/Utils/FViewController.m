@@ -25,7 +25,9 @@ NSString *const kCancelActionTitle = @"Cancel";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setSwipeGestureRecognizer];
+    if (!_isSwipeGestureDisable) {
+        [self setSwipeGestureRecognizer];
+    }
 }
 
 - (void)showActitvyIndicator:(UIView *)container frame:(CGRect)frame {

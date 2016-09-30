@@ -42,7 +42,7 @@ static NSString *const kOneLikeLabelText = @"1 person like this.";
 static NSString *const kSelfLikeWithOthersLabelText = @"You and %ld other(s) like this.";
 static NSString *const kManyLikeLabelText = @"%ld people like this.";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
-static NSInteger const kNumberOfComments = 2;
+static NSInteger const kNumberOfComments = 20;
 static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 
 @interface CommentsViewController () {
