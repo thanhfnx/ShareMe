@@ -148,7 +148,7 @@ static NSInteger const kNumberOfCell = 4;
         frame.origin.y -= 44.0f;
         [self showActitvyIndicator:self.view frame:frame];
         [self getStory];
-        [ClientSocketController sendData:[_story toJSONString] messageType:kSendingRequestSignal
+        [[ClientSocketController sharedController] sendData:[_story toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewStoryAction sender:self];
     }
 }

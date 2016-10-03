@@ -307,7 +307,7 @@ static CGFloat const kMaxImageHeight = 500.0f;
     [self dismissKeyboard];
     if ([self validate]) {
         [self getUser];
-        [ClientSocketController sendData:[_user toJSONString] messageType:kSendingRequestSignal
+        [[ClientSocketController sharedController] sendData:[_user toJSONString] messageType:kSendingRequestSignal
             actionName:kUserRegisterAction sender:self];
     }
 }
@@ -505,7 +505,7 @@ static CGFloat const kMaxImageHeight = 500.0f;
         User *user = [[User alloc] init];
         user.userName = _user.userName;
         user.password = _user.password;
-        [ClientSocketController sendData:[user toJSONString] messageType:kSendingRequestSignal
+        [[ClientSocketController sharedController] sendData:[user toJSONString] messageType:kSendingRequestSignal
             actionName:kUserLoginAction sender:sender];
     }
 }

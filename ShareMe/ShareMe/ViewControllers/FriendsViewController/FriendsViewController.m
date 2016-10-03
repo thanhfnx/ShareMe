@@ -124,13 +124,13 @@ static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 

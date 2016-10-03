@@ -21,11 +21,13 @@
 		92441ABB1D66A96500F5426A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AA11D669F0E00F5426A /* User.m */; };
 		92441AE61D66AD3400F5426A /* ApplicationConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 92441AE51D66AD3400F5426A /* ApplicationConstants.m */; };
 		9247D9F81D9E083F00CB2266 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9247D9F71D9E083F00CB2266 /* MessageTableViewCell.m */; };
+		924C2BC71D9E6A930077B29B /* MenuItemsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924C2BC61D9E6A930077B29B /* MenuItemsViewController.m */; };
 		924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108C1D6D99FE004DE853 /* RequestViewController.m */; };
 		924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E108F1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m */; };
 		924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */; };
 		924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */; };
 		924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */; };
+		9285C58B1DA0A5CD003011DF /* MenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9285C58A1DA0A5CD003011DF /* MenuItemTableViewCell.m */; };
 		928688761D702C9C0078A599 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 928688751D702C9C0078A599 /* Utils.m */; };
 		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
 		929139531D758D5700A0E972 /* ThumbnailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */; };
@@ -82,6 +84,8 @@
 		92441AE51D66AD3400F5426A /* ApplicationConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationConstants.m; sourceTree = "<group>"; };
 		9247D9F61D9E083F00CB2266 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
 		9247D9F71D9E083F00CB2266 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
+		924C2BC51D9E6A930077B29B /* MenuItemsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemsViewController.h; sourceTree = "<group>"; };
+		924C2BC61D9E6A930077B29B /* MenuItemsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemsViewController.m; sourceTree = "<group>"; };
 		924E108B1D6D99FE004DE853 /* RequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestViewController.h; sourceTree = "<group>"; };
 		924E108C1D6D99FE004DE853 /* RequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestViewController.m; sourceTree = "<group>"; };
 		924E108E1D6D9AE1004DE853 /* ReceivedRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceivedRequestTableViewCell.h; sourceTree = "<group>"; };
@@ -92,6 +96,8 @@
 		924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarViewController.m; sourceTree = "<group>"; };
 		924E109D1D6DBAE3004DE853 /* CALayer+UIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+UIColor.h"; sourceTree = "<group>"; };
 		924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UIColor.m"; sourceTree = "<group>"; };
+		9285C5891DA0A5CD003011DF /* MenuItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemTableViewCell.h; sourceTree = "<group>"; };
+		9285C58A1DA0A5CD003011DF /* MenuItemTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemTableViewCell.m; sourceTree = "<group>"; };
 		928688741D702C9C0078A599 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		928688751D702C9C0078A599 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		928EBC0C1D6C371C001E7D3B /* RegisterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterView.xib; sourceTree = "<group>"; };
@@ -188,6 +194,8 @@
 				92D30A481D9BCB220080831C /* MessageDetailTableViewCell.m */,
 				9247D9F61D9E083F00CB2266 /* MessageTableViewCell.h */,
 				9247D9F71D9E083F00CB2266 /* MessageTableViewCell.m */,
+				9285C5891DA0A5CD003011DF /* MenuItemTableViewCell.h */,
+				9285C58A1DA0A5CD003011DF /* MenuItemTableViewCell.m */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -195,6 +203,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				924C2BC41D9E6A6B0077B29B /* MenuItemsViewController */,
 				92D30A431D9BC9920080831C /* MessageDetailViewController */,
 				92F3823F1D9BB86B0056A899 /* MessagesViewController */,
 				92A610BA1D94C91900635510 /* TimelineViewController */,
@@ -286,6 +295,15 @@
 				92AF4F751D6ED72E00B92297 /* UIViewConstant.m */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		924C2BC41D9E6A6B0077B29B /* MenuItemsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				924C2BC51D9E6A930077B29B /* MenuItemsViewController.h */,
+				924C2BC61D9E6A930077B29B /* MenuItemsViewController.m */,
+			);
+			path = MenuItemsViewController;
 			sourceTree = "<group>";
 		};
 		924E108A1D6D99E7004DE853 /* RequestsViewController */ = {
@@ -606,10 +624,12 @@
 				92F840531D86A3E600D32163 /* CommentTableViewCell.m in Sources */,
 				92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
+				924C2BC71D9E6A930077B29B /* MenuItemsViewController.m in Sources */,
 				92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */,
 				92D30A461D9BC9AB0080831C /* MessageDetailViewController.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
 				924E10901D6D9AE1004DE853 /* ReceivedRequestTableViewCell.m in Sources */,
+				9285C58B1DA0A5CD003011DF /* MenuItemTableViewCell.m in Sources */,
 				92A610BD1D94C94600635510 /* TimelineViewController.m in Sources */,
 				92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */,
 				92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */,

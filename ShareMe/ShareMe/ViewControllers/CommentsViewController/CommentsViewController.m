@@ -116,7 +116,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 
 - (void)loadComments {
     _startIndex = _topComments.count;
-    [ClientSocketController sendData:[NSString stringWithFormat:kGetTopCommentsMessageFormat,
+    [[ClientSocketController sharedController] sendData:[NSString stringWithFormat:kGetTopCommentsMessageFormat,
         self.story.storyId.integerValue, _startIndex, kNumberOfComments] messageType:kSendingRequestSignal
         actionName:kUserGetTopCommentsAction sender:self];
 }
@@ -231,15 +231,15 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
     if ([self.txvAddComment hasText]) {
         [self dismissKeyboard];
         [self getComment];
-        [ClientSocketController sendData:[_comment toJSONString] messageType:kSendingRequestSignal
+        [[ClientSocketController sharedController] sendData:[_comment toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewCommentAction sender:self];
     }
 }
 
 - (IBAction)btnLikeTapped:(UIButton *)sender {
-    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, self.story.storyId.integerValue,
-        _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
-        sender:self];
+    [[ClientSocketController sharedController] sendData:[NSString stringWithFormat:kLikeRequestFormat,
+        self.story.storyId.integerValue, _currentUser.userId.integerValue] messageType:kSendingRequestSignal
+        actionName:kUserLikeStoryAction sender:self];
 }
 
 - (IBAction)btnWhoLikeThisTapped:(UIButton *)sender {
@@ -353,13 +353,13 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 

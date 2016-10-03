@@ -170,14 +170,14 @@ static NSString *const kDeclineButtonTitle = @"Decline";
 }
 
 - (void)loadUserById {
-    [ClientSocketController sendData:[@(self.userId) stringValue] messageType:kSendingRequestSignal
+    [[ClientSocketController sharedController] sendData:[@(self.userId) stringValue] messageType:kSendingRequestSignal
         actionName:kGetUserByIdAction sender:self];
 }
 
 - (void)reloadAllStoriesOnTimeline {
     NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, self.userId,
         [UIViewConstant screenWidth] * [UIViewConstant screenScale], (long)0, kNumberOfStories];
-    [ClientSocketController sendData:message messageType:kSendingRequestSignal
+    [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
         actionName:kUserGetStoriesOnTimelineAction sender:self];
 }
 
@@ -185,7 +185,7 @@ static NSString *const kDeclineButtonTitle = @"Decline";
     _startIndex = _topStories.count;
     NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, self.userId,
         [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex, kNumberOfStories];
-    [ClientSocketController sendData:message messageType:kSendingRequestSignal
+    [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
         actionName:kUserGetStoriesOnTimelineAction sender:self];
 }
 
@@ -234,7 +234,7 @@ static NSString *const kDeclineButtonTitle = @"Decline";
 - (IBAction)btnLikeTapped:(UIButton *)sender {
     [self dismissKeyboard];
     NSInteger storyId = _topStories[sender.superview.tag].storyId.integerValue;
-    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
+    [[ClientSocketController sharedController] sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
         _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
         sender:self];
 }
@@ -252,8 +252,8 @@ static NSString *const kDeclineButtonTitle = @"Decline";
                 _user.userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmUnfriendMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserUnfriendAction
-                    sender:self];
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+                    actionName:kUserUnfriendAction sender:self];
             }];
             break;
         }
@@ -263,7 +263,7 @@ static NSString *const kDeclineButtonTitle = @"Decline";
                 _user.userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmCancelRequestMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                 actionName:kUserCancelRequestAction sender:self];
             }];
             break;
@@ -277,14 +277,14 @@ static NSString *const kDeclineButtonTitle = @"Decline";
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                     _user.userId.integerValue];
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                     actionName:kUserAcceptRequestAction sender:self];
             }];
             UIAlertAction *declineAction = [UIAlertAction actionWithTitle:kDeclineButtonTitle
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                     _user.userId.integerValue];
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                     actionName:kUserDeclineRequestAction sender:self];
             }];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel
@@ -298,8 +298,8 @@ static NSString *const kDeclineButtonTitle = @"Decline";
         case NotFriendRelation: {
             NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                 _user.userId.integerValue];
-            [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserSendRequestAction
-                sender:self];
+            [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+                actionName:kUserSendRequestAction sender:self];
             break;
         }
     }
@@ -522,13 +522,13 @@ static NSString *const kDeclineButtonTitle = @"Decline";
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 

@@ -111,7 +111,7 @@ static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
     if ([self validate]) {
         [self showActitvyIndicator:self.view frame:self.view.frame];
         [self getUser];
-        [ClientSocketController sendData:[_user toJSONString] messageType:kSendingRequestSignal
+        [[ClientSocketController sharedController] sendData:[_user toJSONString] messageType:kSendingRequestSignal
             actionName:kUserLoginAction sender:self];
     }
 }

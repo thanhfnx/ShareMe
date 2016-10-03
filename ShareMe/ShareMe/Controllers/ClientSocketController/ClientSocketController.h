@@ -11,11 +11,12 @@
 
 @interface ClientSocketController : NSObject <NSStreamDelegate>
 
++ (instancetype)sharedController;
 - (void)openSocket;
 - (void)closeSocket;
-+ (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
+- (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
     sender:(UIViewController *)sender;
-+ (void)registerRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver;
-+ (void)resignRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver;
+- (void)registerRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver;
+- (void)resignRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver;
 
 @end
