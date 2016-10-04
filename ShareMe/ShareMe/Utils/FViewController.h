@@ -11,6 +11,7 @@
 
 @interface FViewController : UIViewController {
     BOOL _isSwipeGestureDisable;
+    NSInteger _preparedUserId;
 }
 
 - (void)dismissKeyboard;

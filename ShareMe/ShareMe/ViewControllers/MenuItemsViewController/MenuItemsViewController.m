@@ -30,8 +30,8 @@ typedef NS_ENUM(NSInteger, FunctionMenuItems) {
 static NSString *const kViewProfileReuseIdentifier = @"ViewProfileCell";
 static NSString *const kMenuItemReuseIdentifier = @"MenuItemCell";
 static NSString *const kLogOutReuseIdentifier = @"LogOutCell";
-static NSString *const kFindFriendsIconName = @"find-friends";
-static NSString *const kSettingsIconName = @"settings-item";
+static NSString *const kFindFriendsIconName = @"findfriends";
+static NSString *const kSettingsIconName = @"settingsitem";
 static NSString *const kAboutIconName = @"about";
 static NSString *const kFindFriendsTextLabel = @"Find Friends";
 static NSString *const kSettingsTextLabel = @"Settings";
@@ -39,6 +39,7 @@ static NSString *const kAboutTextLabel= @"About";
 static NSString *const kLogOutMessage = @"Are you sure you want to log out?";
 static NSString *const kLogOutActionTitle = @"Log Out";
 static NSString *const kCancelActionTitle = @"Cancel";
+static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
 
 @interface MenuItemsViewController () {
     User *_currentUser;
@@ -129,13 +130,29 @@ static NSString *const kCancelActionTitle = @"Cancel";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
-        case ViewProfileMenuSection:
+        case ViewProfileMenuSection: {
+            _preparedUserId = _currentUser.userId.integerValue;
+            [self performSegueWithIdentifier:kGoToUserTimelineSegueIdentifier sender:self];
             break;
-        case FunctionMenuSection:
+        }
+        case FunctionMenuSection: {
+            switch (indexPath.row) {
+                case FindFriendsMenuItem:
+                    // TODO: Optional function
+                    break;
+                case SettingsMenuItem:
+                    [self performSegueWithIdentifier:kGoToSubMenuSegueIdentifier sender:self];
+                    break;
+                case AboutMenuItem:
+                    // TODO: Optional function
+                    break;
+            }
             break;
-        case LogOutMenuSection:
+        }
+        case LogOutMenuSection: {
             [self showLogOutDialog];
             break;
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

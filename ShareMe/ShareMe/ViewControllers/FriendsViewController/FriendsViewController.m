@@ -98,28 +98,6 @@ static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)btnSearchTapped:(UIButton *)sender {
-    if (self.lblTitle.alpha == 1.0f) {
-        [self.searchTextFieldLeadingConstraint setConstant:-CGRectGetWidth(self.lblTitle.frame)];
-        [self.navigationItem.titleView setNeedsUpdateConstraints];
-        [UIView animateWithDuration:0.4 animations:^{
-            self.lblTitle.alpha = 0.0f;
-            [self.navigationItem.titleView layoutIfNeeded];
-        }];
-        [self.txtSearch becomeFirstResponder];
-        return;
-    }
-    if ([self.txtSearch.text isEqualToString:@""]) {
-        [self showMessage:kEmptySearchMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
-            [self.txtSearch becomeFirstResponder];
-        }];
-        return;
-    }
-    [self.txtSearch resignFirstResponder];
-    // TODO: Search friend
-}
-
-
 #pragma mark - Request Handler
 
 - (void)registerRequestHandler {

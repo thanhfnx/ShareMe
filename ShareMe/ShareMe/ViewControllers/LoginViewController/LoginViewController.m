@@ -18,9 +18,12 @@ static NSString *const kEmptyPasswordMessage = @"Password can not be empty!";
 static NSString *const kFailedLoginMessage = @"UserName or password is incorrect. Login failed!";
 static NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
 static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
+static NSString *const kUserNameKey = @"shareMe_userName";
+static NSString *const kPasswordKey = @"shareMe_password";
 
 @interface LoginViewController () {
     User *_user;
+    NSNumber *_isSaveUserAccount;
 }
 
 @property (weak, nonatomic) IBOutlet UIImageView *imvLogo;
@@ -37,6 +40,26 @@ static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
 - (void)viewDidLoad {
     _isSwipeGestureDisable = YES;
     [super viewDidLoad];
+    _isSaveUserAccount = [[NSUserDefaults standardUserDefaults] objectForKey:kSaveUserAccountKey];
+    if (!_isSaveUserAccount || !_isSaveUserAccount.boolValue) {
+        return;
+    }
+    NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserNameKey];
+    NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:kPasswordKey];
+    NSNumber *isAutoLogin = [[NSUserDefaults standardUserDefaults] objectForKey:kAutoLoginKey];
+    if (userName && password) {
+        self.txtUserName.text = userName;
+        self.txtPassword.text = password;
+        if (!isAutoLogin || !isAutoLogin.boolValue) {
+            return;
+        }
+        [self showActitvyIndicator:self.view frame:self.view.frame];
+        _user = [[User alloc] init];
+        _user.userName = userName;
+        _user.password = password;
+        [[ClientSocketController sharedController] sendData:[_user toJSONString] messageType:kSendingRequestSignal
+            actionName:kUserLoginAction sender:self];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -155,6 +178,9 @@ static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
     } else {
         NSError *error;
         _user = [[User alloc] initWithString:message error:&error];
+        [[NSUserDefaults standardUserDefaults] setObject:_user.userName forKey:kUserNameKey];
+        [[NSUserDefaults standardUserDefaults] setObject:_user.password forKey:kPasswordKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         // TODO: Handle error
         if (!_user.friends) {
             _user.friends = [NSMutableArray<User, Optional> array];
