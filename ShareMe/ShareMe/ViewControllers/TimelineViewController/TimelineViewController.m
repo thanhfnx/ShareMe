@@ -326,8 +326,6 @@ static NSString *const kDeclineButtonTitle = @"Decline";
     }
     cell.contentView.tag = indexPath.row;
     [cell setStory:_topStories[indexPath.row]];
-    [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName, cell.lblUserName]
-        userId:_topStories[indexPath.row].creator.userId.integerValue];
     return cell;
 }
 

@@ -85,4 +85,7 @@ NSString *const kUserGetLatestMessagesAction = @"USER_GET_LATEST_MESSAGES";
 NSString *const kGoToListFriendSegueIdentifier = @"goToListFriend";
 NSString *const kGoToUserTimelineSegueIdentifier = @"goToUserTimeline";
 
+NSString *const kSaveUserAccountKey = @"shareMe_saveUserAccount";
+NSString *const kAutoLoginKey = @"shareMe_autoLogin";
+
 @end

@@ -85,4 +85,7 @@ extern NSString *const kUserGetLatestMessagesAction;
 extern NSString *const kGoToListFriendSegueIdentifier;
 extern NSString *const kGoToUserTimelineSegueIdentifier;
 
+extern NSString *const kSaveUserAccountKey;
+extern NSString *const kAutoLoginKey;
+
 @end

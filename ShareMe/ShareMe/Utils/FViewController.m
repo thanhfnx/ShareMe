@@ -16,7 +16,6 @@ NSString *const kCancelActionTitle = @"Cancel";
 
 @interface FViewController () {
     UIView *_vActivityIndicator;
-    NSInteger _preparedUserId;
 }
 
 @end
