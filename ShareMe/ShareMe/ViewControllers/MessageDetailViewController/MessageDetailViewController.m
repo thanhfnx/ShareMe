@@ -99,9 +99,9 @@ static NSInteger const kNumberOfMessages = 20;
 
 - (void)loadMessages {
     _startIndex = _messages.count;
-    [ClientSocketController sendData:[NSString stringWithFormat:kGetMessagesFormat, _currentUser.userId.integerValue,
-        self.receiver.userId.integerValue, _startIndex, kNumberOfMessages] messageType:kSendingRequestSignal
-        actionName:kUserGetMessagesAction sender:self];
+    [[ClientSocketController sharedController] sendData:[NSString stringWithFormat:kGetMessagesFormat,
+        _currentUser.userId.integerValue, self.receiver.userId.integerValue, _startIndex, kNumberOfMessages]
+        messageType:kSendingRequestSignal actionName:kUserGetMessagesAction sender:self];
 }
 
 #pragma mark - Packing entity
@@ -135,7 +135,7 @@ static NSInteger const kNumberOfMessages = 20;
 - (IBAction)btnSendTapped:(UIButton *)sender {
     if ([self.txvNewMessage hasText]) {
         [self getMessage];
-        [ClientSocketController sendData:[_message toJSONString] messageType:kSendingRequestSignal
+        [[ClientSocketController sharedController] sendData:[_message toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewMessageAction sender:self];
     }
 }
@@ -248,13 +248,13 @@ static NSInteger const kNumberOfMessages = 20;
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 

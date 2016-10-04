@@ -10,27 +10,37 @@
 #import "UIViewController+ResponseHandler.h"
 #import "UIViewController+RequestHandler.h"
 
-static NSOutputStream *kOutputStream;
-static NSMutableDictionary<NSString *, UIViewController *> *kResponses;
-static NSMutableDictionary<NSString *, NSMutableArray *> *kRequests;
-static NSData *kRemainData;
-
 @interface ClientSocketController () {
     CFReadStreamRef _readStream;
     CFWriteStreamRef _writeStream;
+    NSOutputStream *_outputStream;
     NSInputStream *_inputStream;
     NSString *_receivedMessage;
+    NSMutableDictionary<NSString *, UIViewController *> *_responses;
+    NSMutableDictionary<NSString *, NSMutableArray *> *_requests;
+    NSData *_remainData;
+    BOOL _isSocketOpened;
 }
 
 @end
 
 @implementation ClientSocketController
 
++ (instancetype)sharedController {
+    static id sharedController = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedController = [[self alloc] init];
+    });
+    return sharedController;
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
-        kResponses = [NSMutableDictionary dictionary];
-        kRequests = [NSMutableDictionary dictionary];
+        _responses = [NSMutableDictionary dictionary];
+        _requests = [NSMutableDictionary dictionary];
+        _isSocketOpened = NO;
     }
     return self;
 }
@@ -38,58 +48,63 @@ static NSData *kRemainData;
 - (void)openSocket {
     CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, (__bridge CFStringRef) kServerHost, kServerPort,
         &_readStream, &_writeStream);
-    kOutputStream = (__bridge NSOutputStream *)_writeStream;
+    _outputStream = (__bridge NSOutputStream *)_writeStream;
     _inputStream = (__bridge NSInputStream *)_readStream;
-    [kOutputStream setDelegate:self];
+    [_outputStream setDelegate:self];
     [_inputStream setDelegate:self];
-    [kOutputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [kOutputStream open];
+    [_outputStream open];
     [_inputStream open];
+    _isSocketOpened = YES;
 }
 
 - (void)closeSocket {
     [_inputStream close];
-    [kOutputStream close];
+    [_outputStream close];
     [_inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [kOutputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [_outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [_inputStream setDelegate:nil];
-    [kOutputStream setDelegate:nil];
+    [_outputStream setDelegate:nil];
     _inputStream = nil;
-    kOutputStream = nil;
+    _outputStream = nil;
+    _isSocketOpened = NO;
 }
 
-+ (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
+- (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName
     sender:(UIViewController *)sender {
+    if (!_isSocketOpened) {
+        [self openSocket];
+    }
     NSString *finalMessage = [NSString stringWithFormat:kMessageFormat, messageType, actionName, message];
     finalMessage = [NSString stringWithFormat:kFinalMessageFormat, kStartOfStream, strlen([finalMessage UTF8String]),
         finalMessage, kEndOfStream];
     NSData *data = [finalMessage dataUsingEncoding:NSUTF8StringEncoding];
     uint8_t *bytes = (uint8_t *) [data bytes];
-    NSInteger bytesWritten = [kOutputStream write:bytes maxLength:[data length]];
+    NSInteger bytesWritten = [_outputStream write:bytes maxLength:[data length]];
     if (bytesWritten < [data length]) {
         if (bytesWritten != -1) {
             bytes += bytesWritten;
         }
-        kRemainData = [NSData dataWithBytes:bytes length:strlen((char *)bytes)];
+        _remainData = [NSData dataWithBytes:bytes length:strlen((char *)bytes)];
     }
-    kResponses[actionName] = sender;
+    _responses[actionName] = sender;
 }
 
-+ (void)registerRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver {
-    NSMutableArray *array = [kRequests valueForKey:actionName];
+- (void)registerRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver {
+    NSMutableArray *array = [_requests valueForKey:actionName];
     if (array) {
         if (![array containsObject:receiver]) {
             [array addObject:receiver];
         }
     } else {
         array = @[receiver].mutableCopy;
-        kRequests[actionName] = array;
+        _requests[actionName] = array;
     }
 }
 
-+ (void)resignRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver {
-    NSMutableArray *array = [kRequests valueForKey:actionName];
+- (void)resignRequestHandler:(NSString *)actionName receiver:(UIViewController *)receiver {
+    NSMutableArray *array = [_requests valueForKey:actionName];
     if (array && [array containsObject:receiver]) {
         [array removeObject:receiver];
     }
@@ -119,8 +134,6 @@ static NSData *kRemainData;
             temp = [[NSString alloc] initWithBytes:buffer length:bytesRead encoding:NSUTF8StringEncoding];
             if (temp) {
                 _receivedMessage = [_receivedMessage stringByAppendingString:temp];
-            } else {
-                // TODO: Fix encoding
             }
         }
         _receivedMessage = [_receivedMessage substringToIndex:[_receivedMessage rangeOfString:kEndOfStream].location];
@@ -134,10 +147,10 @@ static NSData *kRemainData;
             return;
         }
         if ([result[0] isEqualToString:kReceivingRequestSignal]) {
-            [kResponses[result[1]] handleResponse:result[1] message:result[2]];
-            [kResponses removeObjectForKey:result[1]];
+            [_responses[result[1]] handleResponse:result[1] message:result[2]];
+            [_responses removeObjectForKey:result[1]];
         } else if ([result[0] isEqualToString:kSendingRequestSignal]) {
-            NSArray *array = [kRequests objectForKey:result[1]];
+            NSArray *array = [_requests objectForKey:result[1]];
             for (UIViewController *viewController in array) {
                 [viewController handleRequest:result[1] message:result[2]];
             }
@@ -158,16 +171,16 @@ static NSData *kRemainData;
             }
             break;
         case NSStreamEventHasSpaceAvailable: {
-            if (kRemainData) {
-                uint8_t *bytes = (uint8_t *) [kRemainData bytes];
-                NSInteger bytesWritten = [kOutputStream write:bytes maxLength:[kRemainData length]];
-                if (bytesWritten < [kRemainData length]) {
+            if (_remainData) {
+                uint8_t *bytes = (uint8_t *) [_remainData bytes];
+                NSInteger bytesWritten = [_outputStream write:bytes maxLength:[_remainData length]];
+                if (bytesWritten < [_remainData length]) {
                     if (bytesWritten != -1) {
                         bytes += bytesWritten;
                     }
-                    kRemainData = [NSData dataWithBytes:bytes length:strlen((char *)bytes)];
+                    _remainData = [NSData dataWithBytes:bytes length:strlen((char *)bytes)];
                 } else {
-                    kRemainData = nil;
+                    _remainData = nil;
                 }
             }
             break;

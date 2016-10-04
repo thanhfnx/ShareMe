@@ -112,16 +112,16 @@ static NSInteger const kNumberOfStories = 10;
 - (void)reloadAllStories {
     NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, _currentUser.userId.integerValue,
         [UIViewConstant screenWidth] * [UIViewConstant screenScale], (long)0, kNumberOfStories];
-    [ClientSocketController sendData:message messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction
-        sender:self];
+    [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
+        actionName:kUserGetTopStoriesAction sender:self];
 }
 
 - (void)loadTopStories {
     _startIndex = self.topStories.count;
     NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, _currentUser.userId.integerValue,
         [UIViewConstant screenWidth] * [UIViewConstant screenScale], _startIndex, kNumberOfStories];
-    [ClientSocketController sendData:message messageType:kSendingRequestSignal actionName:kUserGetTopStoriesAction
-        sender:self];
+    [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
+        actionName:kUserGetTopStoriesAction sender:self];
 }
 
 - (IBAction)btnSearchTapped:(UIButton *)sender {
@@ -142,7 +142,7 @@ static NSInteger const kNumberOfStories = 10;
         return;
     }
     [self.txtSearch resignFirstResponder];
-    [ClientSocketController sendData:self.txtSearch.text messageType:kSendingRequestSignal
+    [[ClientSocketController sharedController] sendData:self.txtSearch.text messageType:kSendingRequestSignal
         actionName:kUserSearchFriendAction sender:self];
 }
 
@@ -154,7 +154,7 @@ static NSInteger const kNumberOfStories = 10;
 - (IBAction)btnLikeTapped:(UIButton *)sender {
     [self dismissKeyboard];
     NSInteger storyId = self.topStories[sender.superview.tag].storyId.integerValue;
-    [ClientSocketController sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
+    [[ClientSocketController sharedController] sendData:[NSString stringWithFormat:kLikeRequestFormat, storyId,
         _currentUser.userId.integerValue] messageType:kSendingRequestSignal actionName:kUserLikeStoryAction
         sender:self];
 }
@@ -354,7 +354,7 @@ static NSInteger const kNumberOfStories = 10;
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 

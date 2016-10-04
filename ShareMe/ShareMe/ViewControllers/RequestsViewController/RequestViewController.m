@@ -182,37 +182,37 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
     NSInteger index = sender.tag;
     NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
         _receivedRequests[index].userId.integerValue];
-    [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserAcceptRequestAction
-        sender:self];
+    [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+        actionName:kUserAcceptRequestAction sender:self];
 }
 
 - (IBAction)btnDeclineTapped:(UIButton *)sender {
     NSInteger index = sender.tag;
     NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
         _receivedRequests[index].userId.integerValue];
-    [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserDeclineRequestAction
-        sender:self];
+    [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+        actionName:kUserDeclineRequestAction sender:self];
 }
 
 - (IBAction)btnCancelTapped:(UIButton *)sender {
     NSInteger index = sender.tag;
     NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
         _sentRequests[index].userId.integerValue];
-    [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserCancelRequestAction
-        sender:self];
+    [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+        actionName:kUserCancelRequestAction sender:self];
 }
 
 #pragma mark - Request Handler
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 

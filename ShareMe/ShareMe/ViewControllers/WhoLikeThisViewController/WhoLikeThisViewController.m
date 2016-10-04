@@ -126,7 +126,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
 }
 
 - (void)loadLikedUsers {
-    [ClientSocketController sendData:[@(self.storyId) stringValue] messageType:kSendingRequestSignal
+    [[ClientSocketController sharedController] sendData:[@(self.storyId) stringValue] messageType:kSendingRequestSignal
         actionName:kUserGetLikedUsersAction sender:self];
 }
 
@@ -215,8 +215,8 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 _users[index].userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmUnfriendMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserUnfriendAction
-                    sender:self];
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+                    actionName:kUserUnfriendAction sender:self];
             }];
             break;
         }
@@ -226,7 +226,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 _users[index].userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmCancelRequestMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                 actionName:kUserCancelRequestAction sender:self];
             }];
             break;
@@ -240,14 +240,14 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                     _users[index].userId.integerValue];
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                     actionName:kUserAcceptRequestAction sender:self];
             }];
             UIAlertAction *declineAction = [UIAlertAction actionWithTitle:kDeclineButtonTitle
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                     _users[index].userId.integerValue];
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                     actionName:kUserDeclineRequestAction sender:self];
             }];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel
@@ -261,8 +261,8 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
         case NotFriendRelation: {
             NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                 _users[index].userId.integerValue];
-            [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserSendRequestAction
-                sender:self];
+            [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+                actionName:kUserSendRequestAction sender:self];
             break;
         }
     }
@@ -272,13 +272,13 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 
@@ -367,7 +367,7 @@ static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can 
                 return;
             }
         }
-        [ClientSocketController sendData:[@(userId) stringValue] messageType:kSendingRequestSignal
+        [[ClientSocketController sharedController] sendData:[@(userId) stringValue] messageType:kSendingRequestSignal
             actionName:kGetUserByIdAction sender:self];
     } else if ([likeMessage isEqualToString:kUnlikedMessageAction]) {
         for (User *user in _users) {

@@ -65,8 +65,8 @@ static NSInteger const kNumberOfLatestMessages = 20;
     _startIndex = _latestMessages.count;
     NSString *message = [NSString stringWithFormat:kGetLatestMessagesFormat, _currentUser.userId.integerValue,
         _startIndex, kNumberOfLatestMessages];
-    [ClientSocketController sendData:message messageType:kSendingRequestSignal actionName:kUserGetMessagesAction
-        sender:self];
+    [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
+        actionName:kUserGetMessagesAction sender:self];
 }
 
 #pragma mark - UITableViewDatasource, UITableViewDelegate
@@ -122,13 +122,13 @@ static NSInteger const kNumberOfLatestMessages = 20;
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 

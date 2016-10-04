@@ -9,17 +9,13 @@
 #import "AppDelegate.h"
 #import "ClientSocketController.h"
 
-@interface AppDelegate () {
-    ClientSocketController *_clientSocketController;
-}
+@interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    _clientSocketController = [[ClientSocketController alloc] init];
-    [_clientSocketController openSocket];
     return YES;
 }
 
@@ -31,16 +27,15 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [_clientSocketController openSocket];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [ClientSocketController sendData:kEmptyMessage messageType:kSendingRequestSignal actionName:kCloseConnection
-        sender:nil];
-    [_clientSocketController closeSocket];
+    [[ClientSocketController sharedController] sendData:kEmptyMessage messageType:kSendingRequestSignal
+        actionName:kCloseConnection sender:nil];
+    [[ClientSocketController sharedController] closeSocket];
 }
 
 @end

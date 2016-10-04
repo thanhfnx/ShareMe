@@ -233,7 +233,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
         }];
         return;
     }
-    [ClientSocketController sendData:self.txtSearch.text messageType:kSendingRequestSignal
+    [[ClientSocketController sharedController] sendData:self.txtSearch.text messageType:kSendingRequestSignal
         actionName:kUserSearchFriendAction sender:self];
 }
 
@@ -250,8 +250,8 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 self.users[index].userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmUnfriendMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserUnfriendAction
-                    sender:self];
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+                    actionName:kUserUnfriendAction sender:self];
             }];
             break;
         }
@@ -261,7 +261,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 self.users[index].userId.integerValue];
             [self showConfirmDialog:[NSString stringWithFormat:kConfirmCancelRequestMessage, fullName]
                 title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                 actionName:kUserCancelRequestAction sender:self];
             }];
             break;
@@ -275,14 +275,14 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                     self.users[index].userId.integerValue];
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                     actionName:kUserAcceptRequestAction sender:self];
             }];
             UIAlertAction *declineAction = [UIAlertAction actionWithTitle:kDeclineButtonTitle
                 style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                     self.users[index].userId.integerValue];
-                [ClientSocketController sendData:data messageType:kSendingRequestSignal
+                [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
                     actionName:kUserDeclineRequestAction sender:self];
             }];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel
@@ -296,8 +296,8 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
         case NotFriendRelation: {
             NSString *data = [NSString stringWithFormat:kRequestFormat, _currentUser.userId.integerValue,
                 self.users[index].userId.integerValue];
-            [ClientSocketController sendData:data messageType:kSendingRequestSignal actionName:kUserSendRequestAction
-                sender:self];
+            [[ClientSocketController sharedController] sendData:data messageType:kSendingRequestSignal
+                actionName:kUserSendRequestAction sender:self];
             break;
         }
     }
@@ -307,13 +307,13 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
 
 - (void)registerRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController registerRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] registerRequestHandler:action receiver:self];
     }
 }
 
 - (void)resignRequestHandler {
     for (NSString *action in _requestActions) {
-        [ClientSocketController resignRequestHandler:action receiver:self];
+        [[ClientSocketController sharedController] resignRequestHandler:action receiver:self];
     }
 }
 
