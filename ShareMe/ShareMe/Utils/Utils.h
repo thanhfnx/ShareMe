@@ -40,5 +40,6 @@ extern CGFloat const kLongHeightImageRatio;
 + (ImageType)getImageType:(CGSize)size;
 + (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user;
 + (void)removeUser:(NSMutableArray *)array user:(User *)user;
++ (UITableViewCell *)emptyTableCell:(NSString *)message;
 
 @end

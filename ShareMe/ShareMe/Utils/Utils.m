@@ -31,7 +31,7 @@ CGFloat const kLongHeightImageRatio = 0.5f;
             options:NSDataBase64DecodingIgnoreUnknownCharacters];
         return [UIImage imageWithData:imageData];
     }
-    if (gender.boolValue) {
+    if (gender.integerValue) {
         return [UIImage imageNamed:kDefaultMaleAvatar];
     } else {
         return [UIImage imageNamed:kDefaultFemaleAvatar];
@@ -160,6 +160,14 @@ CGFloat const kLongHeightImageRatio = 0.5f;
             break;
         }
     }
+}
+
++ (UITableViewCell *)emptyTableCell:(NSString *)message {
+    UITableViewCell *emptyCell = [UITableViewCell new];
+    emptyCell.textLabel.text = message;
+    emptyCell.textLabel.font = [UIFont fontWithName:kDefaultFontName size:16.0f];
+    emptyCell.textLabel.textAlignment = NSTextAlignmentCenter;
+    return emptyCell;
 }
 
 @end

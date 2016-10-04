@@ -17,7 +17,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblUserName;
 @property (weak, nonatomic) IBOutlet UIButton *btnAccept;
 @property (weak, nonatomic) IBOutlet UIButton *btnDecline;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *btnAcceptWidthConstraint;
 
 - (void)setUser:(User *)user;
 

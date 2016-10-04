@@ -73,6 +73,7 @@ static CGFloat const kMaxImageHeight = 500.0f;
 #pragma mark - UIView Life Cycle
 
 - (void)viewDidLoad {
+    _isSwipeGestureDisable = YES;
     [super viewDidLoad];
     NSArray *nibObjects = [[NSBundle mainBundle] loadNibNamed:@"RegisterView" owner:self options:nil];
     CGRect screenRect = self.view.frame;
@@ -206,7 +207,7 @@ static CGFloat const kMaxImageHeight = 500.0f;
     _user.lastName = self.txtLastName.text;
     _user.email = self.txtEmail.text;
     _user.dateOfBirth = self.txtDateOfBirth.text;
-    _user.gender = @(self.rdbGender.selected);
+    _user.gender = @([@(self.rdbGender.selected) integerValue]);
     _user.avatarImage = [NSMutableArray<Optional> array];
     if (_avatarImage) {
         NSString *base64 = [UIImageJPEGRepresentation(_avatarImage, 0.9f) base64EncodedStringWithOptions:kNilOptions];
@@ -367,7 +368,7 @@ static CGFloat const kMaxImageHeight = 500.0f;
         }];
     }
     [self presentSemiViewController:_datePicker withOptions:@{KNSemiModalOptionKeys.pushParentBack: @(NO),
-        KNSemiModalOptionKeys.animationDuration: @(0.5f), KNSemiModalOptionKeys.shadowOpacity: @(0.3f)}];
+        KNSemiModalOptionKeys.animationDuration: @(0.3f), KNSemiModalOptionKeys.shadowOpacity: @(0.3f)}];
 }
 
 - (IBAction)btnAddAvatarTapped:(UIButton *)sender {

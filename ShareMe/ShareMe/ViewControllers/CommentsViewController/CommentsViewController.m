@@ -44,6 +44,7 @@ static NSString *const kManyLikeLabelText = @"%ld people like this.";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
 static NSInteger const kNumberOfComments = 20;
 static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
+static NSString *const kEmptyCommentsTableViewMessage = @"No comments.";
 
 @interface CommentsViewController () {
     Comment *_comment;
@@ -169,10 +170,16 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (!_topComments.count) {
+        return 1;
+    }
     return _topComments.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_topComments.count) {
+        return [Utils emptyTableCell:kEmptyCommentsTableViewMessage];
+    }
     CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCommentReuseIdentifier
         forIndexPath:indexPath];
     if (!cell) {
@@ -185,6 +192,9 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_topComments.count) {
+        return tableView.frame.size.height;
+    }
     return UITableViewAutomaticDimension;
 }
 
@@ -271,9 +281,7 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
     NSInteger index = [_responseActions indexOfObject:actionName];
     switch (index) {
         case UserGetTopCommentsAction: {
-            if ([message isEqualToString:kFailureMessage]) {
-                // TODO: Replace blank table view
-            } else {
+            if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
                 NSMutableArray *array = [[[[Comment arrayOfModelsFromString:message error:&error]
                     reverseObjectEnumerator] allObjects] mutableCopy];
@@ -281,7 +289,9 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
                 [_topComments removeAllObjects];
                 [_topComments addObjectsFromArray:array];
                 _startIndex += kNumberOfComments;;
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [self reloadDataWithAnimated:NO];
             }
             [_topRefreshControl endRefreshing];
@@ -369,7 +379,9 @@ static NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
         case AddNewCommentToUserAction: {
             NSError *error;
             Comment *comment = [[Comment alloc] initWithString:message error:&error];
-            // TODO: Handle error
+            if (error) {
+                return;
+            }
             if (comment) {
                 [_topComments addObject:comment];
                 [self reloadDataWithAnimated:YES];

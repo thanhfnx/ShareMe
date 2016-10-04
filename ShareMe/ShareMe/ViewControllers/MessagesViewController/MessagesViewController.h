@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FViewController.h"
 
-@interface MessagesViewController : UIViewController
+@interface MessagesViewController : FViewController
 
 @end

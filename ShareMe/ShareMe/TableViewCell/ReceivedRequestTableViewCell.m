@@ -14,8 +14,6 @@
 @implementation ReceivedRequestTableViewCell
 
 - (void)setUser:(User *)user {
-    CGFloat width = ([UIViewConstant screenWidth] - self.btnAccept.frame.origin.x - 32.0f) / 2;
-    [self.btnAcceptWidthConstraint setConstant:width];
     self.imvAvatar.image = [Utils getAvatar:user.avatarImage gender:user.gender];
     self.lblFullName.text = [user fullName];
     self.lblUserName.text = [@"@" stringByAppendingString:user.userName];
