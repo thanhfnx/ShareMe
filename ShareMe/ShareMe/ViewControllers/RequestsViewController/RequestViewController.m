@@ -89,8 +89,6 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _receivedRequests = _currentUser.receivedRequests;
     _sentRequests = _currentUser.sentRequests;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
     UIFont *font = [UIFont fontWithName:kDefaultFontName size:15];
     [self.scRequestType setTitleTextAttributes:@{NSFontAttributeName: font} forState:UIControlStateNormal];
 }
@@ -233,7 +231,9 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [Utils addUserIfNotExist:_currentUser.friends user:user];
                 [self.tableView reloadData];
@@ -245,7 +245,9 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [self.tableView reloadData];
             }
@@ -256,7 +258,9 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.sentRequests user:user];
                 [self.tableView reloadData];
             }

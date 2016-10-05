@@ -8,6 +8,7 @@
 
 #import <CCBottomRefreshControl/UIScrollView+BottomRefreshControl.h>
 #import "TimelineViewController.h"
+#import "MessageDetailViewController.h"
 #import "MainTabBarViewController.h"
 #import "StoryTableViewCell.h"
 #import "ApplicationConstants.h"
@@ -66,6 +67,8 @@ static NSString *const kSelfButtonTitle = @"Update Profile";
 static NSString *const kSentRequestButtonTitle = @"Cancel Request";
 static NSString *const kReceivedRequestButtonTitle = @"Confirm Request";
 static NSString *const kNotFriendButtonTitle = @"Add Friend";
+static NSString *const kMessageButtonTitle = @"Message";
+static NSString *const kChangePasswordButtonTitle = @"Change Password";
 static NSString *const kRequestFormat = @"%ld-%ld";
 static NSString *const kAcceptRequestErrorMessage = @"Something went wrong! Can not accept friend request!";
 static NSString *const kDeclineRequestErrorMessage = @"Something went wrong! Can not decline friend request!";
@@ -78,6 +81,10 @@ static NSString *const kConfirmCancelRequestMessage = @"Do you really want to ca
 static NSString *const kConfirmAcceptMessage = @"Do you want to accept %@'s friend request?";
 static NSString *const kAcceptButtonTitle = @"Accept";
 static NSString *const kDeclineButtonTitle = @"Decline";
+static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
+static NSString *const kGoToUpdateProfileSegueIdentifier = @"goToUpdateProfile";
+static NSString *const kEmptyStoriesTableViewMessage = @"No stories to show.";
+static NSString *const kSelfTimelineHeaderLabelText = @"Your Timeline";
 
 @interface TimelineViewController () {
     NSMutableDictionary<NSIndexPath *, NSNumber *> *heightForIndexPath;
@@ -100,6 +107,7 @@ static NSString *const kDeclineButtonTitle = @"Decline";
 @property (weak, nonatomic) IBOutlet UILabel *lblUserName;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIButton *btnAction;
+@property (weak, nonatomic) IBOutlet UIButton *btnMessage;
 @property (weak, nonatomic) IBOutlet UILabel *lblTimelineHeader;
 
 @end
@@ -201,9 +209,12 @@ static NSString *const kDeclineButtonTitle = @"Decline";
     self.lblFullName.text = [_user fullName];
     self.lblUserName.text = [@"@" stringByAppendingString:_user.userName];
     self.lblTimelineHeader.text = [NSString stringWithFormat:kTimelineHeaderLabelText, [_user fullName]];
+    [self.btnMessage setTitle:kMessageButtonTitle forState:UIControlStateNormal];
     if (_user.userId == _currentUser.userId) {
         _relationStatus = SelfRelation;
         [self.btnAction setTitle:kSelfButtonTitle forState:UIControlStateNormal];
+        [self.btnMessage setTitle:kChangePasswordButtonTitle forState:UIControlStateNormal];
+        self.lblTimelineHeader.text = kSelfTimelineHeaderLabelText;
         return;
     }
     for (User *temp in _currentUser.friends) {
@@ -306,6 +317,11 @@ static NSString *const kDeclineButtonTitle = @"Decline";
 }
 
 - (IBAction)btnMessageTapped:(UIButton *)sender {
+    if (_relationStatus != SelfRelation) {
+        [self performSegueWithIdentifier:kGoToMessageDetailSegueIdentifier sender:self];
+    } else {
+        [self performSegueWithIdentifier:kGoToUpdateProfileSegueIdentifier sender:self];
+    }
 }
 
 #pragma mark - UITableViewDatasource, UITableViewDelegate
@@ -315,10 +331,16 @@ static NSString *const kDeclineButtonTitle = @"Decline";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (!_topStories.count) {
+        return 1;
+    }
     return _topStories.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_topStories.count) {
+        return [Utils emptyTableCell:kEmptyStoriesTableViewMessage];
+    }
     StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kStoryReuseIdentifier
         forIndexPath:indexPath];
     if (!cell) {
@@ -338,13 +360,23 @@ static NSString *const kDeclineButtonTitle = @"Decline";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_topStories.count) {
+        return tableView.frame.size.height;
+    }
     return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.01f;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.01f;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
     forRowAtIndexPath:(NSIndexPath *)indexPath {
     heightForIndexPath[indexPath] = @(cell.frame.size.height);
-    // TODO: Load more news feed
 }
 
 - (void)reloadSingleCell:(Story *)story {
@@ -367,6 +399,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
     if ([segue.identifier isEqualToString:kGoToCommentSegueIdentifier]) {
         CommentsViewController *commentsViewController = [segue destinationViewController];
         commentsViewController.story = _topStories[_selectedIndex];
+    } else if ([segue.identifier isEqualToString:kGoToMessageDetailSegueIdentifier]) {
+        MessageDetailViewController *messageDetailViewController = [segue destinationViewController];
+        messageDetailViewController.receiver = _user;
     }
 }
 
@@ -381,7 +416,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             } else {
                 NSError *error;
                 _user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 if (_user) {
                     [self updateUser];
                 }
@@ -395,15 +432,15 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             if ([_bottomRefreshControl isRefreshing]) {
                 [_bottomRefreshControl endRefreshing];
             }
-            if ([message isEqualToString:kFailureMessage]) {
-                // TODO: Replace blank table view
-            } else {
+            if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
                 if ([_topRefreshControl isRefreshing]) {
                     [_topStories removeAllObjects];
                 }
                 [_topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [self.tableView reloadData];
             }
             break;
@@ -428,7 +465,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [Utils addUserIfNotExist:_currentUser.friends user:user];
                 [self updateUser];
@@ -441,7 +480,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [self updateUser];
             }
@@ -453,7 +494,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.sentRequests user:user];
                 [self updateUser];
             }
@@ -465,7 +508,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils addUserIfNotExist:_currentUser.sentRequests user:user];
                 [self updateUser];
             }
@@ -477,7 +522,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.friends user:user];
                 [self updateUser];
             }
@@ -547,7 +594,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
             NSError *error;
             Story *story = [[Story alloc] initWithString:message error:&error];
             [_topStories insertObject:story atIndex:0];
-            // TODO: Handle error
+            if (error) {
+                return;
+            }
             [self.tableView reloadData];
             break;
         }
@@ -566,7 +615,9 @@ static NSString *const kDeclineButtonTitle = @"Decline";
         case AddNewCommentToUserAction: {
             NSError *error;
             Comment *comment = [[Comment alloc] initWithString:message error:&error];
-            // TODO: Handle error
+            if (error) {
+                return;
+            }
             if (comment) {
                 [self addCommentToStory:comment];
             }

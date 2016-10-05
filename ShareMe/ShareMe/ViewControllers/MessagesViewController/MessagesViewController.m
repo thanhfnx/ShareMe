@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 
 static NSString *const kMessageReuseIdentifier = @"MessageCell";
 static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
+static NSString *const kEmptyMessagesTableViewMessage = @"No recent messages.";
 static NSString *const kGetLatestMessagesFormat = @"%ld-%ld-%ld";
 static NSInteger const kNumberOfLatestMessages = 20;
 
@@ -76,10 +77,16 @@ static NSInteger const kNumberOfLatestMessages = 20;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (!_latestMessages.count) {
+        return 1;
+    }
     return _latestMessages.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_latestMessages.count) {
+        return [Utils emptyTableCell:kEmptyMessagesTableViewMessage];
+    }
     MessageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMessageReuseIdentifier
         forIndexPath:indexPath];
     if (!cell) {
@@ -90,6 +97,9 @@ static NSInteger const kNumberOfLatestMessages = 20;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_latestMessages.count) {
+        return tableView.frame.size.height;
+    }
     return UITableViewAutomaticDimension;
 }
 
@@ -110,7 +120,9 @@ static NSInteger const kNumberOfLatestMessages = 20;
         case UserGetLatestMessagesAction: {
             if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [_latestMessages addObjectsFromArray:[Message arrayOfModelsFromString:message error:&error]];
             }
             break;
@@ -138,7 +150,9 @@ static NSInteger const kNumberOfLatestMessages = 20;
         case UserGetLatestMessagesAction: {
             NSError *error;
             Message *receivedMessage = [[Message alloc] initWithString:message error:&error];
-            // TODO: Handle error
+            if (error) {
+                return;
+            }
             if (receivedMessage) {
                 [_latestMessages insertObject:receivedMessage atIndex:0];
                 [self.tableView reloadData];

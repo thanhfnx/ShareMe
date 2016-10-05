@@ -41,6 +41,7 @@ static NSString *const kGoToCommentSegueIdentifier = @"goToComment";
 static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
 static NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
 static NSString *const kLikeRequestFormat = @"%ld-%ld";
+static NSString *const kEmptyStoriesTableViewMessage = @"No stories to show.";
 static NSInteger const kNumberOfStories = 10;
 
 @interface NewsFeedViewController () {
@@ -53,6 +54,7 @@ static NSInteger const kNumberOfStories = 10;
     NSMutableDictionary<NSIndexPath *, NSNumber *> *heightForIndexPath;
     UIRefreshControl *_topRefreshControl;
     UIRefreshControl *_bottomRefreshControl;
+    BOOL _isReloadAllStories;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -110,6 +112,7 @@ static NSInteger const kNumberOfStories = 10;
 #pragma mark - IBAction
 
 - (void)reloadAllStories {
+    _isReloadAllStories = YES;
     NSString *message = [NSString stringWithFormat:kGetTopStoriesRequestFormat, _currentUser.userId.integerValue,
         [UIViewConstant screenWidth] * [UIViewConstant screenScale], (long)0, kNumberOfStories];
     [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
@@ -202,10 +205,16 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (!_topStories.count) {
+        return 1;
+    }
     return self.topStories.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_topStories.count) {
+        return [Utils emptyTableCell:kEmptyStoriesTableViewMessage];
+    }
     StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kStoryReuseIdentifier
         forIndexPath:indexPath];
     if (!cell) {
@@ -227,12 +236,23 @@ static NSInteger const kNumberOfStories = 10;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_topStories.count) {
+        return tableView.frame.size.height;
+    }
     return UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
     forRowAtIndexPath:(NSIndexPath *)indexPath {
     heightForIndexPath[indexPath] = @(cell.frame.size.height);
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.01f;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.01f;
 }
 
 - (void)reloadSingleCell:(Story *)story {
@@ -264,7 +284,9 @@ static NSInteger const kNumberOfStories = 10;
             } else {
                 NSError *error;
                 _searchResult = [User arrayOfModelsFromString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [self dissmissKeyboard];
                 [self performSegueWithIdentifier:kGoToSearchFriendSegueIdentifier sender:self];
                 self.txtSearch.text = @"";
@@ -272,22 +294,23 @@ static NSInteger const kNumberOfStories = 10;
             break;
         }
         case UserGetTopStoriesAction: {
+            if (![message isEqualToString:kFailureMessage]) {
+                NSError *error;
+                if (_isReloadAllStories) {
+                    [self.topStories removeAllObjects];
+                    _isReloadAllStories = NO;
+                }
+                [self.topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
+                if (error) {
+                    return;
+                }
+                [self.tableView reloadData];
+            }
             if ([_topRefreshControl isRefreshing]) {
                 [_topRefreshControl endRefreshing];
             }
             if ([_bottomRefreshControl isRefreshing]) {
                 [_bottomRefreshControl endRefreshing];
-            }
-            if ([message isEqualToString:kFailureMessage]) {
-                // TODO: Replace blank table view
-            } else {
-                NSError *error;
-                if ([_topRefreshControl isRefreshing]) {
-                    [self.topStories removeAllObjects];
-                }
-                [self.topStories addObjectsFromArray:[Story arrayOfModelsFromString:message error:&error]];
-                // TODO: Handle error
-                [self.tableView reloadData];
             }
             break;
         }
@@ -375,7 +398,9 @@ static NSInteger const kNumberOfStories = 10;
             NSError *error;
             Story *story = [[Story alloc] initWithString:message error:&error];
             [self.topStories insertObject:story atIndex:0];
-            // TODO: Handle error
+            if (error) {
+                return;
+            }
             [self.tableView reloadData];
             break;
         }
@@ -394,7 +419,9 @@ static NSInteger const kNumberOfStories = 10;
         case AddNewCommentToUserAction: {
             NSError *error;
             Comment *comment = [[Comment alloc] initWithString:message error:&error];
-            // TODO: Handle error
+            if (error) {
+                return;
+            }
             if (comment) {
                 [self addCommentToStory:comment];
             }

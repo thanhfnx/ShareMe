@@ -335,7 +335,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [Utils addUserIfNotExist:_currentUser.friends user:user];
                 [self setRelationStatuses];
@@ -348,7 +350,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -360,7 +364,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.sentRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -372,7 +378,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils addUserIfNotExist:_currentUser.sentRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -384,7 +392,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             } else {
                 NSError *error;
                 User *user = [[User alloc] initWithString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [Utils removeUser:_currentUser.friends user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
@@ -397,7 +407,9 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
             } else {
                 NSError *error;
                 self.users = [User arrayOfModelsFromString:message error:&error];
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [self setRelationStatuses];
                 self.keyword = self.txtSearch.text;
                 self.txtSearch.text = @"";

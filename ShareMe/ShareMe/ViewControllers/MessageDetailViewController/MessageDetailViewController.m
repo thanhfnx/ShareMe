@@ -31,6 +31,7 @@ static NSString *const kConfirmDiscardMessage = @"This message is unsaved! Are y
 static NSString *const kAddNewMessageErrorMessage = @"Something went wrong! Can not send the message!";
 static NSString *const kSelfMessageReuseIdentifier = @"SelfMessageCell";
 static NSString *const kGetMessagesFormat = @"%ld-%ld-%ld-%ld";
+static NSString *const kEmptyMessagesTableViewMessage = @"No messages.";
 static NSInteger const kNumberOfMessages = 20;
 
 @interface MessageDetailViewController () {
@@ -153,10 +154,16 @@ static NSInteger const kNumberOfMessages = 20;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (!_messages.count) {
+        return 1;
+    }
     return _messages.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_messages.count) {
+        return [Utils emptyTableCell:kEmptyMessagesTableViewMessage];
+    }
     Message *message = _messages[indexPath.row];
     NSString *reuseIdentifier = kFriendMessageReuseIdentifier;
     message.sender.avatarImage = self.receiver.avatarImage;
@@ -174,6 +181,9 @@ static NSInteger const kNumberOfMessages = 20;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_messages.count) {
+        return tableView.frame.size.height;
+    }
     return UITableViewAutomaticDimension;
 }
 
@@ -213,9 +223,7 @@ static NSInteger const kNumberOfMessages = 20;
     NSInteger index = [_responseActions indexOfObject:actionName];
     switch (index) {
         case UserGetMessagesAction: {
-            if ([message isEqualToString:kFailureMessage]) {
-                // TODO: Replace blank table view
-            } else {
+            if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
                 NSMutableArray *array = [[[[Message arrayOfModelsFromString:message error:&error]
                     reverseObjectEnumerator] allObjects] mutableCopy];
@@ -223,7 +231,9 @@ static NSInteger const kNumberOfMessages = 20;
                 [_messages removeAllObjects];
                 [_messages addObjectsFromArray:array];
                 _startIndex += kNumberOfMessages;
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [self reloadDataWithAnimated:NO];
             }
             [_topRefreshControl endRefreshing];
@@ -264,7 +274,9 @@ static NSInteger const kNumberOfMessages = 20;
         case AddNewMessageToUserAction: {
             NSError *error;
             Message *receivedMessage = [[Message alloc] initWithString:message error:&error];
-            // TODO: Handle error
+            if (error) {
+                return;
+            }
             if (receivedMessage && receivedMessage.sender.userId == self.receiver.userId) {
                 [_messages addObject:receivedMessage];
                 [self reloadDataWithAnimated:YES];

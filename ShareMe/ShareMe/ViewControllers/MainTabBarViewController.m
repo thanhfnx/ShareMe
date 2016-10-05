@@ -80,7 +80,9 @@ static NSInteger const kNumberOfLatestMessages = 20;
         case UserGetLatestMessagesAction: {
             if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
-                // TODO: Handle error
+                if (error) {
+                    return;
+                }
                 [self.latestMessages addObjectsFromArray:[Message arrayOfModelsFromString:message error:&error]];
             }
             break;
@@ -105,7 +107,9 @@ static NSInteger const kNumberOfLatestMessages = 20;
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
     NSError *error;
     User *user = [[User alloc] initWithString:message error:&error];
-    // TODO: Handle error
+    if (error) {
+        return;
+    }
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
         case UserUnfriendToUserAction: {
@@ -157,34 +161,17 @@ static NSInteger const kNumberOfLatestMessages = 20;
             }
             NSInteger userId = [array[0] integerValue];
             NSString *onlineStatus = array[1];
-            [self updateOnlineStatus:onlineStatus userId:userId];
+            for (User *user in self.loggedInUser.friends) {
+                if (userId == user.userId.integerValue) {
+                    if ([onlineStatus isEqualToString:kFailureMessage]) {
+                        user.status = @(user.status.integerValue - 1);
+                    } else {
+                        user.status = @(user.status.integerValue + 1);
+                    }
+                    break;
+                }
+            }
             break;
-        }
-    }
-}
-
-- (void)updateOnlineStatus:(NSString *)onlineStatus userId:(NSInteger)userId {
-    if ([onlineStatus isEqualToString:kFailureMessage]) {
-        for (User *user in self.loggedInUser.friends) {
-            if (userId == user.userId.integerValue) {
-                user.status = @(user.status.integerValue - 1);
-            }
-        }
-    } else {
-        NSInteger index = 0;
-        for (User *user in self.loggedInUser.friends) {
-            if (userId == user.userId.integerValue) {
-                index = [self.loggedInUser.friends indexOfObject:user];
-                break;
-            }
-        }
-        if (index) {
-            User *user = self.loggedInUser.friends[index];
-            user.status = @(user.status.integerValue + 1);
-            if (user.status.integerValue == 1) {
-                [self.loggedInUser.friends removeObject:user];
-                [self.loggedInUser.friends insertObject:user atIndex:0];
-            }
         }
     }
 }

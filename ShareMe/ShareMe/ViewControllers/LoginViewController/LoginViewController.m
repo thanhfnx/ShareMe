@@ -181,7 +181,9 @@ static NSString *const kPasswordKey = @"shareMe_password";
         [[NSUserDefaults standardUserDefaults] setObject:_user.userName forKey:kUserNameKey];
         [[NSUserDefaults standardUserDefaults] setObject:_user.password forKey:kPasswordKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        // TODO: Handle error
+        if (error) {
+            return;
+        }
         if (!_user.friends) {
             _user.friends = [NSMutableArray<User, Optional> array];
         }

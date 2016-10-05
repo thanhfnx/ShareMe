@@ -89,6 +89,10 @@ static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.01f;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case ViewProfileMenuSection: {
