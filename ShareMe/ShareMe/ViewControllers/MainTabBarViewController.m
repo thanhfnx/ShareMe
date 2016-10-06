@@ -8,16 +8,10 @@
 
 #import "MainTabBarViewController.h"
 #import "UIViewController+RequestHandler.h"
-#import "UIViewController+ResponseHandler.h"
 #import "ApplicationConstants.h"
 #import "ClientSocketController.h"
 #import "Utils.h"
 #import "User.h"
-#import "Message.h"
-
-typedef NS_ENUM(NSInteger, UserResponseActions) {
-    UserGetLatestMessagesAction
-};
 
 typedef NS_ENUM(NSInteger, UserRequestActions) {
     UserUnfriendToUserAction,
@@ -33,12 +27,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     UpdateOnlineStatusToUserAction
 };
 
-static NSString *const kGetLatestMessagesFormat = @"%ld-%ld-%ld";
-static NSInteger const kNumberOfLatestMessages = 20;
-
 @interface MainTabBarViewController () {
     NSArray<NSString *> *_requestActions;
-    NSArray<NSString *> *_responseActions;
 }
 
 @end
@@ -46,7 +36,6 @@ static NSInteger const kNumberOfLatestMessages = 20;
 @implementation MainTabBarViewController
 
 - (void)viewDidLoad {
-    _responseActions = @[kUserGetLatestMessagesAction];
     _requestActions = @[
         kUserUnfriendToUserAction,
         kUserSendRequestToUserAction,
@@ -60,34 +49,7 @@ static NSInteger const kNumberOfLatestMessages = 20;
         kAddUnfriendToClientsAction,
         kUpdateOnlineStatusToUserAction
     ];
-    self.latestMessages = [NSMutableArray array];
     [self registerRequestHandler];
-    [self loadLatestMessages];
-}
-
-- (void)loadLatestMessages {
-    NSString *message = [NSString stringWithFormat:kGetLatestMessagesFormat, self.loggedInUser.userId.integerValue,
-        (long)0, kNumberOfLatestMessages];
-    [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
-        actionName:kUserGetLatestMessagesAction sender:self];
-}
-
-#pragma mark - Response Handler
-
-- (void)handleResponse:(NSString *)actionName message:(NSString *)message {
-    NSInteger index = [_responseActions indexOfObject:actionName];
-    switch (index) {
-        case UserGetLatestMessagesAction: {
-            if (![message isEqualToString:kFailureMessage]) {
-                NSError *error;
-                if (error) {
-                    return;
-                }
-                [self.latestMessages addObjectsFromArray:[Message arrayOfModelsFromString:message error:&error]];
-            }
-            break;
-        }
-    }
 }
 
 #pragma mark - Request Handler
@@ -105,12 +67,31 @@ static NSInteger const kNumberOfLatestMessages = 20;
 }
 
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
+    NSInteger index = [_requestActions indexOfObject:actionName];
+    if (index == UpdateOnlineStatusToUserAction) {
+        NSArray *array = [message componentsSeparatedByString:@"-"];
+        if ([array containsObject:@""]) {
+            return;
+        }
+        NSInteger userId = [array[0] integerValue];
+        NSString *onlineStatus = array[1];
+        for (User *user in self.loggedInUser.friends) {
+            if (userId == user.userId.integerValue) {
+                if ([onlineStatus isEqualToString:kFailureMessage]) {
+                    user.status = @(user.status.integerValue - 1);
+                } else {
+                    user.status = @(user.status.integerValue + 1);
+                }
+                break;
+            }
+        }
+        return;
+    }
     NSError *error;
     User *user = [[User alloc] initWithString:message error:&error];
     if (error) {
         return;
     }
-    NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
         case UserUnfriendToUserAction: {
             [Utils removeUser:self.loggedInUser.friends user:user];
@@ -152,25 +133,6 @@ static NSInteger const kNumberOfLatestMessages = 20;
         }
         case AddUnfriendToClientsAction: {
             [Utils removeUser:self.loggedInUser.friends user:user];
-            break;
-        }
-        case UpdateOnlineStatusToUserAction: {
-            NSArray *array = [message componentsSeparatedByString:@"-"];
-            if ([array containsObject:@""]) {
-                return;
-            }
-            NSInteger userId = [array[0] integerValue];
-            NSString *onlineStatus = array[1];
-            for (User *user in self.loggedInUser.friends) {
-                if (userId == user.userId.integerValue) {
-                    if ([onlineStatus isEqualToString:kFailureMessage]) {
-                        user.status = @(user.status.integerValue - 1);
-                    } else {
-                        user.status = @(user.status.integerValue + 1);
-                    }
-                    break;
-                }
-            }
             break;
         }
     }

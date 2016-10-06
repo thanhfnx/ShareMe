@@ -125,6 +125,9 @@ static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == LogOutMenuSection) {
+        return 44.0f;
+    }
     return UITableViewAutomaticDimension;
 }
 

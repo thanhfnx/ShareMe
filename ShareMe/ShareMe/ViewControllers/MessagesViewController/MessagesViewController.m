@@ -6,6 +6,7 @@
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
+#import <CCBottomRefreshControl/UIScrollView+BottomRefreshControl.h>
 #import "MessagesViewController.h"
 #import "User.h"
 #import "Message.h"
@@ -37,7 +38,7 @@ static NSInteger const kNumberOfLatestMessages = 20;
     NSArray<NSString *> *_requestActions;
     User *_currentUser;
     NSInteger _startIndex;
-    UIRefreshControl *_topRefreshControl;
+    UIRefreshControl *_bottomRefreshControl;
     NSInteger _selectedIndex;
 }
 
@@ -52,14 +53,16 @@ static NSInteger const kNumberOfLatestMessages = 20;
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
-    _latestMessages = ((MainTabBarViewController *)self.navigationController.tabBarController).latestMessages;
+    _latestMessages = [NSMutableArray array];
     _requestActions = @[kAddNewMessageToUserAction];
     [self registerRequestHandler];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
-    _topRefreshControl = [[UIRefreshControl alloc] init];
-    [_topRefreshControl addTarget:self action:@selector(loadLatestMessages)
+    [self loadLatestMessages];
+    _bottomRefreshControl = [UIRefreshControl new];
+    _bottomRefreshControl.triggerVerticalOffset = 50.0f;
+    [_bottomRefreshControl addTarget:self action:@selector(loadLatestMessages)
         forControlEvents:UIControlEventValueChanged];
-    [self.tableView addSubview:_topRefreshControl];
+    self.tableView.bottomRefreshControl = _bottomRefreshControl;
 }
 
 - (void)loadLatestMessages {
@@ -67,7 +70,7 @@ static NSInteger const kNumberOfLatestMessages = 20;
     NSString *message = [NSString stringWithFormat:kGetLatestMessagesFormat, _currentUser.userId.integerValue,
         _startIndex, kNumberOfLatestMessages];
     [[ClientSocketController sharedController] sendData:message messageType:kSendingRequestSignal
-        actionName:kUserGetMessagesAction sender:self];
+        actionName:kUserGetLatestMessagesAction sender:self];
 }
 
 #pragma mark - UITableViewDatasource, UITableViewDelegate
@@ -107,7 +110,19 @@ static NSInteger const kNumberOfLatestMessages = 20;
     return UITableViewAutomaticDimension;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.01f;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.01f;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (!_latestMessages.count) {
+        return;
+    }
     _selectedIndex = indexPath.row;
     [self performSegueWithIdentifier:kGoToMessageDetailSegueIdentifier sender:self];
 }
@@ -120,10 +135,15 @@ static NSInteger const kNumberOfLatestMessages = 20;
         case UserGetLatestMessagesAction: {
             if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
+                NSArray *array = [Message arrayOfModelsFromString:message error:&error];
                 if (error) {
                     return;
                 }
-                [_latestMessages addObjectsFromArray:[Message arrayOfModelsFromString:message error:&error]];
+                [_latestMessages addObjectsFromArray:array];
+                [self.tableView reloadData];
+            }
+            if ([_bottomRefreshControl isRefreshing]) {
+                [_bottomRefreshControl endRefreshing];
             }
             break;
         }
@@ -166,7 +186,12 @@ static NSInteger const kNumberOfLatestMessages = 20;
     [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kGoToMessageDetailSegueIdentifier]) {
         MessageDetailViewController *messageDetailViewController = [segue destinationViewController];
-        messageDetailViewController.receiver = _currentUser.friends[_selectedIndex];
+        Message *selectedMessage = _latestMessages[_selectedIndex];
+        if (_currentUser.userId == selectedMessage.sender.userId) {
+            messageDetailViewController.receiver = selectedMessage.receiver;
+        } else if (_currentUser.userId == selectedMessage.receiver.userId) {
+            messageDetailViewController.receiver = selectedMessage.sender;
+        }
     }
 }
 

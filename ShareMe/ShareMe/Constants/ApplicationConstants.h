@@ -88,4 +88,6 @@ extern NSString *const kGoToUserTimelineSegueIdentifier;
 extern NSString *const kSaveUserAccountKey;
 extern NSString *const kAutoLoginKey;
 
+extern NSInteger const kMessagesViewControllerIndex;
+
 @end

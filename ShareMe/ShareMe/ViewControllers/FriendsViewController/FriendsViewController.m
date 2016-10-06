@@ -10,6 +10,7 @@
 #import "FriendTableViewCell.h"
 #import "MainTabBarViewController.h"
 #import "ClientSocketController.h"
+//#import "MessagesViewController.h"
 #import "MessageDetailViewController.h"
 #import "User.h"
 #import "Utils.h"
@@ -37,9 +38,9 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
 @interface FriendsViewController () {
     User *_currentUser;
     NSArray<NSString *> *_requestActions;
-    NSInteger _selectedIndex;
     NSMutableArray<User *> *_onlineFriends;
     NSMutableArray<User *> *_offlineFriends;
+    NSIndexPath *_selectedIndexPath;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -110,7 +111,7 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
             return _onlineFriends.count;
         }
         case OfflineFriendsSection: {
-            return _onlineFriends.count;
+            return _offlineFriends.count;
         }
     }
     return 0;
@@ -178,7 +179,10 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    _selectedIndex = indexPath.row;
+    if (!_currentUser.friends.count) {
+        return;
+    }
+    _selectedIndexPath = indexPath;
     [self performSegueWithIdentifier:kGoToMessageDetailSegueIdentifier sender:self];
 }
 
@@ -191,13 +195,6 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
-}
-
-- (void)reloadDataWithAnimated:(BOOL)animated {
-    [self.tableView reloadData];
-    NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
-        animated:animated];
 }
 
 #pragma mark - IBAction
@@ -241,7 +238,6 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
     if ([onlineStatus isEqualToString:kFailureMessage]) {
         for (User *user in _onlineFriends) {
             if (userId == user.userId.integerValue) {
-                user.status = @(user.status.integerValue - 1);
                 if (!user.status.integerValue) {
                     [_onlineFriends removeObject:user];
                     [_offlineFriends insertObject:user atIndex:0];
@@ -252,7 +248,6 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
     } else {
         for (User *user in _offlineFriends) {
             if (userId == user.userId.integerValue) {
-                user.status = @(user.status.integerValue + 1);
                 [_offlineFriends removeObject:user];
                 [_onlineFriends insertObject:user atIndex:0];
                 return;
@@ -260,7 +255,6 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
         }
         for (User *user in _onlineFriends) {
             if (userId == user.userId.integerValue) {
-                user.status = @(user.status.integerValue + 1);
                 return;
             }
         }
@@ -270,8 +264,25 @@ static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any frie
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kGoToMessageDetailSegueIdentifier]) {
-        MessageDetailViewController *messageDetailViewController = [segue destinationViewController];
-        messageDetailViewController.receiver = _currentUser.friends[_selectedIndex];
+        User *selectedUser;
+        if (!_onlineFriends.count) {
+            selectedUser = _offlineFriends[_selectedIndexPath.row];
+        } else if (!_offlineFriends.count) {
+            selectedUser = _onlineFriends[_selectedIndexPath.row];
+        } else if (_onlineFriends.count && _offlineFriends.count) {
+            switch (_selectedIndexPath.section) {
+                case OnlineFriendsSection: {
+                    selectedUser = _onlineFriends[_selectedIndexPath.row];
+                    break;
+                }
+                case OfflineFriendsSection: {
+                    selectedUser = _offlineFriends[_selectedIndexPath.row];
+                    break;
+                }
+            }
+        }
+        MessageDetailViewController *messageDetailViewController = segue.destinationViewController;
+        messageDetailViewController.receiver = selectedUser;
     }
 }
 
