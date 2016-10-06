@@ -9,11 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @class User;
-@class Message;
 
 @interface MainTabBarViewController : UITabBarController
 
 @property (strong, nonatomic) User *loggedInUser;
-@property (strong, nonatomic) NSMutableArray<Message *> *latestMessages;
 
 @end

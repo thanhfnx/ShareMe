@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "FViewController.h"
 
+@class User;
+
 @interface MessagesViewController : FViewController
 
 @end

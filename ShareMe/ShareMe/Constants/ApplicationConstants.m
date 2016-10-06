@@ -13,7 +13,7 @@
 NSString *const kSendingRequestSignal = @"TO";
 NSString *const kReceivingRequestSignal = @"RE";
 
-NSString *const kServerHost = @"127.0.0.1";
+NSString *const kServerHost = @"sharemeframgia.no-ip.info";
 int const kServerPort = 1994;
 
 NSString *const kMessageFormat = @"%@~%@~%@";
@@ -87,5 +87,7 @@ NSString *const kGoToUserTimelineSegueIdentifier = @"goToUserTimeline";
 
 NSString *const kSaveUserAccountKey = @"shareMe_saveUserAccount";
 NSString *const kAutoLoginKey = @"shareMe_autoLogin";
+
+NSInteger const kMessagesViewControllerIndex = 2;
 
 @end

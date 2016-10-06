@@ -167,6 +167,7 @@ CGFloat const kLongHeightImageRatio = 0.5f;
     emptyCell.textLabel.text = message;
     emptyCell.textLabel.font = [UIFont fontWithName:kDefaultFontName size:16.0f];
     emptyCell.textLabel.textAlignment = NSTextAlignmentCenter;
+    emptyCell.backgroundColor = [UIColor clearColor];
     return emptyCell;
 }
 

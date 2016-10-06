@@ -227,14 +227,17 @@ static NSInteger const kNumberOfMessages = 20;
                 NSError *error;
                 NSMutableArray *array = [[[[Message arrayOfModelsFromString:message error:&error]
                     reverseObjectEnumerator] allObjects] mutableCopy];
-                [array addObjectsFromArray:_messages];
-                [_messages removeAllObjects];
-                [_messages addObjectsFromArray:array];
-                _startIndex += kNumberOfMessages;
                 if (error) {
                     return;
                 }
-                [self reloadDataWithAnimated:NO];
+                [array addObjectsFromArray:_messages];
+                [_messages removeAllObjects];
+                [_messages addObjectsFromArray:array];
+                if (_startIndex) {
+                    [self.tableView reloadData];
+                } else {
+                    [self reloadDataWithAnimated:NO];
+                }
             }
             [_topRefreshControl endRefreshing];
             break;
@@ -277,7 +280,8 @@ static NSInteger const kNumberOfMessages = 20;
             if (error) {
                 return;
             }
-            if (receivedMessage && receivedMessage.sender.userId == self.receiver.userId) {
+            if (receivedMessage && (receivedMessage.sender.userId == self.receiver.userId ||
+                receivedMessage.receiver.userId == self.receiver.userId)) {
                 [_messages addObject:receivedMessage];
                 [self reloadDataWithAnimated:YES];
             }

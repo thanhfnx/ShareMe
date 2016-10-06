@@ -113,6 +113,7 @@
 #pragma mark - Process message from server
 
 - (void)readMessage {
+
     uint8_t buffer[kDefaultBufferLength];
     NSString *temp;
     NSInteger bytesRead = [_inputStream read:buffer maxLength:kDefaultBufferLength];
@@ -130,7 +131,7 @@
             bufferLength = messageLength - offset > kDefaultBufferLength ? kDefaultBufferLength :
                 messageLength - offset;
             bytesRead = [_inputStream read:buffer maxLength:bufferLength];
-            offset += bufferLength;
+            offset += bytesRead;
             temp = [[NSString alloc] initWithBytes:buffer length:bytesRead encoding:NSUTF8StringEncoding];
             if (temp) {
                 _receivedMessage = [_receivedMessage stringByAppendingString:temp];

@@ -11,6 +11,7 @@
 @protocol RequestHandler <NSObject>
 
 - (void)registerRequestHandler;
+- (void)resignRequestHandler;
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message;
 
 @end
