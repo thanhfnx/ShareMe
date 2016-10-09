@@ -56,7 +56,6 @@
     [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [_outputStream open];
     [_inputStream open];
-    _isSocketOpened = YES;
 }
 
 - (void)closeSocket {
@@ -113,7 +112,6 @@
 #pragma mark - Process message from server
 
 - (void)readMessage {
-
     uint8_t buffer[kDefaultBufferLength];
     NSString *temp;
     NSInteger bytesRead = [_inputStream read:buffer maxLength:kDefaultBufferLength];
@@ -164,6 +162,7 @@
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
     switch (streamEvent) {
         case NSStreamEventOpenCompleted:
+            _isSocketOpened = YES;
             break;
         case NSStreamEventHasBytesAvailable:
             if (theStream == _inputStream) {

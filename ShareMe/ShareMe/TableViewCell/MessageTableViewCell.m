@@ -17,11 +17,12 @@
     if (currentUser.userId == message.sender.userId) {
         self.imvAvatar.image = [Utils getAvatar:message.receiver.avatarImage gender:message.receiver.gender];
         self.lblFullName.text = [message.receiver fullName];
+        self.lblLastMessage.text = [@"You: " stringByAppendingString:message.content];
     } else {
         self.imvAvatar.image = [Utils getAvatar:message.sender.avatarImage gender:message.sender.gender];
         self.lblFullName.text = [message.sender fullName];
+        self.lblLastMessage.text = message.content;
     }
-    self.lblLastMessage.text = message.content;
     self.lblSentTime.text = [Utils timeDiffFromDate:message.sentTime];
 }
 
