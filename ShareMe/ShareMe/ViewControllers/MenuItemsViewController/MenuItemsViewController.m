@@ -51,6 +51,7 @@ static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
 @implementation MenuItemsViewController
 
 - (void)viewDidLoad {
+    _isSwipeGestureDisable = YES;
     [super viewDidLoad];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _functionMenuItems = @{

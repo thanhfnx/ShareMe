@@ -49,6 +49,7 @@ static NSInteger const kNumberOfLatestMessages = 20;
 @implementation MessagesViewController
 
 - (void)viewDidLoad {
+    _isSwipeGestureDisable = YES;
     [super viewDidLoad];
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
@@ -174,8 +175,16 @@ static NSInteger const kNumberOfLatestMessages = 20;
                 return;
             }
             if (receivedMessage) {
-                [_latestMessages insertObject:receivedMessage atIndex:0];
-                [self.tableView reloadData];
+                for (Message *message in _latestMessages) {
+                    if ((message.sender.userId == receivedMessage.sender.userId && message.receiver.userId ==
+                        receivedMessage.receiver.userId) || (message.sender.userId == receivedMessage.receiver.userId
+                        && message.receiver.userId == message.sender.userId)) {
+                        [_latestMessages removeObject:message];
+                        [_latestMessages insertObject:receivedMessage atIndex:0];
+                        [self.tableView reloadData];
+                        break;
+                    }
+                }
             }
             break;
         }

@@ -122,22 +122,6 @@ static CGFloat const kMaxImageHeight = 500.0f;
             return NO;
         }
         [self btnNextToViewTapped:nil];
-    } else if (textField == self.txtEmail) {
-        if ([self.txtEmail.text isEqualToString:@""]) {
-            [self showMessage:kEmptyEmailMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
-                [self.txtEmail becomeFirstResponder];
-            }];
-            return NO;
-        }
-        NSString *emailRegex = kEmailRegex;
-        NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",emailRegex];
-        if ([emailPredicate evaluateWithObject:self.txtEmail.text] != YES) {
-            [self showMessage:kInvalidEmailMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
-                [self.txtEmail becomeFirstResponder];
-            }];
-            return NO;
-        }
-        [self txtDateOfBirthTapped:nil];
     } else if (textField == self.txtUserName) {
         if ([self.txtUserName.text isEqualToString:@""]) {
             [self showMessage:kEmptyUserNameMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
@@ -168,7 +152,7 @@ static CGFloat const kMaxImageHeight = 500.0f;
             return NO;
         }
         [self.txtRetypePassword becomeFirstResponder];
-    } else {
+    } else if (textField == self.txtRetypePassword) {
         if ([self.txtRetypePassword.text isEqualToString:@""]) {
             [self showMessage:kEmptyRetypePasswordMessage title:kDefaultMessageTitle
                 complete:^(UIAlertAction *action) {
@@ -184,6 +168,22 @@ static CGFloat const kMaxImageHeight = 500.0f;
             return NO;
         }
         [self btnRegisterTapped:nil];
+    } else if (textField == self.txtEmail) {
+        if ([self.txtEmail.text isEqualToString:@""]) {
+            [self showMessage:kEmptyEmailMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
+                [self.txtEmail becomeFirstResponder];
+            }];
+            return NO;
+        }
+        NSString *emailRegex = kEmailRegex;
+        NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",emailRegex];
+        if ([emailPredicate evaluateWithObject:self.txtEmail.text] != YES) {
+            [self showMessage:kInvalidEmailMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
+                [self.txtEmail becomeFirstResponder];
+            }];
+            return NO;
+        }
+        [self txtDateOfBirthTapped:nil];
     }
     return YES;
 }
@@ -234,31 +234,6 @@ static CGFloat const kMaxImageHeight = 500.0f;
             return NO;
         }
     } else if (_currentPage == 1) {
-        if ([self.txtEmail.text isEqualToString:@""]) {
-            [self showMessage:kEmptyEmailMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
-                [self.txtEmail becomeFirstResponder];
-            }];
-            return NO;
-        }
-        NSString *emailRegex = kEmailRegex;
-        NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",emailRegex];
-        if ([emailPredicate evaluateWithObject:self.txtEmail.text] != YES) {
-            [self showMessage:kInvalidEmailMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
-                [self.txtEmail becomeFirstResponder];
-            }];
-            return NO;
-        }
-        if ([self.txtDateOfBirth.text isEqualToString:@""]) {
-            [self showMessage:kEmptyDateOfBirthMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
-                [self txtDateOfBirthTapped:nil];
-            }];
-            return NO;
-        }
-        if (self.rdbGender.selectedButton == nil) {
-            [self showMessage:kEmptyGenderMessage title:kDefaultMessageTitle complete:nil];
-            return NO;
-        }
-    } else if (_currentPage == 2) {
         if ([self.txtUserName.text isEqualToString:@""]) {
             [self showMessage:kEmptyUserNameMessage title:kDefaultMessageTitle complete:^(UIAlertAction *action) {
                 [self.txtUserName becomeFirstResponder];
@@ -378,6 +353,11 @@ static CGFloat const kMaxImageHeight = 500.0f;
     } takeFromLibraryHandler:^(UIAlertAction *action) {
         [self showImagePicker];
     }];
+}
+
+- (IBAction)btnDeleteImageDeleted:(UIButton *)sender {
+    self.imvAvatar.image = [Utils getAvatar:[NSMutableArray array] gender:@(self.rdbGender.selected)];
+    _avatarImage = nil;
 }
 
 - (void)goToCurrentPage {

@@ -23,7 +23,6 @@ static NSString *const kPasswordKey = @"shareMe_password";
 
 @interface LoginViewController () {
     User *_user;
-    NSNumber *_isSaveUserAccount;
 }
 
 @property (weak, nonatomic) IBOutlet UIImageView *imvLogo;
@@ -40,17 +39,26 @@ static NSString *const kPasswordKey = @"shareMe_password";
 - (void)viewDidLoad {
     _isSwipeGestureDisable = YES;
     [super viewDidLoad];
-    _isSaveUserAccount = [[NSUserDefaults standardUserDefaults] objectForKey:kSaveUserAccountKey];
-    if (!_isSaveUserAccount || !_isSaveUserAccount.boolValue) {
+    NSNumber *isSaveUserAccount = [[NSUserDefaults standardUserDefaults] objectForKey:kSaveUserAccountKey];
+    if (!isSaveUserAccount) {
+        isSaveUserAccount = @(YES);
+        [[NSUserDefaults standardUserDefaults] setObject:isSaveUserAccount forKey:kSaveUserAccountKey];
+    }
+    NSNumber *isAutoLogin = [[NSUserDefaults standardUserDefaults] objectForKey:kAutoLoginKey];
+    if (!isAutoLogin) {
+        isAutoLogin = @(NO);
+        [[NSUserDefaults standardUserDefaults] setObject:isAutoLogin forKey:kAutoLoginKey];
+        return;
+    }
+    if (!isSaveUserAccount.boolValue) {
         return;
     }
     NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserNameKey];
     NSString *password = [[NSUserDefaults standardUserDefaults] objectForKey:kPasswordKey];
-    NSNumber *isAutoLogin = [[NSUserDefaults standardUserDefaults] objectForKey:kAutoLoginKey];
     if (userName && password) {
         self.txtUserName.text = userName;
         self.txtPassword.text = password;
-        if (!isAutoLogin || !isAutoLogin.boolValue) {
+        if (!isAutoLogin.boolValue) {
             return;
         }
         [self showActitvyIndicator:self.view frame:self.view.frame];

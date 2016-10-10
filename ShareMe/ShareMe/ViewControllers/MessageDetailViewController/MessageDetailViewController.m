@@ -126,10 +126,12 @@ static NSInteger const kNumberOfMessages = 20;
         [self showConfirmDialog:kConfirmDiscardMessage title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
             [self dismissKeyboard];
             [self.navigationController popViewControllerAnimated:YES];
+            [self.navigationController.tabBarController setSelectedIndex:kMessagesViewControllerIndex];
         }];
     } else {
         [self dismissKeyboard];
         [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController.tabBarController setSelectedIndex:kMessagesViewControllerIndex];
     }
 }
 
@@ -280,8 +282,9 @@ static NSInteger const kNumberOfMessages = 20;
             if (error) {
                 return;
             }
-            if (receivedMessage && (receivedMessage.sender.userId == self.receiver.userId ||
-                receivedMessage.receiver.userId == self.receiver.userId)) {
+            if (receivedMessage && ((receivedMessage.sender.userId == self.receiver.userId &&
+                receivedMessage.receiver.userId == _currentUser.userId) || (receivedMessage.receiver.userId ==
+                self.receiver.userId && receivedMessage.sender.userId == _currentUser.userId))) {
                 [_messages addObject:receivedMessage];
                 [self reloadDataWithAnimated:YES];
             }
