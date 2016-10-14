@@ -60,7 +60,7 @@ static NSInteger const kNumberOfStories = 10;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UITextField *txtSearch;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldLeadingConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchTextFieldTrailingConstraint;
 
 @end
 
@@ -129,7 +129,7 @@ static NSInteger const kNumberOfStories = 10;
 
 - (IBAction)btnSearchTapped:(UIButton *)sender {
     if (self.lblTitle.alpha == 1.0f) {
-        [self.searchTextFieldLeadingConstraint setConstant:-CGRectGetWidth(self.lblTitle.frame)];
+        [self.searchTextFieldTrailingConstraint setConstant:CGRectGetWidth(self.lblTitle.frame) + 10.0f];
         [self.navigationItem.titleView setNeedsUpdateConstraints];
         [UIView animateWithDuration:0.4 animations:^{
             self.lblTitle.alpha = 0.0f;
@@ -149,9 +149,9 @@ static NSInteger const kNumberOfStories = 10;
         actionName:kUserSearchFriendAction sender:self];
 }
 
-- (IBAction)btnReloadTapped:(UIButton *)sender {
+- (IBAction)btnShowFriendsTapped:(UIButton *)sender {
     [self dismissKeyboard];
-    [self reloadAllStories];
+    [self performSegueWithIdentifier:kGoToListFriendSegueIdentifier sender:self];
 }
 
 - (IBAction)btnLikeTapped:(UIButton *)sender {
@@ -190,7 +190,7 @@ static NSInteger const kNumberOfStories = 10;
 
 - (void)dissmissKeyboard {
     [self.txtSearch resignFirstResponder];
-    [self.searchTextFieldLeadingConstraint setConstant:-10.0f];
+    [self.searchTextFieldTrailingConstraint setConstant:10.0f];
     [self.navigationItem.titleView setNeedsUpdateConstraints];
     [UIView animateWithDuration:0.4 animations:^{
         [self.navigationItem.titleView layoutIfNeeded];

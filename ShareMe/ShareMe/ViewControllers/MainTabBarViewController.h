@@ -14,4 +14,6 @@
 
 @property (strong, nonatomic) User *loggedInUser;
 
+- (void)setRequestBadgeValue;
+
 @end

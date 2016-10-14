@@ -29,6 +29,8 @@
 @property (strong, nonatomic) NSMutableArray<User, Optional> *receivedRequests;
 @property (strong, nonatomic) NSMutableArray<Optional> *avatarImage;
 @property (strong, nonatomic) NSMutableArray<Optional> *coverImage;
+@property (strong, nonatomic) NSNumber<Optional> *lastLatitude;
+@property (strong, nonatomic) NSNumber<Optional> *lastLongitude;
 
 - (NSString *)fullName;
 

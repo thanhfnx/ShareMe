@@ -171,4 +171,24 @@ CGFloat const kLongHeightImageRatio = 0.5f;
     return emptyCell;
 }
 
++ (void)showLocalNotification:(NSString *)alertBody userInfo:(NSDictionary *)userInfo {
+    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+    localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0.0];
+    localNotification.alertBody = alertBody;
+    localNotification.userInfo = userInfo;
+    localNotification.soundName = UILocalNotificationDefaultSoundName;
+    localNotification.timeZone = [NSTimeZone localTimeZone];
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
++ (void)setApplicationBadge:(BOOL)isIncrease {
+    if (isIncrease) {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication]
+            applicationIconBadgeNumber] + 1];
+    } else {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication]
+            applicationIconBadgeNumber] - 1];
+    }
+}
+
 @end

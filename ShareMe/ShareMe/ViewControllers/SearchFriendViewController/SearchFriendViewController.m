@@ -218,7 +218,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
 
 - (IBAction)btnSearchTapped:(UIButton *)sender {
     if (self.lblTitle.alpha == 1.0f) {
-        [self.searchTextFieldLeadingConstraint setConstant:-self.lblTitle.frame.size.width];
+        [self.searchTextFieldLeadingConstraint setConstant:-CGRectGetWidth(self.lblTitle.frame) - 10.0f];
         [self.navigationItem.titleView setNeedsUpdateConstraints];
         [UIView animateWithDuration:0.4 animations:^{
             self.lblTitle.alpha = 0.0f;
@@ -342,6 +342,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 [Utils addUserIfNotExist:_currentUser.friends user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
+                [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
         case UserDeclineRequestAction:
@@ -356,6 +357,7 @@ static NSString *const kSearchLabelTitle = @"Search results for '%@':";
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [self setRelationStatuses];
                 [self.tableView reloadData];
+                [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
         case UserCancelRequestAction:

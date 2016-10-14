@@ -146,7 +146,7 @@ static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
         case FunctionMenuSection: {
             switch (indexPath.row) {
                 case FindFriendsMenuItem:
-                    // TODO: Optional function
+                    [self performSegueWithIdentifier:@"goToFindFriends" sender:self];
                     break;
                 case SettingsMenuItem:
                     [self performSegueWithIdentifier:kGoToSubMenuSegueIdentifier sender:self];

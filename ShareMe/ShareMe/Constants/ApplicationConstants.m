@@ -10,10 +10,12 @@
 
 @implementation ApplicationConstants
 
+NSString *const kGoogleMapsAPIKey = @"AIzaSyBKHe41nrMWDuq91_2UyQRjM_QX06SUO5g";
+
 NSString *const kSendingRequestSignal = @"TO";
 NSString *const kReceivingRequestSignal = @"RE";
 
-NSString *const kServerHost = @"sharemeframgia.no-ip.info";
+NSString *const kServerHost = @"127.0.0.1";
 int const kServerPort = 1994;
 
 NSString *const kMessageFormat = @"%@~%@~%@";
@@ -89,5 +91,7 @@ NSString *const kSaveUserAccountKey = @"shareMe_saveUserAccount";
 NSString *const kAutoLoginKey = @"shareMe_autoLogin";
 
 NSInteger const kMessagesViewControllerIndex = 2;
+
+NSString *const kReceivedRequestNotification = @"%@ sent you a friend request.";
 
 @end

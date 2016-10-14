@@ -41,5 +41,7 @@ extern CGFloat const kLongHeightImageRatio;
 + (void)addUserIfNotExist:(NSMutableArray *)array user:(User *)user;
 + (void)removeUser:(NSMutableArray *)array user:(User *)user;
 + (UITableViewCell *)emptyTableCell:(NSString *)message;
++ (void)showLocalNotification:(NSString *)alertBody userInfo:(NSDictionary *)userInfo;
++ (void)setApplicationBadge:(BOOL)isIncrease;
 
 @end
