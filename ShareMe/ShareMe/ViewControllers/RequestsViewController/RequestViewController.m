@@ -237,6 +237,7 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [Utils addUserIfNotExist:_currentUser.friends user:user];
                 [self.tableView reloadData];
+                [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
         case UserDeclineRequestAction:
@@ -250,6 +251,7 @@ static NSString *const kNoRequestsMessage = @"No new requests.";
                 }
                 [Utils removeUser:_currentUser.receivedRequests user:user];
                 [self.tableView reloadData];
+                [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
         case UserCancelRequestAction:

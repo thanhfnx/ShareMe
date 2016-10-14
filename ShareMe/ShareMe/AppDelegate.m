@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ClientSocketController.h"
+@import GoogleMaps;
+@import GooglePlaces;
 
 @interface AppDelegate ()
 
@@ -16,6 +18,8 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self setupLocalNotifications];
+    [self setupGoogleMaps];
     return YES;
 }
 
@@ -36,6 +40,21 @@
     [[ClientSocketController sharedController] sendData:kEmptyMessage messageType:kSendingRequestSignal
         actionName:kCloseConnection sender:nil];
     [[ClientSocketController sharedController] closeSocket];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    // TODO: Handle notification 
+}
+
+- (void)setupLocalNotifications {
+    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings
+        settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound
+        categories:nil]];
+}
+
+- (void)setupGoogleMaps {
+    [GMSServices provideAPIKey:kGoogleMapsAPIKey];
+    [GMSPlacesClient provideAPIKey:kGoogleMapsAPIKey];
 }
 
 @end

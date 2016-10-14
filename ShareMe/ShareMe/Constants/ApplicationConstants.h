@@ -10,6 +10,8 @@
 
 @interface ApplicationConstants : NSObject
 
+extern NSString *const kGoogleMapsAPIKey;
+
 extern NSString *const kSendingRequestSignal;
 extern NSString *const kReceivingRequestSignal;
 
@@ -89,5 +91,7 @@ extern NSString *const kSaveUserAccountKey;
 extern NSString *const kAutoLoginKey;
 
 extern NSInteger const kMessagesViewControllerIndex;
+
+extern NSString *const kReceivedRequestNotification;
 
 @end

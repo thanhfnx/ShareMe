@@ -11,4 +11,6 @@ pod 'JSONModel'
 pod 'DLRadioButton', '~> 1.4'
 pod 'QBImagePickerController', '~> 3.4'
 pod 'CCBottomRefreshControl'
+pod 'GoogleMaps'
+pod 'GooglePlaces'
 end

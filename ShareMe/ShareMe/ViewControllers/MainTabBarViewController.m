@@ -50,6 +50,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         kUpdateOnlineStatusToUserAction
     ];
     [self registerRequestHandler];
+    [self setRequestBadgeValue];
 }
 
 #pragma mark - Request Handler
@@ -99,10 +100,16 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         }
         case UserSendRequestToUserAction: {
             [Utils addUserIfNotExist:self.loggedInUser.receivedRequests user:user];
+            [Utils showLocalNotification:[NSString stringWithFormat:kReceivedRequestNotification, [user fullName]]
+                userInfo:nil];
+            [Utils setApplicationBadge:YES];
+            [self setRequestBadgeValue];
             break;
         }
         case UserCancelRequestToUserAction: {
             [Utils removeUser:self.loggedInUser.receivedRequests user:user];
+            [self setRequestBadgeValue];
+            [Utils setApplicationBadge:NO];
             break;
         }
         case UserAddFriendToUserAction: {
@@ -117,10 +124,14 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         case AddAcceptRequestToClientsAction: {
             [Utils removeUser:self.loggedInUser.receivedRequests user:user];
             [Utils addUserIfNotExist:self.loggedInUser.friends user:user];
+            [self setRequestBadgeValue];
+            [Utils setApplicationBadge:NO];
             break;
         }
         case AddDeclineRequestToClientsAction: {
             [Utils removeUser:self.loggedInUser.receivedRequests user:user];
+            [self setRequestBadgeValue];
+            [Utils setApplicationBadge:NO];
             break;
         }
         case AddCancelRequestToClientsAction: {
@@ -135,6 +146,14 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
             [Utils removeUser:self.loggedInUser.friends user:user];
             break;
         }
+    }
+}
+
+- (void)setRequestBadgeValue {
+    if (self.loggedInUser.receivedRequests.count) {
+        self.viewControllers[1].tabBarItem.badgeValue = [@(self.loggedInUser.receivedRequests.count) stringValue];
+    } else {
+        self.viewControllers[1].tabBarItem.badgeValue = nil;
     }
 }
 

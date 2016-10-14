@@ -32,6 +32,7 @@
 		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
 		929139531D758D5700A0E972 /* ThumbnailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */; };
 		929A87AD1D711FEF0027385D /* FViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929A87AC1D711FEF0027385D /* FViewController.m */; };
+		92A15E851DB0712A00C5DBD4 /* FindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A15E841DB0712A00C5DBD4 /* FindFriendsViewController.m */; };
 		92A610BD1D94C94600635510 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A610BC1D94C94600635510 /* TimelineViewController.m */; };
 		92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A77CBD1D6ED09500FD19A3 /* SearchFriendViewController.m */; };
 		92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92A920691D90C89D00C6F007 /* FriendsViewController.m */; };
@@ -107,6 +108,8 @@
 		929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailCollectionViewCell.m; sourceTree = "<group>"; };
 		929A87AB1D711FEF0027385D /* FViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FViewController.h; sourceTree = "<group>"; };
 		929A87AC1D711FEF0027385D /* FViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FViewController.m; sourceTree = "<group>"; };
+		92A15E831DB0712A00C5DBD4 /* FindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindFriendsViewController.h; sourceTree = "<group>"; };
+		92A15E841DB0712A00C5DBD4 /* FindFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindFriendsViewController.m; sourceTree = "<group>"; };
 		92A610BB1D94C94600635510 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		92A610BC1D94C94600635510 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
 		92A77CBC1D6ED09500FD19A3 /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -211,6 +214,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				92A15E821DB0711900C5DBD4 /* FindFriendsViewController */,
 				92BBFE9A1DA37BCE00E8C3A5 /* SubMenusViewController */,
 				924C2BC41D9E6A6B0077B29B /* MenuItemsViewController */,
 				92D30A431D9BC9920080831C /* MessageDetailViewController */,
@@ -354,6 +358,15 @@
 				929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */,
 			);
 			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
+		92A15E821DB0711900C5DBD4 /* FindFriendsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				92A15E831DB0712A00C5DBD4 /* FindFriendsViewController.h */,
+				92A15E841DB0712A00C5DBD4 /* FindFriendsViewController.m */,
+			);
+			path = FindFriendsViewController;
 			sourceTree = "<group>";
 		};
 		92A610BA1D94C91900635510 /* TimelineViewController */ = {
@@ -643,6 +656,7 @@
 				92AF4F761D6ED72E00B92297 /* UIViewConstant.m in Sources */,
 				92441AB91D66A95C00F5426A /* Message.m in Sources */,
 				924C2BC71D9E6A930077B29B /* MenuItemsViewController.m in Sources */,
+				92A15E851DB0712A00C5DBD4 /* FindFriendsViewController.m in Sources */,
 				92A77CBE1D6ED09500FD19A3 /* SearchFriendViewController.m in Sources */,
 				92D30A461D9BC9AB0080831C /* MessageDetailViewController.m in Sources */,
 				92441AB81D66A95700F5426A /* Comment.m in Sources */,
