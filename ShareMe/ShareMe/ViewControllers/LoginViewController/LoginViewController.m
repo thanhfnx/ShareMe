@@ -12,15 +12,6 @@
 #import "UIViewController+ResponseHandler.h"
 #import "MainTabBarViewController.h"
 
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kEmptyUserNameMessage = @"UserName can not be empty!";
-static NSString *const kEmptyPasswordMessage = @"Password can not be empty!";
-static NSString *const kFailedLoginMessage = @"UserName or password is incorrect. Login failed!";
-static NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
-static NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
-static NSString *const kUserNameKey = @"shareMe_userName";
-static NSString *const kPasswordKey = @"shareMe_password";
-
 @interface LoginViewController () {
     User *_user;
 }

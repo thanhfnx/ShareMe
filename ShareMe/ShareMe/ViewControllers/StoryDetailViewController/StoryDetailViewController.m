@@ -1,23 +1,27 @@
 //
-//  CommentsViewController.m
+//  StoryDetailViewController.m
 //  ShareMe
 //
-//  Created by Nguyen Xuan Thanh on 9/12/16.
+//  Created by Nguyen Xuan Thanh on 10/17/16.
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
-#import "CommentsViewController.h"
+#import "StoryDetailViewController.h"
+#import "ApplicationConstants.h"
+#import "Comment.h"
+#import "Story.h"
+#import "User.h"
+#import "Utils.h"
+#import "UIViewController+RequestHandler.h"
+#import "UIViewController+ResponseHandler.h"
 #import "MainTabBarViewController.h"
-#import "NewsFeedViewController.h"
+#import "FDateFormatter.h"
 #import "ClientSocketController.h"
 #import "CommentTableViewCell.h"
-#import "WhoLikeThisViewController.h"
 #import "TimelineViewController.h"
-#import "FDateFormatter.h"
-#import "Utils.h"
-#import "Comment.h"
-#import "User.h"
-#import "Story.h"
+#import "NewsFeedViewController.h"
+#import "WhoLikeThisViewController.h"
+#import "StoryTableViewCell.h"
 
 typedef NS_ENUM(NSInteger, UserResponseActions) {
     UserGetTopCommentsAction,
@@ -30,7 +34,13 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     UpdateLikedUsersAction
 };
 
-@interface CommentsViewController () {
+typedef NS_ENUM(NSInteger, StoryDetailSections) {
+    StoryDetailSection,
+    CommentsSection,
+    NumberOfSections
+};
+
+@interface StoryDetailViewController () {
     Comment *_comment;
     NSInteger _startIndex;
     NSArray<NSString *> *_responseActions;
@@ -41,18 +51,15 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     UIRefreshControl *_topRefreshControl;
 }
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UITextView *txvAddComment;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *lblPlaceHolder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentViewBottomConstraint;
-@property (weak, nonatomic) IBOutlet UIButton *btnLike;
-@property (weak, nonatomic) IBOutlet UIButton *btnWhoLikeThis;
 
 @end
 
-@implementation CommentsViewController
-
-#pragma mark - UIView Life Cycle
+@implementation StoryDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -74,29 +81,11 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _dateFormatter = [FDateFormatter sharedDateFormatter];
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
-    [self updateLikedUsers];
     [self loadComments];
     _topRefreshControl = [[UIRefreshControl alloc] init];
     [_topRefreshControl addTarget:self action:@selector(loadComments) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:_topRefreshControl];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.tableView reloadData];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
-        name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
-        name:UIKeyboardWillHideNotification object:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
-        [self resignRequestHandler];
-    }
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    self.lblTitle.text = [NSString stringWithFormat:@"%@'s Story", [self.story.creator fullName]];
 }
 
 - (void)loadComments {
@@ -107,38 +96,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 }
 
 - (void)updateLikedUsers {
-    UIImage *likedImage = [UIImage imageNamed:@"loved"];
-    UIImage *unlikedImage = [UIImage imageNamed:@"love"];
-    [self.btnWhoLikeThis setTitle:@"" forState:UIControlStateNormal];
-    switch (self.story.numberOfLikedUsers.integerValue) {
-        case 0: {
-            [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
-            [self.btnWhoLikeThis setTitle:kEmptyLikedUsersLabelText forState:UIControlStateNormal];
-            break;
-        }
-        case 1: {
-            if (self.story.likedUsers.count) {
-                [self.btnWhoLikeThis setTitle:kSelfLikeLabelText forState:UIControlStateNormal];
-                [self.btnLike setImage:likedImage forState:UIControlStateNormal];
-            } else {
-                [self.btnWhoLikeThis setTitle:kOneLikeLabelText forState:UIControlStateNormal];
-                [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
-            }
-            break;
-        }
-        case 2 ... NSIntegerMax: {
-            if (self.story.likedUsers.count) {
-                [self.btnWhoLikeThis setTitle:[NSString stringWithFormat:kSelfLikeWithOthersLabelText,
-                    self.story.numberOfLikedUsers.integerValue - 1] forState:UIControlStateNormal];
-                [self.btnLike setImage:likedImage forState:UIControlStateNormal];
-            } else {
-                [self.btnWhoLikeThis setTitle:[NSString stringWithFormat:kManyLikeLabelText,
-                    self.story.numberOfLikedUsers.integerValue] forState:UIControlStateNormal];
-                [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
-            }
-            break;
-        }
-    }
+    //TODO: Update Liked users
 }
 
 #pragma mark - UITextViewDelegate
@@ -150,35 +108,62 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 #pragma mark - UITableViewDatasource, UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return NumberOfSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (!_topComments.count) {
-        return 1;
+    switch (section) {
+        case StoryDetailSection: {
+            return 1;
+        }
+        case CommentsSection: {
+            if (!_topComments.count) {
+                return 1;
+            }
+            return _topComments.count;
+        }
     }
-    return _topComments.count;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!_topComments.count) {
-        return [Utils emptyTableCell:kEmptyCommentsTableViewMessage];
+    switch (indexPath.section) {
+        case StoryDetailSection: {
+            StoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kStoryReuseIdentifier
+                forIndexPath:indexPath];
+            if (!cell) {
+                return [UITableViewCell new];
+            }
+            cell.contentView.tag = indexPath.row;
+            [cell setStory:self.story];
+            UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
+                action:@selector(imagesTapGestureRecognizer:)];
+            tapGestureRecognizer.numberOfTapsRequired = 1;
+            [cell.vContentImages  addGestureRecognizer:tapGestureRecognizer];
+            [cell.vContentImages setUserInteractionEnabled:YES];
+            [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName, cell.lblUserName]
+                userId:self.story.creator.userId.integerValue];
+            return cell;
+        }
+        case CommentsSection: {
+            if (!_topComments.count) {
+                return [Utils emptyTableCell:kEmptyCommentsTableViewMessage];
+            }
+            CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCommentReuseIdentifier
+                forIndexPath:indexPath];
+            if (!cell) {
+                return [UITableViewCell new];
+            }
+            [cell setComment:_topComments[indexPath.row]];
+            [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName]
+                userId:_topComments[indexPath.row].creator.userId.integerValue];
+            return cell;
+        }
     }
-    CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCommentReuseIdentifier
-        forIndexPath:indexPath];
-    if (!cell) {
-        return [UITableViewCell new];
-    }
-    [cell setComment:_topComments[indexPath.row]];
-    [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName]
-        userId:_topComments[indexPath.row].creator.userId.integerValue];
-    return cell;
+    return [UITableViewCell new];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!_topComments.count) {
-        return tableView.frame.size.height;
-    }
     return UITableViewAutomaticDimension;
 }
 
@@ -186,11 +171,23 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     return UITableViewAutomaticDimension;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.01f;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.01f;
+}
+
 - (void)reloadDataWithAnimated:(BOOL)animated {
     [self.tableView reloadData];
     NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
     [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
         animated:animated];
+}
+
+- (void)imagesTapGestureRecognizer:(UITapGestureRecognizer *)sender {
+    // TODO: Display images view
 }
 
 #pragma mark - Packing entity
@@ -234,6 +231,9 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     [[ClientSocketController sharedController] sendData:[NSString stringWithFormat:kLikeRequestFormat,
         self.story.storyId.integerValue, _currentUser.userId.integerValue] messageType:kSendingRequestSignal
         actionName:kUserLikeStoryAction sender:self];
+}
+
+- (IBAction)btnCommentTapped:(UIButton *)sender {
 }
 
 - (IBAction)btnWhoLikeThisTapped:(UIButton *)sender {

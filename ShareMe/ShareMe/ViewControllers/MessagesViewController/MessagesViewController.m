@@ -26,12 +26,6 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddNewMessageToUserAction
 };
 
-static NSString *const kMessageReuseIdentifier = @"MessageCell";
-static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
-static NSString *const kEmptyMessagesTableViewMessage = @"No recent messages.";
-static NSString *const kGetLatestMessagesFormat = @"%ld-%ld-%ld";
-static NSInteger const kNumberOfLatestMessages = 20;
-
 @interface MessagesViewController () {
     NSMutableArray<Message *> *_latestMessages;
     NSArray<NSString *> *_responseActions;
@@ -89,7 +83,7 @@ static NSInteger const kNumberOfLatestMessages = 20;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (!_latestMessages.count) {
-        return [Utils emptyTableCell:kEmptyMessagesTableViewMessage];
+        return [Utils emptyTableCell:kEmptyRecentMessagesTableViewMessage];
     }
     MessageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMessageReuseIdentifier
         forIndexPath:indexPath];
@@ -180,11 +174,11 @@ static NSInteger const kNumberOfLatestMessages = 20;
                         receivedMessage.receiver.userId) || (message.sender.userId == receivedMessage.receiver.userId
                         && message.receiver.userId == message.sender.userId)) {
                         [_latestMessages removeObject:message];
-                        [_latestMessages insertObject:receivedMessage atIndex:0];
-                        [self.tableView reloadData];
                         break;
                     }
                 }
+                [_latestMessages insertObject:receivedMessage atIndex:0];
+                [self.tableView reloadData];
             }
             break;
         }

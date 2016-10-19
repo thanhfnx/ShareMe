@@ -124,6 +124,36 @@
         self.lblNumberOfComments.text = @"";
         [self.btnComment setImage:uncommentedImage forState:UIControlStateNormal];
     }
+    [self.btnWhoLikeThis setTitle:@"" forState:UIControlStateNormal];
+    switch (story.numberOfLikedUsers.integerValue) {
+        case 0: {
+            [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
+            [self.btnWhoLikeThis setTitle:kEmptyLikedUsersLabelText forState:UIControlStateNormal];
+            break;
+        }
+        case 1: {
+            if (story.likedUsers.count) {
+                [self.btnWhoLikeThis setTitle:kSelfLikeLabelText forState:UIControlStateNormal];
+                [self.btnLike setImage:likedImage forState:UIControlStateNormal];
+            } else {
+                [self.btnWhoLikeThis setTitle:kOneLikeLabelText forState:UIControlStateNormal];
+                [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
+            }
+            break;
+        }
+        case 2 ... NSIntegerMax: {
+            if (story.likedUsers.count) {
+                [self.btnWhoLikeThis setTitle:[NSString stringWithFormat:kSelfLikeWithOthersLabelText,
+                    story.numberOfLikedUsers.integerValue - 1] forState:UIControlStateNormal];
+                [self.btnLike setImage:likedImage forState:UIControlStateNormal];
+            } else {
+                [self.btnWhoLikeThis setTitle:[NSString stringWithFormat:kManyLikeLabelText,
+                    story.numberOfLikedUsers.integerValue] forState:UIControlStateNormal];
+                [self.btnLike setImage:unlikedImage forState:UIControlStateNormal];
+            }
+            break;
+        }
+    }
 }
 
 @end

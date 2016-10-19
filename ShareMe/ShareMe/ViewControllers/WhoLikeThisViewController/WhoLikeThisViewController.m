@@ -47,22 +47,6 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
     GetUserByIdAction
 };
 
-static NSString *const kLikedUserReuseIdentifier = @"LikedUserCell";
-static NSString *const kConfirmMessageTitle = @"Confirm";
-static NSString *const kRequestFormat = @"%ld-%ld";
-static NSString *const kConfirmUnfriendMessage = @"Do you really want to unfriend %@?";
-static NSString *const kConfirmCancelRequestMessage = @"Do you really want to cancel friend request to %@?";
-static NSString *const kConfirmAcceptMessage = @"Do you want to accept %@'s friend request?";
-static NSString *const kAcceptButtonTitle = @"Accept";
-static NSString *const kDeclineButtonTitle = @"Decline";
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kAcceptRequestErrorMessage = @"Something went wrong! Can not accept friend request!";
-static NSString *const kDeclineRequestErrorMessage = @"Something went wrong! Can not decline friend request!";
-static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can not cancel friend request!";
-static NSString *const kSendRequestErrorMessage = @"Something went wrong! Can not send friend request!";
-static NSString *const kUnfriendErrorMessage = @"Something went wrong! Can not unfriend!";
-static NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can not get liked users!";
-
 @interface WhoLikeThisViewController () {
     User *_currentUser;
     NSMutableArray<User *> *_users;

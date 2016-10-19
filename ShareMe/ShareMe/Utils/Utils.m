@@ -12,16 +12,6 @@
 #import "User.h"
 #import "UIViewConstant.h"
 
-NSString *const kDateFormat = @"d MMM yy";
-NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd HH:mm:ss";
-NSString *const kDefaultMaleAvatar = @"default-male-avatar";
-NSString *const kDefaultFemaleAvatar = @"default-female-avatar";
-CGFloat const kSquareImageRatio = 1.0f;
-CGFloat const kLandscapeImageRatio = 16.0f / 9.0f;
-CGFloat const kPortraitImageRatio = 9.0f / 16.0f;
-CGFloat const kLongWidthImageRatio = 2.0f;
-CGFloat const kLongHeightImageRatio = 0.5f;
-
 @implementation Utils
 
 + (UIImage *)getAvatar:(NSMutableArray *)imageString gender:(NSNumber *)gender {
@@ -167,7 +157,6 @@ CGFloat const kLongHeightImageRatio = 0.5f;
     emptyCell.textLabel.text = message;
     emptyCell.textLabel.font = [UIFont fontWithName:kDefaultFontName size:16.0f];
     emptyCell.textLabel.textAlignment = NSTextAlignmentCenter;
-    emptyCell.backgroundColor = [UIColor clearColor];
     return emptyCell;
 }
 

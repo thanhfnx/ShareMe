@@ -16,10 +16,6 @@ typedef NS_ENUM(NSInteger, SubMenus) {
     NumberOfSubMenus
 };
 
-static NSString *const kSubMenuReuseIdentifier = @"SubMenuCell";
-static NSString *const kSaveUserAccountTextLabel = @"Save Account";
-static NSString *const kAutoLoginTextLabel = @"Auto Login";
-
 @interface SubMenusViewController () {
     NSArray<NSString *> *_subMenuTextLabels;
     NSNumber *_isSaveUserAccount;

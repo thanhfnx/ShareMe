@@ -40,15 +40,6 @@ typedef NS_ENUM(NSInteger, RequestSections) {
     SentRequestSection
 };
 
-static NSString *const kReceivedRequestReuseIdentifier = @"ReceivedRequestCell";
-static NSString *const kSentRequestReuseIdentifier = @"SentRequestCell";
-static NSString *const kRequestFormat = @"%ld-%ld";
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kAcceptRequestErrorMessage = @"Something went wrong! Can not accept friend request!";
-static NSString *const kDeclineRequestErrorMessage = @"Something went wrong! Can not decline friend request!";
-static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can not cancel friend request!";
-static NSString *const kNoRequestsMessage = @"No new requests.";
-
 @interface RequestViewController () {
     User *_currentUser;
     NSArray<User *> *_receivedRequests;

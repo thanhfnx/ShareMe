@@ -54,38 +54,6 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddUnfriendToClientsAction
 };
 
-static NSString *const kStoryReuseIdentifier = @"StoryCell";
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
-static NSString *const kGetUserErrorMessage = @"Something went wrong! Can not get this user's information!";
-static NSString *const kGoToCommentSegueIdentifier = @"goToComment";
-static NSString *const kLikeRequestFormat = @"%ld-%ld";
-static NSString *const kTimelineHeaderLabelText = @"%@'s Timeline";
-static NSInteger const kNumberOfStories = 2;
-static NSString *const kFriendButtonTitle = @"Friends";
-static NSString *const kSelfButtonTitle = @"Update Profile";
-static NSString *const kSentRequestButtonTitle = @"Cancel Request";
-static NSString *const kReceivedRequestButtonTitle = @"Confirm Request";
-static NSString *const kNotFriendButtonTitle = @"Add Friend";
-static NSString *const kMessageButtonTitle = @"Message";
-static NSString *const kChangePasswordButtonTitle = @"Change Password";
-static NSString *const kRequestFormat = @"%ld-%ld";
-static NSString *const kAcceptRequestErrorMessage = @"Something went wrong! Can not accept friend request!";
-static NSString *const kDeclineRequestErrorMessage = @"Something went wrong! Can not decline friend request!";
-static NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can not cancel friend request!";
-static NSString *const kSendRequestErrorMessage = @"Something went wrong! Can not send friend request!";
-static NSString *const kUnfriendErrorMessage = @"Something went wrong! Can not unfriend!";
-static NSString *const kConfirmMessageTitle = @"Confirm";
-static NSString *const kConfirmUnfriendMessage = @"Do you really want to unfriend %@?";
-static NSString *const kConfirmCancelRequestMessage = @"Do you really want to cancel friend request to %@?";
-static NSString *const kConfirmAcceptMessage = @"Do you want to accept %@'s friend request?";
-static NSString *const kAcceptButtonTitle = @"Accept";
-static NSString *const kDeclineButtonTitle = @"Decline";
-static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
-static NSString *const kGoToUpdateProfileSegueIdentifier = @"goToUpdateProfile";
-static NSString *const kEmptyStoriesTableViewMessage = @"No stories to show.";
-static NSString *const kSelfTimelineHeaderLabelText = @"Your Timeline";
-
 @interface TimelineViewController () {
     NSMutableDictionary<NSIndexPath *, NSNumber *> *heightForIndexPath;
     NSArray<NSString *> *_responseActions;

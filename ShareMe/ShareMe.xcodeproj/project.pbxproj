@@ -27,6 +27,7 @@
 		924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */; };
 		924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */; };
 		924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */; };
+		926FBED11DB4AABA002E3AAD /* StoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926FBED01DB4AABA002E3AAD /* StoryDetailViewController.m */; };
 		9285C58B1DA0A5CD003011DF /* MenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9285C58A1DA0A5CD003011DF /* MenuItemTableViewCell.m */; };
 		928688761D702C9C0078A599 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 928688751D702C9C0078A599 /* Utils.m */; };
 		928EBC0D1D6C371C001E7D3B /* RegisterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 928EBC0C1D6C371C001E7D3B /* RegisterView.xib */; };
@@ -99,6 +100,8 @@
 		924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarViewController.m; sourceTree = "<group>"; };
 		924E109D1D6DBAE3004DE853 /* CALayer+UIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+UIColor.h"; sourceTree = "<group>"; };
 		924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UIColor.m"; sourceTree = "<group>"; };
+		926FBECF1DB4AABA002E3AAD /* StoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryDetailViewController.h; sourceTree = "<group>"; };
+		926FBED01DB4AABA002E3AAD /* StoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryDetailViewController.m; sourceTree = "<group>"; };
 		9285C5891DA0A5CD003011DF /* MenuItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemTableViewCell.h; sourceTree = "<group>"; };
 		9285C58A1DA0A5CD003011DF /* MenuItemTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemTableViewCell.m; sourceTree = "<group>"; };
 		928688741D702C9C0078A599 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -214,6 +217,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				926FBECE1DB4AAA6002E3AAD /* StoryDetailViewController */,
 				92A15E821DB0711900C5DBD4 /* FindFriendsViewController */,
 				92BBFE9A1DA37BCE00E8C3A5 /* SubMenusViewController */,
 				924C2BC41D9E6A6B0077B29B /* MenuItemsViewController */,
@@ -326,6 +330,15 @@
 				924E108C1D6D99FE004DE853 /* RequestViewController.m */,
 			);
 			path = RequestsViewController;
+			sourceTree = "<group>";
+		};
+		926FBECE1DB4AAA6002E3AAD /* StoryDetailViewController */ = {
+			isa = PBXGroup;
+			children = (
+				926FBECF1DB4AABA002E3AAD /* StoryDetailViewController.h */,
+				926FBED01DB4AABA002E3AAD /* StoryDetailViewController.m */,
+			);
+			path = StoryDetailViewController;
 			sourceTree = "<group>";
 		};
 		928688731D702C6B0078A599 /* Utils */ = {
@@ -674,6 +687,7 @@
 				9247D9F81D9E083F00CB2266 /* MessageTableViewCell.m in Sources */,
 				924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */,
 				92F382421D9BB87B0056A899 /* MessagesViewController.m in Sources */,
+				926FBED11DB4AABA002E3AAD /* StoryDetailViewController.m in Sources */,
 				92C869891D78267B0022F0D6 /* FDateFormatter.m in Sources */,
 				92F840501D86A1FE00D32163 /* CommentsViewController.m in Sources */,
 				924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */,

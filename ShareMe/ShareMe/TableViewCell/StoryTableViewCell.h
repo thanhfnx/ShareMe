@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnComment;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentImageViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *likeButtonTopSpacingConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *btnWhoLikeThis;
 
 - (void)setStory:(Story *)story;
 

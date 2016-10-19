@@ -15,6 +15,7 @@
 #import "MainTabBarViewController.h"
 #import "SearchFriendViewController.h"
 #import "CommentsViewController.h"
+#import "StoryDetailViewController.h"
 #import "Utils.h"
 #import "Story.h"
 #import "User.h"
@@ -31,18 +32,6 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     UpdateLikedUsersAction,
     AddNewCommentToUserAction
 };
-
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kStoryReuseIdentifier = @"StoryCell";
-static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
-static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
-static NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
-static NSString *const kGoToCommentSegueIdentifier = @"goToComment";
-static NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
-static NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
-static NSString *const kLikeRequestFormat = @"%ld-%ld";
-static NSString *const kEmptyStoriesTableViewMessage = @"No stories to show.";
-static NSInteger const kNumberOfStories = 10;
 
 @interface NewsFeedViewController () {
     User *_currentUser;
@@ -172,6 +161,10 @@ static NSInteger const kNumberOfStories = 10;
     [self performSegueWithIdentifier:kGoToCommentSegueIdentifier sender:self];
 }
 
+- (void)imagesTapGestureRecognizer:(UITapGestureRecognizer *)sender {
+    // TODO: Display images view
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -222,6 +215,11 @@ static NSInteger const kNumberOfStories = 10;
     }
     cell.contentView.tag = indexPath.row;
     [cell setStory:self.topStories[indexPath.row]];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
+        action:@selector(imagesTapGestureRecognizer:)];
+    tapGestureRecognizer.numberOfTapsRequired = 1;
+    [cell.vContentImages  addGestureRecognizer:tapGestureRecognizer];
+    [cell.vContentImages setUserInteractionEnabled:YES];
     [self setTapGestureRecognizer:@[cell.imvAvatar, cell.lblFullName, cell.lblUserName]
         userId:self.topStories[indexPath.row].creator.userId.integerValue];
     return cell;
@@ -253,6 +251,15 @@ static NSInteger const kNumberOfStories = 10;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.01f;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (!_topStories.count) {
+        return;
+    }
+    _selectedIndex = indexPath.row;
+    [self performSegueWithIdentifier:kGoToStoryDetailSegueIdentifier sender:self];
 }
 
 - (void)reloadSingleCell:(Story *)story {
@@ -370,6 +377,9 @@ static NSInteger const kNumberOfStories = 10;
     } else if ([segue.identifier isEqualToString:kGoToCommentSegueIdentifier]) {
         CommentsViewController *commentsViewController = [segue destinationViewController];
         commentsViewController.story = _topStories[_selectedIndex];
+    } else if ([segue.identifier isEqualToString:kGoToStoryDetailSegueIdentifier]) {
+        StoryDetailViewController *storyDetailViewController = [segue destinationViewController];
+        storyDetailViewController.story = _topStories[_selectedIndex];
     }
 }
 

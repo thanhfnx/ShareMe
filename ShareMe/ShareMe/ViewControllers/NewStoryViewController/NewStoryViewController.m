@@ -16,19 +16,6 @@
 #import "FDateFormatter.h"
 #import "NewsFeedViewController.h"
 
-static NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kConfirmMessageTitle = @"Confirm";
-static NSString *const kConfirmDiscardStory = @"This story is unsaved! Are you sure to discard this story?";
-static NSString *const kAddNewStoryErrorMessage = @"Something went wrong! Can not post new story!";
-static NSString *const kOpenCameraErrorMessage = @"Something went wrong! Can not open camera!";
-static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
-static NSString *const kImagePickerTitle = @"Choose photos";
-static NSString *const kImagePickerMessage = @"Add photos to your story!";
-static CGFloat const kMaxImageWidth = 1920.0f;
-static CGFloat const kMaxImageHeight = 1080.0f;
-static NSInteger const kNumberOfCell = 4;
-
 @interface NewStoryViewController () {
     NSMutableArray<UIImage *> *_images;
     CGFloat _cellWidth;
