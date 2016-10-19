@@ -10,10 +10,6 @@
 #import "ApplicationConstants.h"
 #import "TimelineViewController.h"
 
-NSString *const kTakeImageFromCameraActionTitle = @"Take from camera";
-NSString *const kTakeImageFromLibraryActionTitle = @"Take from photo library";
-NSString *const kCancelActionTitle = @"Cancel";
-
 @interface FViewController () {
     UIView *_vActivityIndicator;
 }

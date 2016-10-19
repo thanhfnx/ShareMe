@@ -27,20 +27,6 @@ typedef NS_ENUM(NSInteger, FunctionMenuItems) {
     NumberOfFunctionMenuItems
 };
 
-static NSString *const kViewProfileReuseIdentifier = @"ViewProfileCell";
-static NSString *const kMenuItemReuseIdentifier = @"MenuItemCell";
-static NSString *const kLogOutReuseIdentifier = @"LogOutCell";
-static NSString *const kFindFriendsIconName = @"findfriends";
-static NSString *const kSettingsIconName = @"settingsitem";
-static NSString *const kAboutIconName = @"about";
-static NSString *const kFindFriendsTextLabel = @"Find Friends";
-static NSString *const kSettingsTextLabel = @"Settings";
-static NSString *const kAboutTextLabel= @"About";
-static NSString *const kLogOutMessage = @"Are you sure you want to log out?";
-static NSString *const kLogOutActionTitle = @"Log Out";
-static NSString *const kCancelActionTitle = @"Cancel";
-static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
-
 @interface MenuItemsViewController () {
     User *_currentUser;
     NSDictionary<NSString *, NSString *> *_functionMenuItems;
@@ -71,13 +57,10 @@ static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
     switch (section) {
         case ViewProfileMenuSection:
             return 1;
-            break;
         case FunctionMenuSection:
             return NumberOfFunctionMenuItems;
-            break;
         case LogOutMenuSection:
             return 1;
-            break;
     }
     return 0;
 }
@@ -137,6 +120,7 @@ static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.section) {
         case ViewProfileMenuSection: {
             _preparedUserId = _currentUser.userId.integerValue;
@@ -146,7 +130,7 @@ static NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
         case FunctionMenuSection: {
             switch (indexPath.row) {
                 case FindFriendsMenuItem:
-                    [self performSegueWithIdentifier:@"goToFindFriends" sender:self];
+                    [self performSegueWithIdentifier:kGoToFindFriendSegueIdentifier sender:self];
                     break;
                 case SettingsMenuItem:
                     [self performSegueWithIdentifier:kGoToSubMenuSegueIdentifier sender:self];

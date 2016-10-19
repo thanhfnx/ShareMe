@@ -94,4 +94,156 @@ NSInteger const kMessagesViewControllerIndex = 2;
 
 NSString *const kReceivedRequestNotification = @"%@ sent you a friend request.";
 
+NSString *const kSubMenuReuseIdentifier = @"SubMenuCell";
+NSString *const kSaveUserAccountTextLabel = @"Save Account";
+NSString *const kAutoLoginTextLabel = @"Auto Login";
+
+NSString *const kViewProfileReuseIdentifier = @"ViewProfileCell";
+NSString *const kMenuItemReuseIdentifier = @"MenuItemCell";
+NSString *const kLogOutReuseIdentifier = @"LogOutCell";
+NSString *const kFindFriendsIconName = @"findfriends";
+NSString *const kSettingsIconName = @"settingsitem";
+NSString *const kAboutIconName = @"about";
+NSString *const kFindFriendsTextLabel = @"Find Friends";
+NSString *const kSettingsTextLabel = @"Settings";
+NSString *const kAboutTextLabel= @"About";
+NSString *const kLogOutMessage = @"Are you sure you want to log out?";
+NSString *const kLogOutActionTitle = @"Log Out";
+NSString *const kCancelActionTitle = @"Cancel";
+NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
+NSString *const kGoToFindFriendSegueIdentifier = @"goToFindFriends";
+
+NSString *const kFriendMessageReuseIdentifier = @"FriendMessageCell";
+NSString *const kConfirmMessageTitle = @"Confirm";
+NSString *const kDefaultMessageTitle = @"Warning";
+NSString *const kConfirmDiscardMessage = @"This message is unsaved! Are you sure to discard this message?";
+NSString *const kAddNewMessageErrorMessage = @"Something went wrong! Can not send the message!";
+NSString *const kSelfMessageReuseIdentifier = @"SelfMessageCell";
+NSString *const kGetMessagesFormat = @"%ld-%ld-%ld-%ld";
+NSString *const kEmptyMessagesTableViewMessage = @"No messages.";
+
+NSString *const kMessageReuseIdentifier = @"MessageCell";
+NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
+NSString *const kEmptyRecentMessagesTableViewMessage = @"No recent messages.";
+NSString *const kGetLatestMessagesFormat = @"%ld-%ld-%ld";
+NSInteger const kNumberOfLatestMessages = 20;
+
+
+NSString *const kStoryReuseIdentifier = @"StoryCell";
+NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
+NSString *const kGetUserErrorMessage = @"Something went wrong! Can not get this user's information!";
+NSString *const kGoToCommentSegueIdentifier = @"goToComment";
+NSString *const kLikeRequestFormat = @"%ld-%ld";
+NSString *const kTimelineHeaderLabelText = @"%@'s Timeline";
+NSInteger const kNumberOfStories = 10;
+NSString *const kFriendButtonTitle = @"Friends";
+NSString *const kSelfButtonTitle = @"Update Profile";
+NSString *const kSentRequestButtonTitle = @"Cancel Request";
+NSString *const kReceivedRequestButtonTitle = @"Confirm Request";
+NSString *const kNotFriendButtonTitle = @"Add Friend";
+NSString *const kMessageButtonTitle = @"Message";
+NSString *const kChangePasswordButtonTitle = @"Change Password";
+NSString *const kRequestFormat = @"%ld-%ld";
+NSString *const kAcceptRequestErrorMessage = @"Something went wrong! Can not accept friend request!";
+NSString *const kDeclineRequestErrorMessage = @"Something went wrong! Can not decline friend request!";
+NSString *const kCancelRequestErrorMessage = @"Something went wrong! Can not cancel friend request!";
+NSString *const kSendRequestErrorMessage = @"Something went wrong! Can not send friend request!";
+NSString *const kUnfriendErrorMessage = @"Something went wrong! Can not unfriend!";
+NSString *const kConfirmUnfriendMessage = @"Do you really want to unfriend %@?";
+NSString *const kConfirmCancelRequestMessage = @"Do you really want to cancel friend request to %@?";
+NSString *const kConfirmAcceptMessage = @"Do you want to accept %@'s friend request?";
+NSString *const kAcceptButtonTitle = @"Accept";
+NSString *const kDeclineButtonTitle = @"Decline";
+NSString *const kGoToUpdateProfileSegueIdentifier = @"goToUpdateProfile";
+NSString *const kEmptyStoriesTableViewMessage = @"No stories to show.";
+NSString *const kSelfTimelineHeaderLabelText = @"Your Timeline";
+NSString *const kGoToStoryDetailSegueIdentifier = @"goToStoryDetail";
+
+NSString *const kLikedUserReuseIdentifier = @"LikedUserCell";
+NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can not get liked users!";
+
+NSString *const kFriendReuseIdentifier = @"FriendCell";
+NSString *const kNoFriendsReuseIdentifier = @"NoFriendsCell";
+NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
+NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
+NSString *const kOnlineFriendsSectionHeader = @"Online Friends";
+NSString *const kOfflineFriendsSectionHeader = @"Offline Friends";
+NSString *const kEmptyFriendsTableViewMessage = @"You don't have any friends.";
+
+NSString *const kCommentReuseIdentifier = @"CommentCell";
+NSString *const kGetTopCommentsMessageFormat = @"%ld-%ld-%ld";
+NSString *const kConfirmDiscardComment = @"This comment is unsaved! Are you sure to discard this comment?";
+NSString *const kAddNewCommentErrorMessage = @"Something went wrong! Can not add new comment!";
+NSString *const kEmptyLikedUsersLabelText = @"Be the first to like this.";
+NSString *const kSelfLikeLabelText = @"You like this.";
+NSString *const kOneLikeLabelText = @"1 person like this.";
+NSString *const kSelfLikeWithOthersLabelText = @"You and %ld other(s) like this.";
+NSString *const kManyLikeLabelText = @"%ld people like this.";
+NSInteger const kNumberOfComments = 20;
+NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
+NSString *const kEmptyCommentsTableViewMessage = @"No comments.";
+
+NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
+NSString *const kConfirmDiscardStory = @"This story is unsaved! Are you sure to discard this story?";
+NSString *const kAddNewStoryErrorMessage = @"Something went wrong! Can not post new story!";
+NSString *const kOpenCameraErrorMessage = @"Something went wrong! Can not open camera!";
+NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
+NSString *const kImagePickerTitle = @"Choose photos";
+NSString *const kImagePickerMessage = @"Add photos to your story!";
+CGFloat const kMaxImageWidth = 1920.0f;
+CGFloat const kMaxImageHeight = 1080.0f;
+NSInteger const kNumberOfCell = 4;
+
+NSString *const kSearchFriendReuseIdentifier = @"SearchFriendCell";
+NSString *const kSearchLabelTitle = @"Search results for '%@':";
+
+NSString *const kReceivedRequestReuseIdentifier = @"ReceivedRequestCell";
+NSString *const kSentRequestReuseIdentifier = @"SentRequestCell";
+NSString *const kNoRequestsMessage = @"No new requests.";
+
+NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
+NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
+
+NSString *const kDefaultDateFormat = @"dd-MM-yyyy";
+NSString *const kDefaultDate = @"05-09-1994";
+NSString *const kFailedRegisterMessage = @"UserName or email is already exist. Register failed!";
+NSString *const kEmptyDateOfBirthTextFieldText = @"No date selected";
+NSString *const kEmptyFirstNameMessage = @"First name can not be empty!";
+NSString *const kEmptyLastNameMessage = @"Last name can not be empty!";
+NSString *const kEmptyEmailMessage = @"Email can not be empty!";
+NSString *const kEmailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+NSString *const kInvalidEmailMessage = @"Email format is invalid!";
+NSString *const kEmptyUserNameMessage = @"UserName can not be empty!";
+NSString *const kEmptyDateOfBirthMessage = @"Date of birth can not be empty!";
+NSString *const kEmptyGenderMessage = @"Please choose your gender!";
+NSString *const kUserNameRegex = @"[A-Z0-9a-z._]{6,50}";
+NSString *const kInvalidUserNameMessage
+    = @"Username can not be less than 6 characters and can not contain special characters!";
+NSString *const kEmptyPasswordMessage = @"Password can not be empty!";
+NSString *const kInvalidPasswordMessage = @"Password can not be less than 6 characters!";
+NSString *const kEmptyRetypePasswordMessage = @"Retype password can not be empty!";
+NSString *const kNotMatchRetypePasswordMessage = @"Password and retype password have to be the same!";
+NSInteger const kMinimumPasswordLength = 6;
+CGFloat const kMaxAvatarWidth = 500.0f;
+CGFloat const kMaxAvatarHeight = 500.0f;
+
+NSString *const kFailedLoginMessage = @"UserName or password is incorrect. Login failed!";
+NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
+NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
+NSString *const kUserNameKey = @"shareMe_userName";
+NSString *const kPasswordKey = @"shareMe_password";
+
+NSString *const kTakeImageFromCameraActionTitle = @"Take from camera";
+NSString *const kTakeImageFromLibraryActionTitle = @"Take from photo library";
+
+NSString *const kDateFormat = @"d MMM yy";
+NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd HH:mm:ss";
+NSString *const kDefaultMaleAvatar = @"default-male-avatar";
+NSString *const kDefaultFemaleAvatar = @"default-female-avatar";
+CGFloat const kSquareImageRatio = 1.0f;
+CGFloat const kLandscapeImageRatio = 16.0f / 9.0f;
+CGFloat const kPortraitImageRatio = 9.0f / 16.0f;
+CGFloat const kLongWidthImageRatio = 2.0f;
+CGFloat const kLongHeightImageRatio = 0.5f;
+
 @end

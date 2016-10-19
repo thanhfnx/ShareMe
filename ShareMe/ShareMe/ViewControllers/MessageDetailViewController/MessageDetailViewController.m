@@ -24,14 +24,6 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddNewMessageToUserAction
 };
 
-static NSString *const kFriendMessageReuseIdentifier = @"FriendMessageCell";
-static NSString *const kConfirmMessageTitle = @"Confirm";
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kConfirmDiscardMessage = @"This message is unsaved! Are you sure to discard this message?";
-static NSString *const kAddNewMessageErrorMessage = @"Something went wrong! Can not send the message!";
-static NSString *const kSelfMessageReuseIdentifier = @"SelfMessageCell";
-static NSString *const kGetMessagesFormat = @"%ld-%ld-%ld-%ld";
-static NSString *const kEmptyMessagesTableViewMessage = @"No messages.";
 static NSInteger const kNumberOfMessages = 20;
 
 @interface MessageDetailViewController () {

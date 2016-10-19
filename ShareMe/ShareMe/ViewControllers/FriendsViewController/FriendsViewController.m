@@ -10,7 +10,6 @@
 #import "FriendTableViewCell.h"
 #import "MainTabBarViewController.h"
 #import "ClientSocketController.h"
-//#import "MessagesViewController.h"
 #import "MessageDetailViewController.h"
 #import "User.h"
 #import "Utils.h"
@@ -24,16 +23,6 @@ typedef NS_ENUM(NSInteger, FriendSections) {
 typedef NS_ENUM(NSInteger, UserRequestActions) {
     UpdateOnlineStatusToUserAction
 };
-
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kFriendReuseIdentifier = @"FriendCell";
-static NSString *const kNoFriendsReuseIdentifier = @"NoFriendsCell";
-static NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
-static NSString *const kEmptySearchResultMessage = @"Could not find anything for \"%@\"!";
-static NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
-static NSString *const kOnlineFriendsSectionHeader = @"Online Friends";
-static NSString *const kOfflineFriendsSectionHeader = @"Offline Friends";
-static NSString *const kEmptyFriendsTableViewMessage = @"You don't have any friends.";
 
 @interface FriendsViewController () {
     User *_currentUser;

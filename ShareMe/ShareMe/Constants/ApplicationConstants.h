@@ -6,7 +6,7 @@
 //  Copyright © 2016 Framgia. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface ApplicationConstants : NSObject
 
@@ -93,5 +93,155 @@ extern NSString *const kAutoLoginKey;
 extern NSInteger const kMessagesViewControllerIndex;
 
 extern NSString *const kReceivedRequestNotification;
+
+extern NSString *const kSubMenuReuseIdentifier;
+extern NSString *const kSaveUserAccountTextLabel;
+extern NSString *const kAutoLoginTextLabel;
+
+extern NSString *const kViewProfileReuseIdentifier;
+extern NSString *const kMenuItemReuseIdentifier;
+extern NSString *const kLogOutReuseIdentifier;
+extern NSString *const kFindFriendsIconName;
+extern NSString *const kSettingsIconName;
+extern NSString *const kAboutIconName;
+extern NSString *const kFindFriendsTextLabel;
+extern NSString *const kSettingsTextLabel;
+extern NSString *const kAboutTextLabel;
+extern NSString *const kLogOutMessage;
+extern NSString *const kLogOutActionTitle;
+extern NSString *const kCancelActionTitle;
+extern NSString *const kGoToSubMenuSegueIdentifier;
+extern NSString *const kGoToFindFriendSegueIdentifier;
+
+extern NSString *const kFriendMessageReuseIdentifier;
+extern NSString *const kConfirmMessageTitle;
+extern NSString *const kDefaultMessageTitle;
+extern NSString *const kConfirmDiscardMessage;
+extern NSString *const kAddNewMessageErrorMessage;
+extern NSString *const kSelfMessageReuseIdentifier;
+extern NSString *const kGetMessagesFormat;
+extern NSString *const kEmptyMessagesTableViewMessage;
+
+extern NSString *const kMessageReuseIdentifier;
+extern NSString *const kGoToMessageDetailSegueIdentifier;
+extern NSString *const kEmptyRecentMessagesTableViewMessage;
+extern NSString *const kGetLatestMessagesFormat;
+extern NSInteger const kNumberOfLatestMessages;
+
+extern NSString *const kStoryReuseIdentifier;
+extern NSString *const kGetTopStoriesRequestFormat;
+extern NSString *const kGetUserErrorMessage;
+extern NSString *const kGoToCommentSegueIdentifier;
+extern NSString *const kLikeRequestFormat;
+extern NSString *const kTimelineHeaderLabelText;
+extern NSInteger const kNumberOfStories;
+extern NSString *const kFriendButtonTitle;
+extern NSString *const kSelfButtonTitle;
+extern NSString *const kSentRequestButtonTitle;
+extern NSString *const kReceivedRequestButtonTitle;
+extern NSString *const kNotFriendButtonTitle;
+extern NSString *const kMessageButtonTitle;
+extern NSString *const kChangePasswordButtonTitle;
+extern NSString *const kRequestFormat;
+extern NSString *const kAcceptRequestErrorMessage;
+extern NSString *const kDeclineRequestErrorMessage;
+extern NSString *const kCancelRequestErrorMessage;
+extern NSString *const kSendRequestErrorMessage;
+extern NSString *const kUnfriendErrorMessage;
+extern NSString *const kConfirmUnfriendMessage;
+extern NSString *const kConfirmCancelRequestMessage;
+extern NSString *const kConfirmAcceptMessage;
+extern NSString *const kAcceptButtonTitle;
+extern NSString *const kDeclineButtonTitle;
+extern NSString *const kGoToUpdateProfileSegueIdentifier;
+extern NSString *const kEmptyStoriesTableViewMessage;
+extern NSString *const kSelfTimelineHeaderLabelText;
+extern NSString *const kGoToStoryDetailSegueIdentifier;
+
+extern NSString *const kLikedUserReuseIdentifier;
+extern NSString *const kGetLikedUsersErrorMessage;
+
+extern NSString *const kFriendReuseIdentifier;
+extern NSString *const kNoFriendsReuseIdentifier;
+extern NSString *const kEmptySearchMessage;
+extern NSString *const kEmptySearchResultMessage;
+extern NSString *const kOnlineFriendsSectionHeader;
+extern NSString *const kOfflineFriendsSectionHeader;
+extern NSString *const kEmptyFriendsTableViewMessage;
+
+extern NSString *const kCommentReuseIdentifier;
+extern NSString *const kGetTopCommentsMessageFormat;
+extern NSString *const kConfirmDiscardComment;
+extern NSString *const kAddNewCommentErrorMessage;
+extern NSString *const kEmptyLikedUsersLabelText;
+extern NSString *const kSelfLikeLabelText;
+extern NSString *const kOneLikeLabelText;
+extern NSString *const kSelfLikeWithOthersLabelText;
+extern NSString *const kManyLikeLabelText;
+extern NSInteger const kNumberOfComments;
+extern NSString *const kGoToWhoLikeThisSegueIdentifier;
+extern NSString *const kEmptyCommentsTableViewMessage;
+
+extern NSString *const kThumbnailReuseIdentifier;
+extern NSString *const kConfirmDiscardStory;
+extern NSString *const kAddNewStoryErrorMessage;
+extern NSString *const kOpenCameraErrorMessage;
+extern NSString *const kImageMessageFormat;
+extern NSString *const kImagePickerTitle;
+extern NSString *const kImagePickerMessage;
+extern CGFloat const kMaxImageWidth;
+extern CGFloat const kMaxImageHeight;
+extern NSInteger const kNumberOfCell;
+
+extern NSString *const kSearchFriendReuseIdentifier;
+extern NSString *const kSearchLabelTitle;
+
+extern NSString *const kReceivedRequestReuseIdentifier;
+extern NSString *const kSentRequestReuseIdentifier;
+extern NSString *const kNoRequestsMessage;
+
+extern NSString *const kGoToSearchFriendSegueIdentifier;
+extern NSString *const kGoToNewStorySegueIdentifier;
+
+extern NSString *const kDefaultDateFormat;
+extern NSString *const kDefaultDate;
+extern NSString *const kFailedRegisterMessage;
+extern NSString *const kEmptyDateOfBirthTextFieldText;
+extern NSString *const kEmptyFirstNameMessage;
+extern NSString *const kEmptyLastNameMessage;
+extern NSString *const kEmptyEmailMessage;
+extern NSString *const kEmailRegex;
+extern NSString *const kInvalidEmailMessage;
+extern NSString *const kEmptyUserNameMessage;
+extern NSString *const kEmptyDateOfBirthMessage;
+extern NSString *const kEmptyGenderMessage;
+extern NSString *const kUserNameRegex;
+extern NSString *const kInvalidUserNameMessage;
+extern NSString *const kEmptyPasswordMessage;
+extern NSString *const kInvalidPasswordMessage;
+extern NSString *const kEmptyRetypePasswordMessage;
+extern NSString *const kNotMatchRetypePasswordMessage;
+extern NSInteger const kMinimumPasswordLength;
+extern CGFloat const kMaxAvatarWidth;
+extern CGFloat const kMaxAvatarHeight;
+
+extern NSString *const kFailedLoginMessage;
+extern NSString *const kGoToMainTabBarSegueIdentifier;
+extern NSString *const kGoToRegisterSegueIdentifier;
+extern NSString *const kUserNameKey;
+extern NSString *const kPasswordKey;
+
+extern NSString *const kTakeImageFromCameraActionTitle;
+extern NSString *const kTakeImageFromLibraryActionTitle;
+
+extern NSString *const kDateFormat;
+extern NSString *const kDefaultDateTimeFormat;
+extern NSString *const kDefaultMaleAvatar;
+extern NSString *const kDefaultFemaleAvatar;
+extern CGFloat const kSquareImageRatio;
+extern CGFloat const kLandscapeImageRatio;
+extern CGFloat const kPortraitImageRatio;
+extern CGFloat const kLongWidthImageRatio;
+extern CGFloat const kLongHeightImageRatio;
 
 @end

@@ -14,34 +14,6 @@
 #import "Utils.h"
 #import "FDateFormatter.h"
 
-static NSString *const kDefaultDateFormat = @"dd-MM-yyyy";
-static NSString *const kDefaultDate = @"05-09-1994";
-static NSString *const kDefaultMessageTitle = @"Warning";
-static NSString *const kFailedRegisterMessage = @"UserName or email is already exist. Register failed!";
-static NSString *const kEmptyDateOfBirthTextFieldText = @"No date selected";
-static NSString *const kEmptyFirstNameMessage = @"First name can not be empty!";
-static NSString *const kEmptyLastNameMessage = @"Last name can not be empty!";
-static NSString *const kEmptyEmailMessage = @"Email can not be empty!";
-static NSString *const kEmailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-static NSString *const kInvalidEmailMessage = @"Email format is invalid!";
-static NSString *const kEmptyUserNameMessage = @"UserName can not be empty!";
-static NSString *const kEmptyDateOfBirthMessage = @"Date of birth can not be empty!";
-static NSString *const kEmptyGenderMessage = @"Please choose your gender!";
-static NSString *const kUserNameRegex = @"[A-Z0-9a-z._]{6,50}";
-static NSString *const kInvalidUserNameMessage
-    = @"Username can not be less than 6 characters and can not contain special characters!";
-static NSString *const kEmptyPasswordMessage = @"Password can not be empty!";
-static NSString *const kInvalidPasswordMessage = @"Password can not be less than 6 characters!";
-static NSString *const kEmptyRetypePasswordMessage = @"Retype password can not be empty!";
-static NSString *const kNotMatchRetypePasswordMessage = @"Password and retype password have to be the same!";
-static NSString *const kOpenCameraErrorMessage = @"Something went wrong! Can not open camera!";
-static NSString *const kImagePickerTitle = @"Choose photo";
-static NSString *const kImagePickerMessage = @"Add an profile picture so friends can easily recognize you!";
-static NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
-static NSInteger const kMinimumPasswordLength = 6;
-static CGFloat const kMaxImageWidth = 500.0f;
-static CGFloat const kMaxImageHeight = 500.0f;
-
 @interface RegisterViewController () {
     NSDate *_currentDate;
     NSDateFormatter *_dateFormatter;
@@ -437,7 +409,7 @@ static CGFloat const kMaxImageHeight = 500.0f;
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController
     didFinishPickingAssets:(NSArray *)assets {
     if (assets.count) {
-        _avatarImage = [Utils getUIImageFromAsset:assets[0] maxWidth:kMaxImageWidth maxHeight:kMaxImageHeight];
+        _avatarImage = [Utils getUIImageFromAsset:assets[0] maxWidth:kMaxAvatarWidth maxHeight:kMaxAvatarHeight];
         self.imvAvatar.image = _avatarImage;
         [self dismissViewControllerAnimated:YES completion:nil];
     }
