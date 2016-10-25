@@ -19,16 +19,6 @@ typedef NS_ENUM(NSInteger, ImageType) {
     ImageTypeLongHeight
 };
 
-extern NSString *const kDateFormat;
-extern NSString *const kDefaultDateTimeFormat;
-extern NSString *const kDefaultMaleAvatar;
-extern NSString *const kDefaultFemaleAvatar;
-extern CGFloat const kSquareImageRatio;
-extern CGFloat const kLandscapeImageRatio;
-extern CGFloat const kPortraitImageRatio;
-extern CGFloat const kLongWidthImageRatio;
-extern CGFloat const kLongHeightImageRatio;
-
 @interface Utils : NSObject
 
 + (UIImage *)getAvatar:(NSMutableArray *)imageString gender:(NSNumber *)gender;
@@ -43,5 +33,6 @@ extern CGFloat const kLongHeightImageRatio;
 + (UITableViewCell *)emptyTableCell:(NSString *)message;
 + (void)showLocalNotification:(NSString *)alertBody userInfo:(NSDictionary *)userInfo;
 + (void)setApplicationBadge:(BOOL)isIncrease;
++ (NSString *)sentTimeFromDate:(NSString *)dateString withDetail:(BOOL)withDetail;
 
 @end

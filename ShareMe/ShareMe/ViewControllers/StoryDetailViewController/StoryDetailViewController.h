@@ -11,7 +11,7 @@
 
 @class Story;
 
-@interface StoryDetailViewController : FViewController
+@interface StoryDetailViewController : FViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @property (strong, nonatomic) Story *story;
 

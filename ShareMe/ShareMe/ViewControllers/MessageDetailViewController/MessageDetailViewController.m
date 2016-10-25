@@ -10,8 +10,11 @@
 #import "MessageDetailTableViewCell.h"
 #import "MainTabBarViewController.h"
 #import "ClientSocketController.h"
+#import "ApplicationConstants.h"
+#import "UITableView+ScrollHelpers.h"
 #import "Message.h"
 #import "FDateFormatter.h"
+#import "NSDate+TimeDiff.h"
 #import "Utils.h"
 #import "User.h"
 
@@ -23,8 +26,6 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
 typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddNewMessageToUserAction
 };
-
-static NSInteger const kNumberOfMessages = 20;
 
 @interface MessageDetailViewController () {
     NSMutableArray<Message *> *_messages;
@@ -86,8 +87,7 @@ static NSInteger const kNumberOfMessages = 20;
     if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
         [self resignRequestHandler];
     }
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)loadMessages {
@@ -108,6 +108,7 @@ static NSInteger const kNumberOfMessages = 20;
     _message.sender = sender;
     _message.receiver = receiver;
     _message.content = self.txvNewMessage.text;
+    _dateFormatter.dateFormat = kDefaultDateTimeFormat;
     _message.sentTime = [_dateFormatter stringFromDate:[NSDate date]];
 }
 
@@ -170,7 +171,15 @@ static NSInteger const kNumberOfMessages = 20;
     if (!cell) {
         return [UITableViewCell new];
     }
-    [cell setMessage:message];
+    BOOL isFirstMessageOfTheDay = YES;
+    if (indexPath.row) {
+        _dateFormatter.dateFormat = kDefaultDateTimeFormat;
+        NSDate *currentMessageSentTime = [_dateFormatter dateFromString:message.sentTime];
+        NSDate *previousMessageSentTime = [_dateFormatter dateFromString:_messages[indexPath.row - 1].sentTime];
+        isFirstMessageOfTheDay = ![[NSCalendar currentCalendar] isDate:currentMessageSentTime
+            inSameDayAsDate:previousMessageSentTime];
+    }
+    [cell setMessage:message isFirstMessageOfTheDay:isFirstMessageOfTheDay];
     return cell;
 }
 
@@ -187,26 +196,32 @@ static NSInteger const kNumberOfMessages = 20;
 
 - (void)reloadDataWithAnimated:(BOOL)animated {
     [self.tableView reloadData];
-    if (_messages.count) {
-        NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1
-            inSection:0];
-        [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
-            animated:animated];
-    }
+    [self updateContentInset];
+    [self.tableView scrollToBottom:animated];
+}
+
+- (void)updateContentInset {
+    [self.tableView layoutIfNeeded];
+    CGFloat topInset = MAX(CGRectGetHeight(self.tableView.frame) - self.tableView.contentSize.height, 0.0f);
+    self.tableView.contentInset = UIEdgeInsetsMake(topInset + 4.0f, 0.0f, 4.0f, 0.0f);
 }
 
 #pragma mark - Show / hide keyboard
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    [UIView animateWithDuration:0.3 animations:^{
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    [UIView animateWithDuration:duration animations:^{
         CGFloat offset = keyboardSize.height;
         self.addMessageViewBottomConstraint.constant += offset;
     }];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    [UIView animateWithDuration:0.3 animations:^{
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    [UIView animateWithDuration:duration animations:^{
         self.addMessageViewBottomConstraint.constant = 0.0f;
     }];
 }
@@ -219,11 +234,11 @@ static NSInteger const kNumberOfMessages = 20;
         case UserGetMessagesAction: {
             if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
-                NSMutableArray *array = [[[[Message arrayOfModelsFromString:message error:&error]
-                    reverseObjectEnumerator] allObjects] mutableCopy];
+                NSMutableArray *array = [Message arrayOfModelsFromString:message error:&error];
                 if (error) {
                     return;
                 }
+                array = [[[array reverseObjectEnumerator] allObjects] mutableCopy];
                 [array addObjectsFromArray:_messages];
                 [_messages removeAllObjects];
                 [_messages addObjectsFromArray:array];

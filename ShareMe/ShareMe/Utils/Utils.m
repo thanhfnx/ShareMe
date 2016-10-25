@@ -11,6 +11,7 @@
 #import "FDateFormatter.h"
 #import "User.h"
 #import "UIViewConstant.h"
+#import "ApplicationConstants.h"
 
 @implementation Utils
 
@@ -178,6 +179,40 @@
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication]
             applicationIconBadgeNumber] - 1];
     }
+}
+
++ (NSString *)sentTimeFromDate:(NSString *)dateString withDetail:(BOOL)withDetail {
+    FDateFormatter *dateFormatter = [FDateFormatter sharedDateFormatter];
+    dateFormatter.dateFormat = kDefaultDateTimeFormat;
+    NSDate *date = [dateFormatter dateFromString:dateString];
+    if ([[NSCalendar currentCalendar] isDateInToday:date]) {
+        NSString *format = withDetail ? kSentTimeTodayFullFormat : @"%@";
+        dateFormatter.dateFormat = kTimeWithHourMinuteFormat;
+        return [NSString stringWithFormat:format, [dateFormatter stringFromDate:date withLocalTimeZone:[NSTimeZone
+            localTimeZone]]];
+    }
+    if ([[NSCalendar currentCalendar] isDateInYesterday:date]) {
+        if (!withDetail) {
+            return kSentTimeYesterdayFormat;
+        }
+        NSString *format = kSentTimeYesterdayFullFormat;
+        dateFormatter.dateFormat = kTimeWithHourMinuteFormat;
+        return [NSString stringWithFormat:format, [dateFormatter stringFromDate:date withLocalTimeZone:[NSTimeZone
+            localTimeZone]]];
+    }
+    NSDate *today = [NSDate date];
+    NSInteger days = [today timeDiffFromDate:date unit:NSCalendarUnitDay].day;
+    if (days > 1 && days < 7) {
+        dateFormatter.dateFormat = withDetail ? kTimeWithDayOfWeekFullFormat : kTimeWithDayOfWeekFormat;
+        return [dateFormatter stringFromDate:date withLocalTimeZone:[NSTimeZone localTimeZone]];
+    }
+    NSInteger months = [today timeDiffFromDate:date unit:NSCalendarUnitMonth].month;
+    if (months < 12) {
+        dateFormatter.dateFormat = withDetail ? kTimeInYearFullFormat : kTimeInYearFormat;
+        return [dateFormatter stringFromDate:date withLocalTimeZone:[NSTimeZone localTimeZone]];
+    }
+    dateFormatter.dateFormat = withDetail ? kTimeNotInYearFullFormat : kTimeNotInYearFormat;
+    return [dateFormatter stringFromDate:date withLocalTimeZone:[NSTimeZone localTimeZone]];
 }
 
 @end

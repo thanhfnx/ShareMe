@@ -14,7 +14,10 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imvAvatar;
 @property (weak, nonatomic) IBOutlet UILabel *lblContent;
+@property (weak, nonatomic) IBOutlet UILabel *lblSentTime;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *messageViewTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sentTimeLabelHeightConstraint;
 
-- (void)setMessage:(Message *)message;
+- (void)setMessage:(Message *)message isFirstMessageOfTheDay:(BOOL)isFirstMessageOfTheDay;
 
 @end
