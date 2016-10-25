@@ -70,8 +70,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self dismissKeyboard];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -425,7 +424,9 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    [UIView animateWithDuration:0.3 animations:^{
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    [UIView animateWithDuration:duration animations:^{
         CGRect theFrame = self.view.frame;
         CGFloat offset = self.lblTitle.frame.origin.y + self.lblTitle.frame.size.height;
         self.loginButtonBottomConstraint.constant = keyboardSize.height + 8.0f - offset;
@@ -437,7 +438,9 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    [UIView animateWithDuration:0.3 animations:^{
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    [UIView animateWithDuration:duration animations:^{
         CGRect frame = self.view.frame;
         self.loginButtonBottomConstraint.constant = 8.0f;
         self.backToFirstViewButtonBottomConstraint.constant = 8.0f;

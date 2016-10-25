@@ -11,5 +11,6 @@
 @interface FDateFormatter : NSDateFormatter
 
 + (instancetype)sharedDateFormatter;
+- (NSString *)stringFromDate:(NSDate *)date withLocalTimeZone:(NSTimeZone *)timeZone;
 
 @end

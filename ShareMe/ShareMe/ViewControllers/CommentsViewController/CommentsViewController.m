@@ -13,6 +13,7 @@
 #import "CommentTableViewCell.h"
 #import "WhoLikeThisViewController.h"
 #import "TimelineViewController.h"
+#import "UITableView+ScrollHelpers.h"
 #import "FDateFormatter.h"
 #import "Utils.h"
 #import "Comment.h"
@@ -73,7 +74,6 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     [self registerRequestHandler];
     _currentUser = ((MainTabBarViewController *)self.navigationController.tabBarController).loggedInUser;
     _dateFormatter = [FDateFormatter sharedDateFormatter];
-    _dateFormatter.dateFormat = kDefaultDateTimeFormat;
     [self updateLikedUsers];
     [self loadComments];
     _topRefreshControl = [[UIRefreshControl alloc] init];
@@ -95,8 +95,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
         [self resignRequestHandler];
     }
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)loadComments {
@@ -188,9 +187,11 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 
 - (void)reloadDataWithAnimated:(BOOL)animated {
     [self.tableView reloadData];
-    NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
-        animated:animated];
+    [self.tableView scrollToBottom:animated];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.txvAddComment resignFirstResponder];
 }
 
 #pragma mark - Packing entity
@@ -201,6 +202,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     creator.userId = _currentUser.userId;
     _comment.creator = creator;
     _comment.content = self.txvAddComment.text;
+    _dateFormatter.dateFormat = kDefaultDateTimeFormat;
     _comment.createdTime = [_dateFormatter stringFromDate:[NSDate date]];
     Story *story = [[Story alloc] init];
     story.storyId = @(self.story.storyId.integerValue);
@@ -247,14 +249,23 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    [UIView animateWithDuration:0.3 animations:^{
-        CGFloat offset = keyboardSize.height;
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    CGFloat offset = keyboardSize.height;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, 0.0f, offset, 0.0f);
+    [UIView animateWithDuration:duration animations:^{
+        self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
         self.addCommentViewBottomConstraint.constant += offset;
     }];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    [UIView animateWithDuration:0.3 animations:^{
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    [UIView animateWithDuration:duration animations:^{
+        self.tableView.contentInset = UIEdgeInsetsZero;
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
         self.addCommentViewBottomConstraint.constant = 0.0f;
     }];
 }
@@ -267,15 +278,15 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         case UserGetTopCommentsAction: {
             if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
-                NSMutableArray *array = [[[[Comment arrayOfModelsFromString:message error:&error]
-                    reverseObjectEnumerator] allObjects] mutableCopy];
+                NSMutableArray *array = [Comment arrayOfModelsFromString:message error:&error];
+                if (error) {
+                    return;
+                }
+                array = [[[array reverseObjectEnumerator] allObjects] mutableCopy];
                 [array addObjectsFromArray:_topComments];
                 [_topComments removeAllObjects];
                 [_topComments addObjectsFromArray:array];
                 _startIndex += kNumberOfComments;;
-                if (error) {
-                    return;
-                }
                 [self reloadDataWithAnimated:NO];
             }
             [_topRefreshControl endRefreshing];

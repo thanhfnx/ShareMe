@@ -11,6 +11,6 @@
 
 @class User;
 
-@interface MessagesViewController : FViewController
+@interface MessagesViewController : FViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

@@ -10,6 +10,7 @@
 		9203403D1D9287E500619B28 /* WhoLikeThisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9203403C1D9287E500619B28 /* WhoLikeThisViewController.m */; };
 		920391151D6D343E00BC5BE0 /* NewsFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391141D6D343E00BC5BE0 /* NewsFeedViewController.m */; };
 		920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */; };
+		92214D701DB9BCFC00493202 /* UITableView+ScrollHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 92214D6F1DB9BCFC00493202 /* UITableView+ScrollHelpers.m */; };
 		922945011D7D40C300913B0C /* NewsFeedImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 922945001D7D40C300913B0C /* NewsFeedImageView.xib */; };
 		922DB3F11D6B4D4C00AF2268 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */; };
 		92441AB51D66A94200F5426A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D50D781D6540770022772A /* main.m */; };
@@ -67,6 +68,8 @@
 		920391141D6D343E00BC5BE0 /* NewsFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsFeedViewController.m; sourceTree = "<group>"; };
 		920391171D6D3EAB00BC5BE0 /* StoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewCell.h; sourceTree = "<group>"; };
 		920391181D6D3EAB00BC5BE0 /* StoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryTableViewCell.m; sourceTree = "<group>"; };
+		92214D6E1DB9BCFC00493202 /* UITableView+ScrollHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+ScrollHelpers.h"; sourceTree = "<group>"; };
+		92214D6F1DB9BCFC00493202 /* UITableView+ScrollHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ScrollHelpers.m"; sourceTree = "<group>"; };
 		922945001D7D40C300913B0C /* NewsFeedImageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsFeedImageView.xib; sourceTree = "<group>"; };
 		922DB3EE1D6B4D4C00AF2268 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		922DB3EF1D6B4D4C00AF2268 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
@@ -276,6 +279,8 @@
 				924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */,
 				92C869841D7807430022F0D6 /* NSDate+TimeDiff.h */,
 				92C869851D7807430022F0D6 /* NSDate+TimeDiff.m */,
+				92214D6E1DB9BCFC00493202 /* UITableView+ScrollHelpers.h */,
+				92214D6F1DB9BCFC00493202 /* UITableView+ScrollHelpers.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -693,6 +698,7 @@
 				924E108D1D6D99FE004DE853 /* RequestViewController.m in Sources */,
 				92BBFEA01DA37C1D00E8C3A5 /* SubMenuTableViewCell.m in Sources */,
 				92C869861D7807430022F0D6 /* NSDate+TimeDiff.m in Sources */,
+				92214D701DB9BCFC00493202 /* UITableView+ScrollHelpers.m in Sources */,
 				92EB83611D6BDB9E004119FD /* RegisterViewController.m in Sources */,
 				92441AB61D66A94D00F5426A /* AppDelegate.m in Sources */,
 				920391191D6D3EAB00BC5BE0 /* StoryTableViewCell.m in Sources */,

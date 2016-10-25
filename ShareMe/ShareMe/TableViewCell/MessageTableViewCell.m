@@ -23,7 +23,7 @@
         self.lblFullName.text = [message.sender fullName];
         self.lblLastMessage.text = message.content;
     }
-    self.lblSentTime.text = [Utils timeDiffFromDate:message.sentTime];
+    self.lblSentTime.text = [Utils sentTimeFromDate:message.sentTime withDetail:NO];
 }
 
 @end

@@ -90,7 +90,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 }
 
 - (void)didReceiveMemoryWarning {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kUpdateNewsFeedNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

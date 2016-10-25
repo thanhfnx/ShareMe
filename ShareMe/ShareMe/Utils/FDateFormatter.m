@@ -20,4 +20,11 @@
   return sharedDateFormatter;
 }
 
+- (NSString *)stringFromDate:(NSDate *)date withLocalTimeZone:(NSTimeZone *)timeZone {
+    [self setTimeZone:timeZone];
+    NSString *result = [self stringFromDate:date];
+    [self setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    return result;
+}
+
 @end

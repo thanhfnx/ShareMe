@@ -87,17 +87,23 @@ extern NSString *const kUserGetLatestMessagesAction;
 extern NSString *const kGoToListFriendSegueIdentifier;
 extern NSString *const kGoToUserTimelineSegueIdentifier;
 
+/* Constants for NSUserDefaults keys */
 extern NSString *const kSaveUserAccountKey;
 extern NSString *const kAutoLoginKey;
+extern NSString *const kUserNameKey;
+extern NSString *const kPasswordKey;
 
 extern NSInteger const kMessagesViewControllerIndex;
 
+/* Constants for Notifications */
 extern NSString *const kReceivedRequestNotification;
 
+/* Constants for SubMenuViewController */
 extern NSString *const kSubMenuReuseIdentifier;
 extern NSString *const kSaveUserAccountTextLabel;
 extern NSString *const kAutoLoginTextLabel;
 
+/* Constants for MenuItemViewController */
 extern NSString *const kViewProfileReuseIdentifier;
 extern NSString *const kMenuItemReuseIdentifier;
 extern NSString *const kLogOutReuseIdentifier;
@@ -113,6 +119,7 @@ extern NSString *const kCancelActionTitle;
 extern NSString *const kGoToSubMenuSegueIdentifier;
 extern NSString *const kGoToFindFriendSegueIdentifier;
 
+/* Constants for MessageDetailViewController */
 extern NSString *const kFriendMessageReuseIdentifier;
 extern NSString *const kConfirmMessageTitle;
 extern NSString *const kDefaultMessageTitle;
@@ -121,13 +128,16 @@ extern NSString *const kAddNewMessageErrorMessage;
 extern NSString *const kSelfMessageReuseIdentifier;
 extern NSString *const kGetMessagesFormat;
 extern NSString *const kEmptyMessagesTableViewMessage;
+extern NSInteger const kNumberOfMessages;
 
+/* Constants for MessagesViewController */
 extern NSString *const kMessageReuseIdentifier;
 extern NSString *const kGoToMessageDetailSegueIdentifier;
 extern NSString *const kEmptyRecentMessagesTableViewMessage;
 extern NSString *const kGetLatestMessagesFormat;
 extern NSInteger const kNumberOfLatestMessages;
 
+/* Constants for TimelineViewController */
 extern NSString *const kStoryReuseIdentifier;
 extern NSString *const kGetTopStoriesRequestFormat;
 extern NSString *const kGetUserErrorMessage;
@@ -158,9 +168,11 @@ extern NSString *const kEmptyStoriesTableViewMessage;
 extern NSString *const kSelfTimelineHeaderLabelText;
 extern NSString *const kGoToStoryDetailSegueIdentifier;
 
+/* Constants for WhoLikeThisViewController */
 extern NSString *const kLikedUserReuseIdentifier;
 extern NSString *const kGetLikedUsersErrorMessage;
 
+/* Constants for FriendsViewController */
 extern NSString *const kFriendReuseIdentifier;
 extern NSString *const kNoFriendsReuseIdentifier;
 extern NSString *const kEmptySearchMessage;
@@ -169,6 +181,7 @@ extern NSString *const kOnlineFriendsSectionHeader;
 extern NSString *const kOfflineFriendsSectionHeader;
 extern NSString *const kEmptyFriendsTableViewMessage;
 
+/* Constants for CommentsViewController */
 extern NSString *const kCommentReuseIdentifier;
 extern NSString *const kGetTopCommentsMessageFormat;
 extern NSString *const kConfirmDiscardComment;
@@ -182,6 +195,7 @@ extern NSInteger const kNumberOfComments;
 extern NSString *const kGoToWhoLikeThisSegueIdentifier;
 extern NSString *const kEmptyCommentsTableViewMessage;
 
+/* Constants for NewStoryViewController */
 extern NSString *const kThumbnailReuseIdentifier;
 extern NSString *const kConfirmDiscardStory;
 extern NSString *const kAddNewStoryErrorMessage;
@@ -193,16 +207,20 @@ extern CGFloat const kMaxImageWidth;
 extern CGFloat const kMaxImageHeight;
 extern NSInteger const kNumberOfCell;
 
+/* Constants for SearchFriendViewController */
 extern NSString *const kSearchFriendReuseIdentifier;
 extern NSString *const kSearchLabelTitle;
 
+/* Constants for RequestsViewController */
 extern NSString *const kReceivedRequestReuseIdentifier;
 extern NSString *const kSentRequestReuseIdentifier;
 extern NSString *const kNoRequestsMessage;
 
+/* Constants for NewsFeedViewController */
 extern NSString *const kGoToSearchFriendSegueIdentifier;
 extern NSString *const kGoToNewStorySegueIdentifier;
 
+/* Constants for RegisterViewController */
 extern NSString *const kDefaultDateFormat;
 extern NSString *const kDefaultDate;
 extern NSString *const kFailedRegisterMessage;
@@ -225,15 +243,16 @@ extern NSInteger const kMinimumPasswordLength;
 extern CGFloat const kMaxAvatarWidth;
 extern CGFloat const kMaxAvatarHeight;
 
+/* Constants for LoginViewController */
 extern NSString *const kFailedLoginMessage;
 extern NSString *const kGoToMainTabBarSegueIdentifier;
 extern NSString *const kGoToRegisterSegueIdentifier;
-extern NSString *const kUserNameKey;
-extern NSString *const kPasswordKey;
 
+/* Constants for FViewController */
 extern NSString *const kTakeImageFromCameraActionTitle;
 extern NSString *const kTakeImageFromLibraryActionTitle;
 
+/* Constants for Utils */
 extern NSString *const kDateFormat;
 extern NSString *const kDefaultDateTimeFormat;
 extern NSString *const kDefaultMaleAvatar;
@@ -243,5 +262,18 @@ extern CGFloat const kLandscapeImageRatio;
 extern CGFloat const kPortraitImageRatio;
 extern CGFloat const kLongWidthImageRatio;
 extern CGFloat const kLongHeightImageRatio;
+extern NSString *const kTimeWithHourMinuteFormat;
+extern NSString *const kTimeWithDayOfWeekFormat;
+extern NSString *const kTimeWithDayOfWeekFullFormat;
+extern NSString *const kTimeInYearFormat;
+extern NSString *const kTimeInYearFullFormat;
+extern NSString *const kTimeNotInYearFormat;
+extern NSString *const kTimeNotInYearFullFormat;
+extern NSString *const kSentTimeTodayFullFormat;
+extern NSString *const kSentTimeYesterdayFormat;
+extern NSString *const kSentTimeYesterdayFullFormat;
+
+/* Constants for StoryDetailViewController */
+extern NSString *const kStoryDetailTitle;
 
 @end

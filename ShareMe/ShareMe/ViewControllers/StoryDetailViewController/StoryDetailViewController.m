@@ -22,6 +22,7 @@
 #import "NewsFeedViewController.h"
 #import "WhoLikeThisViewController.h"
 #import "StoryTableViewCell.h"
+#import "UITableView+ScrollHelpers.h"
 
 typedef NS_ENUM(NSInteger, UserResponseActions) {
     UserGetTopCommentsAction,
@@ -48,7 +49,6 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
     NSMutableArray<Comment *> *_topComments;
     User *_currentUser;
     NSDateFormatter *_dateFormatter;
-    UIRefreshControl *_topRefreshControl;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
@@ -66,7 +66,6 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
-    [self.txvAddComment becomeFirstResponder];
     _topComments = [NSMutableArray array];
     _responseActions = @[
         kUserGetTopCommentsAction,
@@ -82,10 +81,23 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
     _dateFormatter = [FDateFormatter sharedDateFormatter];
     _dateFormatter.dateFormat = kDefaultDateTimeFormat;
     [self loadComments];
-    _topRefreshControl = [[UIRefreshControl alloc] init];
-    [_topRefreshControl addTarget:self action:@selector(loadComments) forControlEvents:UIControlEventValueChanged];
-    [self.tableView addSubview:_topRefreshControl];
-    self.lblTitle.text = [NSString stringWithFormat:@"%@'s Story", [self.story.creator fullName]];
+    self.lblTitle.text = [NSString stringWithFormat:kStoryDetailTitle, [self.story.creator fullName]];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+        name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
+        name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.navigationController && ![self.navigationController.viewControllers containsObject:self]) {
+        [self resignRequestHandler];
+    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)loadComments {
@@ -96,7 +108,14 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
 }
 
 - (void)updateLikedUsers {
-    //TODO: Update Liked users
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:StoryDetailSection];
+    CGPoint offset = self.tableView.contentOffset;
+    [UIView setAnimationsEnabled:NO];
+    [self.tableView beginUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
+    self.tableView.contentOffset = offset;
 }
 
 #pragma mark - UITextViewDelegate
@@ -179,11 +198,13 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
     return 0.01f;
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.txvAddComment resignFirstResponder];
+}
+
 - (void)reloadDataWithAnimated:(BOOL)animated {
     [self.tableView reloadData];
-    NSIndexPath *lastRowIndex = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:lastRowIndex atScrollPosition:UITableViewScrollPositionBottom
-        animated:animated];
+    [self.tableView scrollToBottom:animated];
 }
 
 - (void)imagesTapGestureRecognizer:(UITapGestureRecognizer *)sender {
@@ -198,6 +219,7 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
     creator.userId = _currentUser.userId;
     _comment.creator = creator;
     _comment.content = self.txvAddComment.text;
+    _dateFormatter.dateFormat = kDefaultDateTimeFormat;
     _comment.createdTime = [_dateFormatter stringFromDate:[NSDate date]];
     Story *story = [[Story alloc] init];
     story.storyId = @(self.story.storyId.integerValue);
@@ -233,9 +255,6 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
         actionName:kUserLikeStoryAction sender:self];
 }
 
-- (IBAction)btnCommentTapped:(UIButton *)sender {
-}
-
 - (IBAction)btnWhoLikeThisTapped:(UIButton *)sender {
     if (self.story.numberOfLikedUsers.integerValue) {
         [self dismissKeyboard];
@@ -247,14 +266,23 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    [UIView animateWithDuration:0.3 animations:^{
-        CGFloat offset = keyboardSize.height;
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    CGFloat offset = keyboardSize.height;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, 0.0f, offset, 0.0f);
+    [UIView animateWithDuration:duration animations:^{
+        self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
         self.addCommentViewBottomConstraint.constant += offset;
     }];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    [UIView animateWithDuration:0.3 animations:^{
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
+        doubleValue];
+    [UIView animateWithDuration:duration animations:^{
+        self.tableView.contentInset = UIEdgeInsetsZero;
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
         self.addCommentViewBottomConstraint.constant = 0.0f;
     }];
 }
@@ -267,18 +295,17 @@ typedef NS_ENUM(NSInteger, StoryDetailSections) {
         case UserGetTopCommentsAction: {
             if (![message isEqualToString:kFailureMessage]) {
                 NSError *error;
-                NSMutableArray *array = [[[[Comment arrayOfModelsFromString:message error:&error]
-                    reverseObjectEnumerator] allObjects] mutableCopy];
+                NSMutableArray *array = [Comment arrayOfModelsFromString:message error:&error];
+                if (error) {
+                    return;
+                }
+                array = [[[array reverseObjectEnumerator] allObjects] mutableCopy];
                 [array addObjectsFromArray:_topComments];
                 [_topComments removeAllObjects];
                 [_topComments addObjectsFromArray:array];
                 _startIndex += kNumberOfComments;;
-                if (error) {
-                    return;
-                }
-                [self reloadDataWithAnimated:NO];
+                [self.tableView reloadData];
             }
-            [_topRefreshControl endRefreshing];
             break;
         }
         case UserCreateNewCommentAction: {

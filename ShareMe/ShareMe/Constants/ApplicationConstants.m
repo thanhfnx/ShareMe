@@ -87,17 +87,23 @@ NSString *const kUserGetLatestMessagesAction = @"USER_GET_LATEST_MESSAGES";
 NSString *const kGoToListFriendSegueIdentifier = @"goToListFriend";
 NSString *const kGoToUserTimelineSegueIdentifier = @"goToUserTimeline";
 
+/* Constants for NSUserDefaults keys */
 NSString *const kSaveUserAccountKey = @"shareMe_saveUserAccount";
 NSString *const kAutoLoginKey = @"shareMe_autoLogin";
+NSString *const kUserNameKey = @"shareMe_userName";
+NSString *const kPasswordKey = @"shareMe_password";
 
 NSInteger const kMessagesViewControllerIndex = 2;
 
+/* Constants for Notifications */
 NSString *const kReceivedRequestNotification = @"%@ sent you a friend request.";
 
+/* Constants for SubMenuViewController */
 NSString *const kSubMenuReuseIdentifier = @"SubMenuCell";
 NSString *const kSaveUserAccountTextLabel = @"Save Account";
 NSString *const kAutoLoginTextLabel = @"Auto Login";
 
+/* Constants for MenuItemViewController */
 NSString *const kViewProfileReuseIdentifier = @"ViewProfileCell";
 NSString *const kMenuItemReuseIdentifier = @"MenuItemCell";
 NSString *const kLogOutReuseIdentifier = @"LogOutCell";
@@ -113,6 +119,7 @@ NSString *const kCancelActionTitle = @"Cancel";
 NSString *const kGoToSubMenuSegueIdentifier = @"goToSubMenu";
 NSString *const kGoToFindFriendSegueIdentifier = @"goToFindFriends";
 
+/* Constants for MessageDetailViewController */
 NSString *const kFriendMessageReuseIdentifier = @"FriendMessageCell";
 NSString *const kConfirmMessageTitle = @"Confirm";
 NSString *const kDefaultMessageTitle = @"Warning";
@@ -121,14 +128,16 @@ NSString *const kAddNewMessageErrorMessage = @"Something went wrong! Can not sen
 NSString *const kSelfMessageReuseIdentifier = @"SelfMessageCell";
 NSString *const kGetMessagesFormat = @"%ld-%ld-%ld-%ld";
 NSString *const kEmptyMessagesTableViewMessage = @"No messages.";
+NSInteger const kNumberOfMessages = 20;
 
+/* Constants for MessagesViewController */
 NSString *const kMessageReuseIdentifier = @"MessageCell";
 NSString *const kGoToMessageDetailSegueIdentifier = @"goToMessageDetail";
 NSString *const kEmptyRecentMessagesTableViewMessage = @"No recent messages.";
 NSString *const kGetLatestMessagesFormat = @"%ld-%ld-%ld";
 NSInteger const kNumberOfLatestMessages = 20;
 
-
+/* Constants for TimelineViewController */
 NSString *const kStoryReuseIdentifier = @"StoryCell";
 NSString *const kGetTopStoriesRequestFormat = @"%ld-%.0f-%ld-%ld";
 NSString *const kGetUserErrorMessage = @"Something went wrong! Can not get this user's information!";
@@ -159,9 +168,11 @@ NSString *const kEmptyStoriesTableViewMessage = @"No stories to show.";
 NSString *const kSelfTimelineHeaderLabelText = @"Your Timeline";
 NSString *const kGoToStoryDetailSegueIdentifier = @"goToStoryDetail";
 
+/* Constants for WhoLikeThisViewController */
 NSString *const kLikedUserReuseIdentifier = @"LikedUserCell";
 NSString *const kGetLikedUsersErrorMessage = @"Something went wrong! Can not get liked users!";
 
+/* Constants for FriendsViewController */
 NSString *const kFriendReuseIdentifier = @"FriendCell";
 NSString *const kNoFriendsReuseIdentifier = @"NoFriendsCell";
 NSString *const kEmptySearchMessage = @"Please enter friend's name or email to search!";
@@ -170,6 +181,7 @@ NSString *const kOnlineFriendsSectionHeader = @"Online Friends";
 NSString *const kOfflineFriendsSectionHeader = @"Offline Friends";
 NSString *const kEmptyFriendsTableViewMessage = @"You don't have any friends.";
 
+/* Constants for CommentsViewController */
 NSString *const kCommentReuseIdentifier = @"CommentCell";
 NSString *const kGetTopCommentsMessageFormat = @"%ld-%ld-%ld";
 NSString *const kConfirmDiscardComment = @"This comment is unsaved! Are you sure to discard this comment?";
@@ -183,6 +195,7 @@ NSInteger const kNumberOfComments = 20;
 NSString *const kGoToWhoLikeThisSegueIdentifier = @"goToWhoLikeThis";
 NSString *const kEmptyCommentsTableViewMessage = @"No comments.";
 
+/* Constants for NewStoryViewController */
 NSString *const kThumbnailReuseIdentifier = @"ThumbnailCell";
 NSString *const kConfirmDiscardStory = @"This story is unsaved! Are you sure to discard this story?";
 NSString *const kAddNewStoryErrorMessage = @"Something went wrong! Can not post new story!";
@@ -194,16 +207,20 @@ CGFloat const kMaxImageWidth = 1920.0f;
 CGFloat const kMaxImageHeight = 1080.0f;
 NSInteger const kNumberOfCell = 4;
 
+/* Constants for SearchFriendViewController */
 NSString *const kSearchFriendReuseIdentifier = @"SearchFriendCell";
 NSString *const kSearchLabelTitle = @"Search results for '%@':";
 
+/* Constants for RequestsViewController */
 NSString *const kReceivedRequestReuseIdentifier = @"ReceivedRequestCell";
 NSString *const kSentRequestReuseIdentifier = @"SentRequestCell";
 NSString *const kNoRequestsMessage = @"No new requests.";
 
+/* Constants for NewsFeedViewController */
 NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
 NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
 
+/* Constants for RegisterViewController */
 NSString *const kDefaultDateFormat = @"dd-MM-yyyy";
 NSString *const kDefaultDate = @"05-09-1994";
 NSString *const kFailedRegisterMessage = @"UserName or email is already exist. Register failed!";
@@ -227,15 +244,16 @@ NSInteger const kMinimumPasswordLength = 6;
 CGFloat const kMaxAvatarWidth = 500.0f;
 CGFloat const kMaxAvatarHeight = 500.0f;
 
+/* Constants for LoginViewController */
 NSString *const kFailedLoginMessage = @"UserName or password is incorrect. Login failed!";
 NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
 NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
-NSString *const kUserNameKey = @"shareMe_userName";
-NSString *const kPasswordKey = @"shareMe_password";
 
+/* Constants for FViewController */
 NSString *const kTakeImageFromCameraActionTitle = @"Take from camera";
 NSString *const kTakeImageFromLibraryActionTitle = @"Take from photo library";
 
+/* Constants for Utils */
 NSString *const kDateFormat = @"d MMM yy";
 NSString *const kDefaultDateTimeFormat = @"yyyy-MM-dd HH:mm:ss";
 NSString *const kDefaultMaleAvatar = @"default-male-avatar";
@@ -245,5 +263,18 @@ CGFloat const kLandscapeImageRatio = 16.0f / 9.0f;
 CGFloat const kPortraitImageRatio = 9.0f / 16.0f;
 CGFloat const kLongWidthImageRatio = 2.0f;
 CGFloat const kLongHeightImageRatio = 0.5f;
+NSString *const kTimeWithHourMinuteFormat = @"HH:mm";
+NSString *const kTimeWithDayOfWeekFormat = @"EEE";
+NSString *const kTimeWithDayOfWeekFullFormat = @"EEE, HH:mm";
+NSString *const kTimeInYearFormat = @"MMM dd";
+NSString *const kTimeInYearFullFormat = @"MMM dd, HH:mm";
+NSString *const kTimeNotInYearFormat = @"yyyy/MM/dd";
+NSString *const kTimeNotInYearFullFormat = @"yyyy/MM/dd, HH:mm";
+NSString *const kSentTimeTodayFullFormat = @"Today, %@";
+NSString *const kSentTimeYesterdayFormat = @"Yesterday";
+NSString *const kSentTimeYesterdayFullFormat = @"Yesterday, %@";
+
+/* Constants for StoryDetailViewController */
+NSString *const kStoryDetailTitle = @"%@'s Story";
 
 @end
