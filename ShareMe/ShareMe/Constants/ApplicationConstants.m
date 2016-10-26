@@ -219,6 +219,7 @@ NSString *const kNoRequestsMessage = @"No new requests.";
 /* Constants for NewsFeedViewController */
 NSString *const kGoToSearchFriendSegueIdentifier = @"goToSearchFriend";
 NSString *const kGoToNewStorySegueIdentifier = @"goToNewStory";
+NSString *const kGoToImageDetailSegueIdentifier = @"goToImageDetail";
 
 /* Constants for RegisterViewController */
 NSString *const kDefaultDateFormat = @"dd-MM-yyyy";
@@ -276,5 +277,8 @@ NSString *const kSentTimeYesterdayFullFormat = @"Yesterday, %@";
 
 /* Constants for StoryDetailViewController */
 NSString *const kStoryDetailTitle = @"%@'s Story";
+
+/* Constants for ImageDetailsViewController*/
+NSString *const kImageDetailReuseIdentifier = @"ImageDetailCell";
 
 @end

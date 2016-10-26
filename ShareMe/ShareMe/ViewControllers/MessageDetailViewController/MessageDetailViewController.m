@@ -56,7 +56,6 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
-    [self.txvNewMessage becomeFirstResponder];
     _messages = [NSMutableArray array];
     _responseActions = @[
         kUserGetMessagesAction,
@@ -206,24 +205,37 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     self.tableView.contentInset = UIEdgeInsetsMake(topInset + 4.0f, 0.0f, 4.0f, 0.0f);
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if ([self.txvNewMessage isFirstResponder]) {
+        [self.txvNewMessage resignFirstResponder];
+    }
+}
+
 #pragma mark - Show / hide keyboard
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
         doubleValue];
+    CGFloat offset = keyboardSize.height;
+    self.addMessageViewBottomConstraint.constant += offset;
     [UIView animateWithDuration:duration animations:^{
-        CGFloat offset = keyboardSize.height;
-        self.addMessageViewBottomConstraint.constant += offset;
+        [self.view layoutIfNeeded];
     }];
+    [self updateContentInset];
+    [self.tableView scrollToBottom:NO];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
     NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]
         doubleValue];
+    self.addMessageViewBottomConstraint.constant = 0.0f;
     [UIView animateWithDuration:duration animations:^{
-        self.addMessageViewBottomConstraint.constant = 0.0f;
+        [self.view layoutIfNeeded];
     }];
+    [self updateContentInset];
 }
 
 #pragma mark - Response Handler
@@ -259,7 +271,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
                 [_messages addObject:_message];
                 [self.txvNewMessage setText:@""];
                 self.lblPlaceHolder.hidden = NO;
-                [self reloadDataWithAnimated:YES];
+                [self reloadDataWithAnimated:NO];
             }
             break;
         }

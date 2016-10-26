@@ -16,6 +16,7 @@
 #import "SearchFriendViewController.h"
 #import "CommentsViewController.h"
 #import "StoryDetailViewController.h"
+#import "ImageDetailsViewController.h"
 #import "Utils.h"
 #import "Story.h"
 #import "User.h"
@@ -162,7 +163,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 }
 
 - (void)imagesTapGestureRecognizer:(UITapGestureRecognizer *)sender {
-    // TODO: Display images view
+    [self performSegueWithIdentifier:kGoToImageDetailSegueIdentifier sender:self];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -380,6 +381,9 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     } else if ([segue.identifier isEqualToString:kGoToStoryDetailSegueIdentifier]) {
         StoryDetailViewController *storyDetailViewController = [segue destinationViewController];
         storyDetailViewController.story = _topStories[_selectedIndex];
+    } else if ([segue.identifier isEqualToString:@"goToImageDetail"]) {
+        ImageDetailsViewController *imageDetailsViewController = [segue destinationViewController];
+        imageDetailsViewController.images = _topStories[_selectedIndex].images;
     }
 }
 

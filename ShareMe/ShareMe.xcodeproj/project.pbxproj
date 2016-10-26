@@ -28,6 +28,8 @@
 		924E10931D6D9C1B004DE853 /* SentRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E10921D6D9C1B004DE853 /* SentRequestTableViewCell.m */; };
 		924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */; };
 		924E109F1D6DBAE3004DE853 /* CALayer+UIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */; };
+		9262440A1DC2F08600A2DDBE /* ImageDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926244091DC2F08600A2DDBE /* ImageDetailsViewController.m */; };
+		9262440D1DC2F16F00A2DDBE /* ImageDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9262440C1DC2F16F00A2DDBE /* ImageDetailCollectionViewCell.m */; };
 		926FBED11DB4AABA002E3AAD /* StoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926FBED01DB4AABA002E3AAD /* StoryDetailViewController.m */; };
 		9285C58B1DA0A5CD003011DF /* MenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9285C58A1DA0A5CD003011DF /* MenuItemTableViewCell.m */; };
 		928688761D702C9C0078A599 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 928688751D702C9C0078A599 /* Utils.m */; };
@@ -103,6 +105,10 @@
 		924E109B1D6DA73C004DE853 /* MainTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarViewController.m; sourceTree = "<group>"; };
 		924E109D1D6DBAE3004DE853 /* CALayer+UIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+UIColor.h"; sourceTree = "<group>"; };
 		924E109E1D6DBAE3004DE853 /* CALayer+UIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UIColor.m"; sourceTree = "<group>"; };
+		926244081DC2F08600A2DDBE /* ImageDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDetailsViewController.h; sourceTree = "<group>"; };
+		926244091DC2F08600A2DDBE /* ImageDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDetailsViewController.m; sourceTree = "<group>"; };
+		9262440B1DC2F16F00A2DDBE /* ImageDetailCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDetailCollectionViewCell.h; sourceTree = "<group>"; };
+		9262440C1DC2F16F00A2DDBE /* ImageDetailCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDetailCollectionViewCell.m; sourceTree = "<group>"; };
 		926FBECF1DB4AABA002E3AAD /* StoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryDetailViewController.h; sourceTree = "<group>"; };
 		926FBED01DB4AABA002E3AAD /* StoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryDetailViewController.m; sourceTree = "<group>"; };
 		9285C5891DA0A5CD003011DF /* MenuItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemTableViewCell.h; sourceTree = "<group>"; };
@@ -220,6 +226,7 @@
 		922DB3EC1D6B4CD100AF2268 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				926244071DC2F07300A2DDBE /* ImageDetailsViewController */,
 				926FBECE1DB4AAA6002E3AAD /* StoryDetailViewController */,
 				92A15E821DB0711900C5DBD4 /* FindFriendsViewController */,
 				92BBFE9A1DA37BCE00E8C3A5 /* SubMenusViewController */,
@@ -337,6 +344,15 @@
 			path = RequestsViewController;
 			sourceTree = "<group>";
 		};
+		926244071DC2F07300A2DDBE /* ImageDetailsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				926244081DC2F08600A2DDBE /* ImageDetailsViewController.h */,
+				926244091DC2F08600A2DDBE /* ImageDetailsViewController.m */,
+			);
+			path = ImageDetailsViewController;
+			sourceTree = "<group>";
+		};
 		926FBECE1DB4AAA6002E3AAD /* StoryDetailViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,6 +390,8 @@
 			children = (
 				929139511D758D5700A0E972 /* ThumbnailCollectionViewCell.h */,
 				929139521D758D5700A0E972 /* ThumbnailCollectionViewCell.m */,
+				9262440B1DC2F16F00A2DDBE /* ImageDetailCollectionViewCell.h */,
+				9262440C1DC2F16F00A2DDBE /* ImageDetailCollectionViewCell.m */,
 			);
 			path = CollectionViewCell;
 			sourceTree = "<group>";
@@ -684,6 +702,7 @@
 				92A9206A1D90C89D00C6F007 /* FriendsViewController.m in Sources */,
 				92CE61FA1D6FFCAC00E31C34 /* NewStoryViewController.m in Sources */,
 				92D30A491D9BCB220080831C /* MessageDetailTableViewCell.m in Sources */,
+				9262440D1DC2F16F00A2DDBE /* ImageDetailCollectionViewCell.m in Sources */,
 				92BBFE9D1DA37BEA00E8C3A5 /* SubMenusViewController.m in Sources */,
 				924E109C1D6DA73C004DE853 /* MainTabBarViewController.m in Sources */,
 				929139531D758D5700A0E972 /* ThumbnailCollectionViewCell.m in Sources */,
@@ -710,6 +729,7 @@
 				92AF4F731D6ED3E100B92297 /* SearchFriendTableViewCell.m in Sources */,
 				920391151D6D343E00BC5BE0 /* NewsFeedViewController.m in Sources */,
 				9203403D1D9287E500619B28 /* WhoLikeThisViewController.m in Sources */,
+				9262440A1DC2F08600A2DDBE /* ImageDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

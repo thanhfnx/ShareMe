@@ -219,6 +219,7 @@ extern NSString *const kNoRequestsMessage;
 /* Constants for NewsFeedViewController */
 extern NSString *const kGoToSearchFriendSegueIdentifier;
 extern NSString *const kGoToNewStorySegueIdentifier;
+extern NSString *const kGoToImageDetailSegueIdentifier;
 
 /* Constants for RegisterViewController */
 extern NSString *const kDefaultDateFormat;
@@ -275,5 +276,8 @@ extern NSString *const kSentTimeYesterdayFullFormat;
 
 /* Constants for StoryDetailViewController */
 extern NSString *const kStoryDetailTitle;
+
+/* Constants for ImageDetailsViewController*/
+extern NSString *const kImageDetailReuseIdentifier;
 
 @end
