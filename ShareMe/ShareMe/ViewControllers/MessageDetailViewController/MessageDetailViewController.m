@@ -56,7 +56,6 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     CGRect frame = self.navigationItem.titleView.frame;
     frame.size.width = [UIViewConstant screenWidth];
     self.navigationItem.titleView.frame = frame;
-    [self.txvNewMessage becomeFirstResponder];
     _messages = [NSMutableArray array];
     _responseActions = @[
         kUserGetMessagesAction,
@@ -272,7 +271,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
                 [_messages addObject:_message];
                 [self.txvNewMessage setText:@""];
                 self.lblPlaceHolder.hidden = NO;
-                [self reloadDataWithAnimated:YES];
+                [self reloadDataWithAnimated:NO];
             }
             break;
         }
