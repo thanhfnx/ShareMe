@@ -9,7 +9,8 @@
 #import "ImageDetailCollectionViewCell.h"
 
 @interface ImageDetailCollectionViewCell () {
-    void (^_handleZooming)(BOOL);
+    void (^_handleZooming)(BOOL, UITapGestureRecognizer *);
+    UITapGestureRecognizer *_zoomTapGestureRecognizer;
 }
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -22,16 +23,16 @@
 
 @implementation ImageDetailCollectionViewCell
 
-- (void)setImageDetail:(UIImage *)image withHandler:(void(^)(BOOL isZooming))handler {
+- (void)setImageDetail:(UIImage *)image withHandler:(void(^)(BOOL isZooming, UITapGestureRecognizer *gesture))handler {
     self.scrollView.delegate = self;
     self.imvDetail.image = image;
     [self layoutIfNeeded];
     [self updateMinZoomScaleForSize];
     [self updateConstraintsForSize];
-    UITapGestureRecognizer *zoomTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
+    _zoomTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
         action:@selector(zoomWhenDoubleTapped:)];
-    zoomTapGestureRecognizer.numberOfTapsRequired = 2;
-    [self.scrollView addGestureRecognizer:zoomTapGestureRecognizer];
+    _zoomTapGestureRecognizer.numberOfTapsRequired = 2;
+    [self.scrollView addGestureRecognizer:_zoomTapGestureRecognizer];
     _handleZooming = handler;
 }
 
@@ -44,7 +45,7 @@
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
     BOOL isZooming = self.scrollView.zoomScale > self.scrollView.minimumZoomScale;
     if (_handleZooming) {
-        _handleZooming(isZooming);
+        _handleZooming(isZooming, _zoomTapGestureRecognizer);
     }
 }
 

@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class Story;
+
 @interface ImageDetailsViewController : UIViewController <UICollectionViewDataSource,
     UICollectionViewDelegateFlowLayout>
 
-@property (strong, nonatomic) NSArray<UIImage *> *images;
+@property (strong, nonatomic) Story *story;
 
 @end

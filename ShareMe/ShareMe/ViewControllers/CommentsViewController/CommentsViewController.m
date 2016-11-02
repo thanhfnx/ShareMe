@@ -106,8 +106,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 }
 
 - (void)updateLikedUsers {
-    UIImage *likedImage = [UIImage imageNamed:@"loved"];
-    UIImage *unlikedImage = [UIImage imageNamed:@"love"];
+    UIImage *likedImage = [UIImage imageNamed:kLikedImage];
+    UIImage *unlikedImage = [UIImage imageNamed:kUnlikedImage];
     [self.btnWhoLikeThis setTitle:@"" forState:UIControlStateNormal];
     switch (self.story.numberOfLikedUsers.integerValue) {
         case 0: {

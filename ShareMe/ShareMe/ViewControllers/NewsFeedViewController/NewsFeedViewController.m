@@ -163,6 +163,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 }
 
 - (void)imagesTapGestureRecognizer:(UITapGestureRecognizer *)sender {
+    _selectedIndex = sender.view.superview.tag;
     [self performSegueWithIdentifier:kGoToImageDetailSegueIdentifier sender:self];
 }
 
@@ -381,9 +382,9 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     } else if ([segue.identifier isEqualToString:kGoToStoryDetailSegueIdentifier]) {
         StoryDetailViewController *storyDetailViewController = [segue destinationViewController];
         storyDetailViewController.story = _topStories[_selectedIndex];
-    } else if ([segue.identifier isEqualToString:@"goToImageDetail"]) {
+    } else if ([segue.identifier isEqualToString:kGoToImageDetailSegueIdentifier]) {
         ImageDetailsViewController *imageDetailsViewController = [segue destinationViewController];
-        imageDetailsViewController.images = _topStories[_selectedIndex].images;
+        imageDetailsViewController.story = _topStories[_selectedIndex];
     }
 }
 
