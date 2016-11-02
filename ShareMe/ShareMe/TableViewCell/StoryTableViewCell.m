@@ -94,10 +94,10 @@
             }
         }];
     }
-    UIImage *likedImage = [UIImage imageNamed:@"loved"];
-    UIImage *unlikedImage = [UIImage imageNamed:@"love"];
-    UIImage *commentedImage = [UIImage imageNamed:@"commented"];
-    UIImage *uncommentedImage = [UIImage imageNamed:@"comment"];
+    UIImage *likedImage = [UIImage imageNamed:kLikedImage];
+    UIImage *unlikedImage = [UIImage imageNamed:kUnlikedImage];
+    UIImage *commentedImage = [UIImage imageNamed:kCommentedImage];
+    UIImage *uncommentedImage = [UIImage imageNamed:kUncommentedImage];
     if (story.numberOfLikedUsers.integerValue) {
         self.lblNumberOfLikes.text = [Utils stringfromNumber:story.numberOfLikedUsers.integerValue];
         if (story.likedUsers.count) {

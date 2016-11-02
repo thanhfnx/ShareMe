@@ -281,4 +281,14 @@ NSString *const kStoryDetailTitle = @"%@'s Story";
 /* Constants for ImageDetailsViewController*/
 NSString *const kImageDetailReuseIdentifier = @"ImageDetailCell";
 
+/* Constants for UIImage */
+NSString *const kLikedImage = @"loved";
+NSString *const kUnlikedImage = @"love";
+NSString *const kCommentedImage = @"commented";
+NSString *const kUncommentedImage = @"comment";
+NSString *const kWhiteUnikedImage = @"love-white";
+NSString *const kWhiteUncommentedImage = @"comment-white";
+NSString *const kWhiteLikedImage = @"love-white-filled";
+NSString *const kWhiteCommentedImage = @"comment-white-filled";
+
 @end

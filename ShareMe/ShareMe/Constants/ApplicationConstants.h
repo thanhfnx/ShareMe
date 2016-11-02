@@ -280,4 +280,14 @@ extern NSString *const kStoryDetailTitle;
 /* Constants for ImageDetailsViewController*/
 extern NSString *const kImageDetailReuseIdentifier;
 
+/* Constants for UIImage */
+extern NSString *const kLikedImage;
+extern NSString *const kUnlikedImage;
+extern NSString *const kCommentedImage;
+extern NSString *const kUncommentedImage;
+extern NSString *const kWhiteUnikedImage;
+extern NSString *const kWhiteUncommentedImage;
+extern NSString *const kWhiteLikedImage;
+extern NSString *const kWhiteCommentedImage;
+
 @end

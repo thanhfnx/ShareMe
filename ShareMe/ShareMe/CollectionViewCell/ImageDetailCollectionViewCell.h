@@ -12,6 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imvDetail;
 
-- (void)setImageDetail:(UIImage *)image withHandler:(void(^)(BOOL isZooming))handler;
+- (void)setImageDetail:(UIImage *)image withHandler:(void(^)(BOOL isZooming, UITapGestureRecognizer *gesture))handler;
 
 @end
