@@ -311,7 +311,7 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message {
     NSInteger index = [_responseActions indexOfObject:actionName];
     switch (index) {
-        case UserAcceptRequestAction:
+        case UserAcceptRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kAcceptRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -327,7 +327,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
                 [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
-        case UserDeclineRequestAction:
+        }
+        case UserDeclineRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kDeclineRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -342,7 +343,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
                 [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
-        case UserCancelRequestAction:
+        }
+        case UserCancelRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kCancelRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -356,7 +358,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
                 [self.tableView reloadData];
             }
             break;
-        case UserSendRequestAction:
+        }
+        case UserSendRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kSendRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -370,7 +373,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
                 [self.tableView reloadData];
             }
             break;
-        case UserUnfriendAction:
+        }
+        case UserUnfriendAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kUnfriendErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -384,7 +388,8 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
                 [self.tableView reloadData];
             }
             break;
-        case UserSearchFriendAction:
+        }
+        case UserSearchFriendAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:[NSString stringWithFormat:kEmptySearchResultMessage, self.txtSearch.text]
                     title:kDefaultMessageTitle complete:nil];
@@ -401,6 +406,7 @@ typedef NS_ENUM(NSInteger, UserResponseActions) {
                 [self.tableView reloadData];
             }
             break;
+        }
     }
 }
 

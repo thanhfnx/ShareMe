@@ -27,6 +27,7 @@ extern NSString *const kDelim;
 
 extern NSString *const kSuccessMessage;
 extern NSString *const kFailureMessage;
+extern NSString *const kBannedMessage;
 
 extern NSString *const kCloseConnection;
 extern NSString *const kEmptyMessage;
@@ -71,6 +72,7 @@ extern NSString *const kUserGetTopCommentsAction;
 extern NSString *const kUserCreateNewCommentAction;
 
 extern NSString *const kUpdateNewsFeedNotificationName;
+extern NSString *const kUpdateMessagesNotificationName;
 
 extern NSString *const kUserGetLikedUsersAction;
 
@@ -83,9 +85,12 @@ extern NSString *const kUserCreateNewMessageAction;
 extern NSString *const kAddNewMessageToUserAction;
 
 extern NSString *const kUserGetLatestMessagesAction;
+extern NSString *const kForceToCloseSocketAction;
 
 extern NSString *const kGoToListFriendSegueIdentifier;
 extern NSString *const kGoToUserTimelineSegueIdentifier;
+
+extern NSString *const kConnectionErrorMessage;
 
 /* Constants for NSUserDefaults keys */
 extern NSString *const kSaveUserAccountKey;
@@ -93,10 +98,19 @@ extern NSString *const kAutoLoginKey;
 extern NSString *const kUserNameKey;
 extern NSString *const kPasswordKey;
 
-extern NSInteger const kMessagesViewControllerIndex;
-
 /* Constants for Notifications */
 extern NSString *const kReceivedRequestNotification;
+extern NSString *const kLikedStoryNotification;
+extern NSString *const kCommenteddStoryNotification;
+extern NSString *const kAcceptedRequestNotification;
+
+/* Constants for NotificationsViewController */
+extern NSString *const kAddNewNotificationToUserAction;
+extern NSString *const kNotificationReuseIdentifier;
+extern NSString *const kEmptyNotificationsTableViewMessage;
+extern NSString *const kGetLatestNotificationsFormat;
+extern NSInteger const kNumberOfLatestNotifications;
+
 
 /* Constants for SubMenuViewController */
 extern NSString *const kSubMenuReuseIdentifier;
@@ -128,6 +142,7 @@ extern NSString *const kAddNewMessageErrorMessage;
 extern NSString *const kSelfMessageReuseIdentifier;
 extern NSString *const kGetMessagesFormat;
 extern NSString *const kEmptyMessagesTableViewMessage;
+extern NSString *const kNewMessageKey;
 extern NSInteger const kNumberOfMessages;
 
 /* Constants for MessagesViewController */
@@ -203,6 +218,7 @@ extern NSString *const kOpenCameraErrorMessage;
 extern NSString *const kImageMessageFormat;
 extern NSString *const kImagePickerTitle;
 extern NSString *const kImagePickerMessage;
+extern NSString *const kNewStoryKey;
 extern CGFloat const kMaxImageWidth;
 extern CGFloat const kMaxImageHeight;
 extern NSInteger const kNumberOfCell;
@@ -246,6 +262,7 @@ extern CGFloat const kMaxAvatarHeight;
 
 /* Constants for LoginViewController */
 extern NSString *const kFailedLoginMessage;
+extern NSString *const kBannedLoginMessage;
 extern NSString *const kGoToMainTabBarSegueIdentifier;
 extern NSString *const kGoToRegisterSegueIdentifier;
 

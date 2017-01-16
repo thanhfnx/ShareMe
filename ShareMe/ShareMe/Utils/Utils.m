@@ -71,18 +71,24 @@
 
 + (NSString *)stringfromNumber:(NSUInteger)number {
     switch (number) {
-        case 1 ... 999:
+        case 1 ... 999: {
             return [@(number) stringValue];
-        case 1000 ... 9999:
+        }
+        case 1000 ... 9999: {
             return [NSString stringWithFormat:@"%.1fk", number / 1000.0];
-        case 10000 ... 999999:
+        }
+        case 10000 ... 999999: {
             return [NSString stringWithFormat:@"%ldk", number / 1000];
-        case 1000000 ... 9999999:
+        }
+        case 1000000 ... 9999999: {
             return [NSString stringWithFormat:@"%.1fm", number / 1000000.0];
-        case 10000000 ... 999999999:
+        }
+        case 10000000 ... 999999999: {
             return [NSString stringWithFormat:@"%ldm", number / 1000000];
-        case 1000000000 ... NSUIntegerMax:
+        }
+        case 1000000000 ... NSUIntegerMax: {
             return [NSString stringWithFormat:@"%ldb", number / 1000000000];
+        }
     }
     return @"";
 }

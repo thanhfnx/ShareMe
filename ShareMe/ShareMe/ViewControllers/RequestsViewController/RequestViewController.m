@@ -106,12 +106,14 @@ typedef NS_ENUM(NSInteger, RequestSections) {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger numberOfRowsInSection = 0;
     switch (self.scRequestType.selectedSegmentIndex) {
-        case ReceivedRequestSection:
+        case ReceivedRequestSection: {
             numberOfRowsInSection = _receivedRequests.count;
             break;
-        case SentRequestSection:
+        }
+        case SentRequestSection: {
             numberOfRowsInSection = _sentRequests.count;
             break;
+        }
     }
     if (numberOfRowsInSection == 0) {
         self.lblTitle.text = kNoRequestsMessage;
@@ -216,7 +218,7 @@ typedef NS_ENUM(NSInteger, RequestSections) {
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message {
     NSInteger index = [_responseActions indexOfObject:actionName];
     switch (index) {
-        case UserAcceptRequestAction:
+        case UserAcceptRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kAcceptRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -231,7 +233,8 @@ typedef NS_ENUM(NSInteger, RequestSections) {
                 [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
-        case UserDeclineRequestAction:
+        }
+        case UserDeclineRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kDeclineRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -245,7 +248,8 @@ typedef NS_ENUM(NSInteger, RequestSections) {
                 [((MainTabBarViewController *)self.navigationController.tabBarController) setRequestBadgeValue];
             }
             break;
-        case UserCancelRequestAction:
+        }
+        case UserCancelRequestAction: {
             if ([message isEqualToString:kFailureMessage]) {
                 [self showMessage:kCancelRequestErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
@@ -258,6 +262,7 @@ typedef NS_ENUM(NSInteger, RequestSections) {
                 [self.tableView reloadData];
             }
             break;
+        }
     }
 }
 

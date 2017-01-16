@@ -11,6 +11,7 @@
 #import "ApplicationConstants.h"
 #import "Story.h"
 #import "Utils.h"
+#import "AppDelegate.h"
 
 @interface ImageDetailsViewController ()
 
@@ -21,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnComment;
 @property (weak, nonatomic) IBOutlet UILabel *lblNumberOfLikes;
 @property (weak, nonatomic) IBOutlet UILabel *lblNumberOfComments;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *showHideSubviewsTapGestureRecognizer;
 
 @end

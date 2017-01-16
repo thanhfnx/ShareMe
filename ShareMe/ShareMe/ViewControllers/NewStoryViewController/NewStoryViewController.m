@@ -23,7 +23,6 @@
     Story *_story;
     User *_currentUser;
     BOOL _isStoryUnsaved;
-    NewsFeedViewController *_newsFeedViewController;
 }
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -117,17 +116,8 @@
     [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
-- (IBAction)btnAddEmoticonTapped:(UIButton *)sender {
-    // TODO: Optional function
-}
-
-- (IBAction)btnAddLocationTapped:(UIButton *)sender {
-    // TODO: Optional function
-}
-
 - (IBAction)btnPostTapped:(UIButton *)sender {
     if ([self.txvContent hasText] || _images.count > 0) {
-        _newsFeedViewController = self.navigationController.viewControllers[0];
         _isStoryUnsaved = NO;
         [self dismissKeyboard];
         CGRect frame = [[UIScreen mainScreen] bounds];
@@ -136,6 +126,9 @@
         [self getStory];
         [[ClientSocketController sharedController] sendData:[_story toJSONString] messageType:kSendingRequestSignal
             actionName:kUserCreateNewStoryAction sender:self];
+        if (![[ClientSocketController sharedController] isConnected]) {
+            [self dismissActitvyIndicator];
+        }
     }
 }
 
@@ -265,8 +258,8 @@
         _story.storyId = @(message.integerValue);
         _story.creator = _currentUser;
         _story.images = _images;
-        [_newsFeedViewController.topStories insertObject:_story atIndex:0];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateNewsFeedNotificationName object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateNewsFeedNotificationName object:nil
+            userInfo:@{kNewStoryKey: _story}];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }

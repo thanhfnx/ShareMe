@@ -9,6 +9,7 @@
 #import "ClientSocketController.h"
 #import "UIViewController+ResponseHandler.h"
 #import "UIViewController+RequestHandler.h"
+#import "UIViewController+Utils.h"
 
 @interface ClientSocketController () {
     CFReadStreamRef _readStream;
@@ -33,6 +34,10 @@
         sharedController = [[self alloc] init];
     });
     return sharedController;
+}
+
+- (BOOL)isConnected {
+    return _isSocketOpened;
 }
 
 - (instancetype)init {
@@ -157,19 +162,29 @@
     }
 }
 
+- (void)showConnectionError {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:kDefaultMessageTitle
+        message:kConnectionErrorMessage preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:cancelAction];
+    [[UIViewController currentViewController] presentViewController:alertController animated:YES completion:nil];
+}
+
 #pragma mark - NSStreamDelegate
 
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
     switch (streamEvent) {
-        case NSStreamEventOpenCompleted:
+        case NSStreamEventOpenCompleted: {
             _isSocketOpened = YES;
             break;
-        case NSStreamEventHasBytesAvailable:
+        }
+        case NSStreamEventHasBytesAvailable: {
             if (theStream == _inputStream) {
                 [self readMessage];
                 [self handleMessage];
             }
             break;
+        }
         case NSStreamEventHasSpaceAvailable: {
             if (_remainData) {
                 uint8_t *bytes = (uint8_t *) [_remainData bytes];
@@ -185,17 +200,19 @@
             }
             break;
         }
-        case NSStreamEventErrorOccurred:
-            // TODO
+        case NSStreamEventErrorOccurred: {
             [self closeSocket];
+            [self showConnectionError];
             break;
-        case NSStreamEventEndEncountered:
-            // TODO
-            [theStream close];
-            [theStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        }
+        case NSStreamEventEndEncountered: {
+            [self closeSocket];
+            [self showConnectionError];
             break;
-        default:
+        }
+        default: {
             break;
+        }
     }
 }
 
