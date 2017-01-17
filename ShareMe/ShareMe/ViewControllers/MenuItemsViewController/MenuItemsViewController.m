@@ -55,12 +55,15 @@ typedef NS_ENUM(NSInteger, FunctionMenuItems) {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case ViewProfileMenuSection:
+        case ViewProfileMenuSection: {
             return 1;
-        case FunctionMenuSection:
+        }
+        case FunctionMenuSection: {
             return NumberOfFunctionMenuItems;
-        case LogOutMenuSection:
+        }
+        case LogOutMenuSection: {
             return 1;
+        }
     }
     return 0;
 }
@@ -129,15 +132,18 @@ typedef NS_ENUM(NSInteger, FunctionMenuItems) {
         }
         case FunctionMenuSection: {
             switch (indexPath.row) {
-                case FindFriendsMenuItem:
+                case FindFriendsMenuItem: {
                     [self performSegueWithIdentifier:kGoToFindFriendSegueIdentifier sender:self];
                     break;
-                case SettingsMenuItem:
+                }
+                case SettingsMenuItem: {
                     [self performSegueWithIdentifier:kGoToSubMenuSegueIdentifier sender:self];
                     break;
-                case AboutMenuItem:
+                }
+                case AboutMenuItem: {
                     // TODO: Optional function
                     break;
+                }
             }
             break;
         }

@@ -30,6 +30,13 @@
 - (void)viewDidLoad {
     _isSwipeGestureDisable = YES;
     [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+        name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
+        name:UIKeyboardWillHideNotification object:nil];
     NSNumber *isSaveUserAccount = [[NSUserDefaults standardUserDefaults] objectForKey:kSaveUserAccountKey];
     if (!isSaveUserAccount) {
         isSaveUserAccount = @(YES);
@@ -42,6 +49,8 @@
         return;
     }
     if (!isSaveUserAccount.boolValue) {
+        [self.txtUserName setText:@""];
+        [self.txtPassword setText:@""];
         return;
     }
     NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserNameKey];
@@ -59,13 +68,6 @@
         [[ClientSocketController sharedController] sendData:[_user toJSONString] messageType:kSendingRequestSignal
             actionName:kUserLoginAction sender:self];
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
-        name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
-        name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -134,6 +136,9 @@
         [self getUser];
         [[ClientSocketController sharedController] sendData:[_user toJSONString] messageType:kSendingRequestSignal
             actionName:kUserLoginAction sender:self];
+        if (![[ClientSocketController sharedController] isConnected]) {
+            [self dismissActitvyIndicator];
+        }
     }
 }
 
@@ -177,6 +182,8 @@
     [self dismissActitvyIndicator];
     if ([message isEqualToString:kFailureMessage]) {
         [self showMessage:kFailedLoginMessage title:kDefaultMessageTitle complete:nil];
+    } else if ([message isEqualToString:kBannedMessage]) {
+        [self showMessage:kBannedLoginMessage title:kDefaultMessageTitle complete:nil];
     } else {
         NSError *error;
         _user = [[User alloc] initWithString:message error:&error];

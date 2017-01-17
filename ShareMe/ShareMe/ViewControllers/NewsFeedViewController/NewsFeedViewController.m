@@ -78,7 +78,7 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     [self registerRequestHandler];
     self.topStories = [NSMutableArray array];
     heightForIndexPath = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAllData:)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewStory:)
         name:kUpdateNewsFeedNotificationName object:nil];
     [self loadTopStories];
     _topRefreshControl = [[UIRefreshControl alloc] init];
@@ -277,7 +277,12 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     }
 }
 
-- (void)reloadAllData:(NSNotification *)notification {
+- (void)addNewStory:(NSNotification *)notification {
+    Story *newStory = [[notification userInfo] valueForKey:kNewStoryKey];
+    if (!newStory) {
+        return;
+    }
+    [self.topStories insertObject:newStory atIndex:0];
     [self.tableView reloadData];
 }
 

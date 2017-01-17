@@ -117,10 +117,12 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         return kOnlineFriendsSectionHeader;
     }
     switch (section) {
-        case OnlineFriendsSection:
+        case OnlineFriendsSection: {
             return kOnlineFriendsSectionHeader;
-        case OfflineFriendsSection:
+        }
+        case OfflineFriendsSection: {
             return kOfflineFriendsSectionHeader;
+        }
     }
     return @"";
 }

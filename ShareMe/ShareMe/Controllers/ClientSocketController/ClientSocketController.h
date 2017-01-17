@@ -12,6 +12,7 @@
 @interface ClientSocketController : NSObject <NSStreamDelegate>
 
 + (instancetype)sharedController;
+- (BOOL)isConnected;
 - (void)openSocket;
 - (void)closeSocket;
 - (void)sendData:(NSString *)message messageType:(NSString *)messageType actionName:(NSString *)actionName

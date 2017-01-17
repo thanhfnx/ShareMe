@@ -118,12 +118,10 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         [self showConfirmDialog:kConfirmDiscardMessage title:kConfirmMessageTitle handler:^(UIAlertAction *action) {
             [self dismissKeyboard];
             [self.navigationController popViewControllerAnimated:YES];
-            [self.navigationController.tabBarController setSelectedIndex:kMessagesViewControllerIndex];
         }];
     } else {
         [self dismissKeyboard];
         [self.navigationController popViewControllerAnimated:YES];
-        [self.navigationController.tabBarController setSelectedIndex:kMessagesViewControllerIndex];
     }
 }
 
@@ -268,10 +266,13 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
                 [self showMessage:kAddNewMessageErrorMessage title:kDefaultMessageTitle complete:nil];
             } else {
                 _message.messageId = @(message.integerValue);
+                _message.receiver = self.receiver;
                 [_messages addObject:_message];
                 [self.txvNewMessage setText:@""];
                 self.lblPlaceHolder.hidden = NO;
                 [self reloadDataWithAnimated:NO];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateMessagesNotificationName object:nil
+                    userInfo:@{kNewMessageKey: _message}];
             }
             break;
         }

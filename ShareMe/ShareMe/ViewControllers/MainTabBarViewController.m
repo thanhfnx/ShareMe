@@ -24,7 +24,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     AddCancelRequestToClientsAction,
     AddSendRequestToClientsAction,
     AddUnfriendToClientsAction,
-    UpdateOnlineStatusToUserAction
+    UpdateOnlineStatusToUserAction,
+    ForceToCloseSocketAction
 };
 
 @interface MainTabBarViewController () {
@@ -47,7 +48,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         kAddCancelRequestToClientsAction,
         kAddSendRequestToClientsAction,
         kAddUnfriendToClientsAction,
-        kUpdateOnlineStatusToUserAction
+        kUpdateOnlineStatusToUserAction,
+        kForceToCloseSocketAction
     ];
     [self registerRequestHandler];
     [self setRequestBadgeValue];
@@ -87,6 +89,11 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
             }
         }
         return;
+    } else if (index == ForceToCloseSocketAction) {
+        [[ClientSocketController sharedController] closeSocket];
+        [self showMessage:message title:kConfirmMessageTitle complete:^(UIAlertAction *action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
     }
     NSError *error;
     User *user = [[User alloc] initWithString:message error:&error];
@@ -149,11 +156,21 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     }
 }
 
+- (void)showMessage:(NSString *)message title:(NSString *)title complete:(void (^)(UIAlertAction *action))complete {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message
+        preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:complete];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
 - (void)setRequestBadgeValue {
     if (self.loggedInUser.receivedRequests.count) {
         self.viewControllers[1].tabBarItem.badgeValue = [@(self.loggedInUser.receivedRequests.count) stringValue];
+        [UIApplication sharedApplication].applicationIconBadgeNumber = self.loggedInUser.receivedRequests.count;
     } else {
         self.viewControllers[1].tabBarItem.badgeValue = nil;
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
 }
 

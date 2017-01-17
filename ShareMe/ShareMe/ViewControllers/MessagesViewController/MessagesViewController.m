@@ -58,6 +58,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     [_bottomRefreshControl addTarget:self action:@selector(loadLatestMessages)
         forControlEvents:UIControlEventValueChanged];
     self.tableView.bottomRefreshControl = _bottomRefreshControl;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewMessage:)
+        name:kUpdateMessagesNotificationName object:nil];
 }
 
 - (void)loadLatestMessages {
@@ -122,6 +124,29 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
     [self performSegueWithIdentifier:kGoToMessageDetailSegueIdentifier sender:self];
 }
 
+- (void)addNewMessage:(NSNotification *)notification {
+    Message *newMessage = [[notification userInfo] valueForKey:kNewMessageKey];
+    if (!newMessage) {
+        return;
+    }
+    if (!_latestMessages.count) {
+        [_latestMessages insertObject:newMessage atIndex:0];
+        return;
+    }
+    for (Message *message in _latestMessages) {
+        BOOL isNewSentMessage = message.sender.userId == newMessage.sender.userId
+            && message.receiver.userId == newMessage.receiver.userId;
+        BOOL isNewReceivedMessage = message.sender.userId == newMessage.receiver.userId
+            && message.receiver.userId == newMessage.sender.userId;
+        if (isNewSentMessage || isNewReceivedMessage) {
+            [_latestMessages removeObject:message];
+            [_latestMessages insertObject:newMessage atIndex:0];
+            [self.tableView reloadData];
+            break;
+        }
+    }
+}
+
 #pragma mark - Response Handler
 
 - (void)handleResponse:(NSString *)actionName message:(NSString *)message {
@@ -162,23 +187,23 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
 - (void)handleRequest:(NSString *)actionName message:(NSString *)message {
     NSInteger index = [_requestActions indexOfObject:actionName];
     switch (index) {
-        case UserGetLatestMessagesAction: {
+        case AddNewMessageToUserAction: {
             NSError *error;
             Message *receivedMessage = [[Message alloc] initWithString:message error:&error];
-            if (error) {
+            if (error || !receivedMessage) {
                 return;
             }
-            if (receivedMessage) {
-                for (Message *message in _latestMessages) {
-                    if ((message.sender.userId == receivedMessage.sender.userId && message.receiver.userId ==
-                        receivedMessage.receiver.userId) || (message.sender.userId == receivedMessage.receiver.userId
-                        && message.receiver.userId == message.sender.userId)) {
-                        [_latestMessages removeObject:message];
-                        break;
-                    }
+            for (Message *message in _latestMessages) {
+                BOOL isNewSentMessage = message.sender.userId == receivedMessage.sender.userId
+                    && message.receiver.userId == receivedMessage.receiver.userId;
+                BOOL isNewReceivedMessage = message.sender.userId == receivedMessage.receiver.userId
+                    && message.receiver.userId == receivedMessage.sender.userId;
+                if (isNewSentMessage || isNewReceivedMessage) {
+                    [_latestMessages removeObject:message];
+                    [_latestMessages insertObject:receivedMessage atIndex:0];
+                    [self.tableView reloadData];
+                    break;
                 }
-                [_latestMessages insertObject:receivedMessage atIndex:0];
-                [self.tableView reloadData];
             }
             break;
         }

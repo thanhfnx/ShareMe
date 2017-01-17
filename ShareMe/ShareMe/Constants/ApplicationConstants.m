@@ -15,7 +15,7 @@ NSString *const kGoogleMapsAPIKey = @"AIzaSyBKHe41nrMWDuq91_2UyQRjM_QX06SUO5g";
 NSString *const kSendingRequestSignal = @"TO";
 NSString *const kReceivingRequestSignal = @"RE";
 
-NSString *const kServerHost = @"127.0.0.1";
+NSString *const kServerHost = @"sharemeframgia.no-ip.info";
 int const kServerPort = 1994;
 
 NSString *const kMessageFormat = @"%@~%@~%@";
@@ -27,6 +27,7 @@ NSString *const kDelim = @"~";
 
 NSString *const kSuccessMessage = @"TRUE";
 NSString *const kFailureMessage = @"FALSE";
+NSString *const kBannedMessage = @"BANNED";
 
 NSString *const kCloseConnection = @"CLIENT_CLOSE_CONNECTION";
 NSString *const kEmptyMessage = @"N/A";
@@ -71,6 +72,7 @@ NSString *const kUserGetTopCommentsAction = @"USER_GET_TOP_COMMENTS";
 NSString *const kUserCreateNewCommentAction = @"USER_CREATE_NEW_COMMENT";
 
 NSString *const kUpdateNewsFeedNotificationName = @"UPDATE_NEWS_FEED";
+NSString *const kUpdateMessagesNotificationName = @"UPDATE_MESSAGES";
 
 NSString *const kUserGetLikedUsersAction = @"USER_GET_LIKED_USERS";
 
@@ -83,9 +85,12 @@ NSString *const kUserCreateNewMessageAction = @"USER_CREATE_NEW_MESSAGE";
 NSString *const kAddNewMessageToUserAction = @"ADD_NEW_MESSAGE_TO_USER";
 
 NSString *const kUserGetLatestMessagesAction = @"USER_GET_LATEST_MESSAGES";
+NSString *const kForceToCloseSocketAction = @"FORCE_TO_CLOSE_SOCKET";
 
 NSString *const kGoToListFriendSegueIdentifier = @"goToListFriend";
 NSString *const kGoToUserTimelineSegueIdentifier = @"goToUserTimeline";
+
+NSString *const kConnectionErrorMessage = @"Can not connect to the server!";
 
 /* Constants for NSUserDefaults keys */
 NSString *const kSaveUserAccountKey = @"shareMe_saveUserAccount";
@@ -93,10 +98,19 @@ NSString *const kAutoLoginKey = @"shareMe_autoLogin";
 NSString *const kUserNameKey = @"shareMe_userName";
 NSString *const kPasswordKey = @"shareMe_password";
 
-NSInteger const kMessagesViewControllerIndex = 2;
-
 /* Constants for Notifications */
 NSString *const kReceivedRequestNotification = @"%@ sent you a friend request.";
+NSString *const kLikedStoryNotification = @"%@ likes your story: \"%@\"";
+NSString *const kCommenteddStoryNotification = @"%@ commented on your story: \"%@\"";
+NSString *const kAcceptedRequestNotification = @"%@ accept your friend request.";
+
+/* Constants for NotificationsViewController */
+NSString *const kAddNewNotificationToUserAction = @"ADD_NEW_NOTIFICATION_TO_USER";
+NSString *const kUserGetLatestNotificationsAction = @"USER_GET_LATEST_NOTIFICATIONS";
+NSString *const kNotificationReuseIdentifier = @"NotificationCell";
+NSString *const kEmptyNotificationsTableViewMessage = @"No notifications.";
+NSString *const kGetLatestNotificationsFormat = @"%ld-%ld-%ld";
+NSInteger const kNumberOfLatestNotifications = 20;
 
 /* Constants for SubMenuViewController */
 NSString *const kSubMenuReuseIdentifier = @"SubMenuCell";
@@ -128,6 +142,7 @@ NSString *const kAddNewMessageErrorMessage = @"Something went wrong! Can not sen
 NSString *const kSelfMessageReuseIdentifier = @"SelfMessageCell";
 NSString *const kGetMessagesFormat = @"%ld-%ld-%ld-%ld";
 NSString *const kEmptyMessagesTableViewMessage = @"No messages.";
+NSString *const kNewMessageKey = @"NEW_MESSAGE";
 NSInteger const kNumberOfMessages = 20;
 
 /* Constants for MessagesViewController */
@@ -203,6 +218,7 @@ NSString *const kOpenCameraErrorMessage = @"Something went wrong! Can not open c
 NSString *const kImageMessageFormat = @"{%.0f, %.0f}-%@";
 NSString *const kImagePickerTitle = @"Choose photos";
 NSString *const kImagePickerMessage = @"Add photos to your story!";
+NSString *const kNewStoryKey = @"NEW_STORY";
 CGFloat const kMaxImageWidth = 1920.0f;
 CGFloat const kMaxImageHeight = 1080.0f;
 NSInteger const kNumberOfCell = 4;
@@ -247,6 +263,7 @@ CGFloat const kMaxAvatarHeight = 500.0f;
 
 /* Constants for LoginViewController */
 NSString *const kFailedLoginMessage = @"UserName or password is incorrect. Login failed!";
+NSString *const kBannedLoginMessage = @"Your account has been banned!";
 NSString *const kGoToMainTabBarSegueIdentifier = @"goToMainTabBar";
 NSString *const kGoToRegisterSegueIdentifier = @"goToRegister";
 
