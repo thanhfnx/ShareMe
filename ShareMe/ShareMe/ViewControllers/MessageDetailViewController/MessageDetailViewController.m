@@ -299,12 +299,14 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         case AddNewMessageToUserAction: {
             NSError *error;
             Message *receivedMessage = [[Message alloc] initWithString:message error:&error];
-            if (error) {
+            if (error || !receivedMessage) {
                 return;
             }
-            if (receivedMessage && ((receivedMessage.sender.userId == self.receiver.userId &&
-                receivedMessage.receiver.userId == _currentUser.userId) || (receivedMessage.receiver.userId ==
-                self.receiver.userId && receivedMessage.sender.userId == _currentUser.userId))) {
+            BOOL isNewSentMessage = receivedMessage.sender.userId == self.receiver.userId
+                && receivedMessage.receiver.userId == _currentUser.userId;
+            BOOL isNewReceivedMessage = receivedMessage.receiver.userId == self.receiver.userId
+                && receivedMessage.sender.userId == _currentUser.userId;
+            if (isNewSentMessage || isNewReceivedMessage) {
                 [_messages addObject:receivedMessage];
                 [self reloadDataWithAnimated:YES];
             }

@@ -135,7 +135,8 @@ typedef NS_ENUM(NSInteger, UserRequestActions) {
         return;
     }
     _selectedIndex = indexPath.row;
-    [self performSegueWithIdentifier:kGoToMessageDetailSegueIdentifier sender:self];
+//    [self performSegueWithIdentifier:kGoToMessageDetailSegueIdentifier sender:self];
+    [Utils showLocalNotification:@"test" userInfo:nil];
 }
 
 #pragma mark - Response Handler

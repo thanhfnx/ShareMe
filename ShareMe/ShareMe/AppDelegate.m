@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ClientSocketController.h"
+#import "UIViewController+Utils.h"
+#import "StoryDetailViewController.h"
 @import GoogleMaps;
 @import GooglePlaces;
 
@@ -43,7 +45,20 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    // TODO: Handle notification 
+    // TODO: Handle notification
+    UIApplicationState state = [application applicationState];
+    if (state == UIApplicationStateActive) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:kDefaultMessageTitle
+            message:kConnectionErrorMessage preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+        [alertController addAction:cancelAction];
+        [[UIViewController currentViewController] presentViewController:alertController animated:YES completion:nil];
+    } else if (state == UIApplicationStateInactive) {
+        UINavigationController *nav = (UINavigationController *)self.window.rootViewController;
+        for (UIViewController *vc in nav.viewControllers) {
+            NSLog(@"%@", vc);
+        }
+    }
 }
 
 - (void)setupLocalNotifications {

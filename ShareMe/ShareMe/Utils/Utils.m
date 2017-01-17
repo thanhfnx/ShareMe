@@ -169,7 +169,7 @@
 
 + (void)showLocalNotification:(NSString *)alertBody userInfo:(NSDictionary *)userInfo {
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-    localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0.0];
+    localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:5.0];
     localNotification.alertBody = alertBody;
     localNotification.userInfo = userInfo;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
